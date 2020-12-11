@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/Principal">
+        <menu>
+            <item
+                android:id="@+id/ic_home"
+                android:icon="@drawable/ic_home"
+                android:title="@string/ic_home">
+            </item>
+            <item
+                android:id="@+id/ic_cardTravel"
+                android:icon="@drawable/ic_card_travel"
+                android:title="@string/ic_card_travel">
+            </item>
+            <item
+                android:id="@+id/ic_alojamiento"
+                android:icon="@drawable/ic_baseline_favorite_border_24"
+                android:title="@string/ic_alojamiento">
+            </item>
+
+        </menu>
+
+    </item>
+    <item  android:title="@string/enlaces_utiles">
+        <menu>
+            <item
+                android:id="@+id/ic_ofertas"
+                android:icon="@drawable/ic_baseline_monetization_on_24"
+                android:title="@string/ic_ofertas">
+            </item>
+            <item
+                android:id="@+id/ic_coche"
+                android:icon="@drawable/ic_baseline_directions_car_24"
+                android:title="@string/ic_coche">
+            </item>
+            <item
+                android:id="@+id/ic_COVID"
+                android:icon="@drawable/ic_baseline_masks_24"
+                android:title="@string/ic_COVID">
+            </item>
+
+
+        </menu>
+
+
+    </item>
+
+</menu>
