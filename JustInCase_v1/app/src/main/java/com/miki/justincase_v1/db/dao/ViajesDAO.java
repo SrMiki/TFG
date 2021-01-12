@@ -11,18 +11,19 @@ import com.miki.justincase_v1.db.entity.Viaje;
 
 import java.util.List;
 
-//Data access object de Viajes
+//Data access object de la tabla "viajes"
+//Entity Viaje.class
 
 @Dao
 public interface ViajesDAO {
     //LiveData
-    @Query("SELECT * FROM viaje")
+    @Query("SELECT * FROM viajes")
     List<Viaje> getAll();
 
-    @Query("SELECT * FROM viaje WHERE uid IN (:userIds)")
+    @Query("SELECT * FROM viajes WHERE viajeID IN (:userIds)")
     List<Viaje> loadAllByIds(int[] userIds);
 
-    @Query("SELECT * FROM viaje WHERE destino LIKE :first AND " +
+    @Query("SELECT * FROM viajes WHERE destino LIKE :first AND " +
             "fecha LIKE :last LIMIT 1")
     Viaje findByName(String first, String last);
 

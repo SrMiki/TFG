@@ -6,41 +6,33 @@
     android:orientation="vertical"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <ImageView
-            android:id="@+id/dragwerHeader_img_profile"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_baseline_account_circle_24" />
+        android:padding="20dp">
 
         <TextView
-            android:id="@+id/drawerHeader_text_username"
+            android:id="@+id/recyclerview_Trip_tripDestino"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_toEndOf="@+id/dragwerHeader_img_profile"
-            android:layout_toRightOf="@id/dragwerHeader_img_profile"
-            android:text="Miguel"
+            android:text="destino"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/drawerHeader_text_about"
+            android:id="@+id/recyclerview_Trip_tripDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/drawerHeader_text_username"
+            android:layout_below="@id/recyclerview_Trip_tripDestino"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_toEndOf="@+id/dragwerHeader_img_profile"
-            android:layout_toRightOf="@id/dragwerHeader_img_profile"
-            android:text="hola!" />
+            android:text="descripcion" />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

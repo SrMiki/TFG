@@ -1,25 +1,62 @@
 <resources>
+    <!-- general -->
+
     <string name="app_name">JustInCase_v1</string>
-    <string name="Principal">Principal</string>
+    <string name="main">Principal</string>
+
+    <!-- buttons -->
+    <string name="btn_next">siguiente</string>
+    <string name="btn_back">volver</string>
+    <string name="btn_delete">eliminar</string>
+    <string name="btn_finish">terminar</string>
+    <string name="btn_add">añadir</string>
+
+    <!-- texts (for example: labels for forms) -->
+    <string name="text_Destino">Destino:</string>
+    <string name="text_date">Fecha:</string>
+    <string name="text_name">Nombre:</string>
+    <string name="text_description">descripcion:</string>
+
+
+    <!-- TODO -->
+
+    <!-- menu elements -->
     <string name="ic_home">Inicio</string>
-    <string name="ic_card_travel">Mis viajes</string>
-    <string name="open">open</string>
-    <string name="close">close</string>
-    <string name="drawer_header">CABECERA</string>
-    <string name="fragmentViajesTitle">Mis viajes</string>
-    <string name="title_activity_crear_viajes">Nuevo Viaje</string>
-    <string name="Destino">Destino:</string>
-    <string name="Fecha">Fecha:</string>
-    <string name="btn_siguiente">siguiente</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="enlaces_utiles">Enlaces útiles</string>
+    <string name="ic_Trips">Mis viajes</string>
+    <string name="ic_suitcase">Mis maletas</string>
     <string name="ic_COVID">COVID</string>
     <string name="ic_coche">Alquiler de coches</string>
     <string name="ic_alojamiento">Alojamientos guardados</string>
-    <string name="mainFragmentTitle">Menu principal</string>
-    <string name="btn_volver">volver</string>
-    <string name="detallesViajeTitle">Detalles del viaje</string>
-    <string name="btn_eliminar">eliminar</string>
     <string name="ic_ofertas">Ofertas</string>
+    <string name="ic_items">Items</string>
+
+    <!-- drawer menu -->
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="drawer_header">CABECERA</string>
+    <string name="important_links">Enlaces útiles</string>
+
+    <!-- Trip -->
+    <string name="fragment_showTrip_title">Mis viajes</string>
+    <string name="activity_createTrip_title">Nuevo Viaje</string>
+    <string name="fragment_focusTrip_title">Detalles del viaje</string>
+
+
+    <string name="mainFragment_title">Menu principal</string>
+    <string name="title_activity_addBaggage">Agregar Equipaje</string>
+
+    <!-- Suitcase -->
+    <string name="fragment_showSuticase_title">Mis maletas</string>
+    <string name="fragment_focusSuitcase_title">Detalles Maleta</string>
+    <string name="activity_createSuitcase_title">Nueva maleta</string>
+
+    <!-- Item -->
+    <string name="fragment_showItem_title">Items</string>
+    <string name="activity_createItem_title">Crear Item</string>
+    <string name="fragment_focusItem_title">Detalles del item</string>
+    <string name="text_hintInputName">Introduzca el nombre</string>
+    <string name="text_hintInputDestino">Introduzca el destino</string>
+    <string name="text_hintInputDate">Introduzca la fecha</string>
+    <string name="activity_addSuitcaseContent">Añade items</string>
+
 </resources>

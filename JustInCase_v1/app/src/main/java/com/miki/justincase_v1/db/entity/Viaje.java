@@ -6,10 +6,11 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity
+
+@Entity(tableName = "viajes")
 public class Viaje implements Serializable {
     @PrimaryKey(autoGenerate = true)
-    public int uid;
+    public int viajeID;
 
     @ColumnInfo(name = "destino")
     public String destino;
