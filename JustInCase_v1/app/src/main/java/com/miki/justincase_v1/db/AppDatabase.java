@@ -6,41 +6,51 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.miki.justincase_v1.db.dao.BaggageContentDAO;
 import com.miki.justincase_v1.db.dao.BaggageDAO;
+import com.miki.justincase_v1.db.dao.CategoryContentDAO;
+import com.miki.justincase_v1.db.dao.CategoryDAO;
 import com.miki.justincase_v1.db.dao.ItemDAO;
-import com.miki.justincase_v1.db.dao.SuitcaseContentDAO;
 import com.miki.justincase_v1.db.dao.SuitcaseDAO;
-import com.miki.justincase_v1.db.dao.ViajesDAO;
+import com.miki.justincase_v1.db.dao.TripDAO;
 import com.miki.justincase_v1.db.entity.Baggage;
+import com.miki.justincase_v1.db.entity.Category;
+import com.miki.justincase_v1.db.entity.CategoryContent;
 import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.db.entity.Suitcase;
-import com.miki.justincase_v1.db.entity.SuitcaseContent;
-import com.miki.justincase_v1.db.entity.Viaje;
+import com.miki.justincase_v1.db.entity.BaggageContent;
+import com.miki.justincase_v1.db.entity.Trip;
 
 
-//se trata de la clase cuyos objetos vas a guardar
-// en la base de datos; el número de versión empieza a contar por 1
-// y tienes que cambiarlo cada vez que modifiques la base de datos.
-@Database(entities = {Viaje.class, Suitcase.class, Item.class, Baggage.class, SuitcaseContent.class}, version = 3)
+//App database
+//Content all objects we would save; start version at 1 but, for every change we must upgrade it
+//Just for the device who access
+@Database(entities = {Trip.class, Suitcase.class, Item.class, Baggage.class, BaggageContent.class, Category.class, CategoryContent.class}, version = 15)
 
 public abstract class AppDatabase extends RoomDatabase {
 
-    //singleton
+    //singleton!
     private static AppDatabase DBinstance;
 
-    public abstract ViajesDAO viajesDao();
+    //Trips
+    public abstract TripDAO tripDao();
 
-    //Maletas indp.
+    //Suitcase
     public abstract SuitcaseDAO suitcaseDAO();
 
-    //Items indp.
+    //Items
     public abstract ItemDAO itemDAO();
 
-    //Equipaje de un viaje
+    //Baggage
     public abstract BaggageDAO baggageDAO();
 
-    //Contenido de maletas
-    public abstract SuitcaseContentDAO suitcaseContentDAO();
+    //Register item - baggage
+    public abstract BaggageContentDAO baggageContentDAO();
+
+    //Categories
+    public abstract CategoryDAO categoryDAO();
+
+    public abstract CategoryContentDAO categoryContentDAO();
 
     public static synchronized AppDatabase getInstance(Context context) {
         if (DBinstance == null) {

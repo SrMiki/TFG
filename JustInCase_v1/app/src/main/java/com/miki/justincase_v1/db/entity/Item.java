@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity(tableName = "items")
 public class Item implements Serializable {
@@ -14,26 +15,26 @@ public class Item implements Serializable {
     @ColumnInfo(name = "itemName")
     public String itemName;
 
-    public Item(String nombreItem) {
-        this.itemName = nombreItem;
-    }
-
-    public Item(int itemID) {
-        this.itemID = itemID;
+    public Item(String itemName) {
+        this.itemName = itemName;
     }
 
     public String getItemName() {
         return itemName;
     }
 
-    public void setItemName(String nombreItem) {
-        this.itemName = nombreItem;
+    public int getItemID() {
+        return itemID;
     }
+
 
     @Override
-    public String toString() {
-        return "Maleta " + itemName;
-
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return getItemName().equals(item.getItemName());
     }
 
+
 }
+

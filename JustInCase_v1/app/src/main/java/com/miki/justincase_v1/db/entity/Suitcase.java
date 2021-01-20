@@ -1,5 +1,6 @@
 package com.miki.justincase_v1.db.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -18,11 +19,24 @@ public class Suitcase implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public int suitcaseID;
 
+    @NonNull
     @ColumnInfo(name = "suitcaseName")
     public String suitcaseName;
 
-    public Suitcase(String suitcaseName) {
+    @ColumnInfo(name = "suitcaseColor")
+    public String suitcaseColor;
+
+    @ColumnInfo(name = "suitcaseWeight")
+    public String suitcaseWeight;
+
+    @ColumnInfo(name = "suitcaseDims")
+    public String suitcaseDims; // heigth x width x depth
+
+    public Suitcase(@NonNull String suitcaseName, String suitcaseColor, String suitcaseWeight, String suitcaseDims) {
         this.suitcaseName = suitcaseName;
+        this.suitcaseColor = suitcaseColor;
+        this.suitcaseWeight = suitcaseWeight;
+        this.suitcaseDims = suitcaseDims;
     }
 
     public int getSuitcaseID(){ return suitcaseID; }
@@ -35,10 +49,15 @@ public class Suitcase implements Serializable {
         this.suitcaseName = suitcaseName;
     }
 
-    @Override
-    public String toString() {
-        return "Maleta " + suitcaseName;
-
+    public String getSuitcaseColor() {
+        return suitcaseColor;
     }
 
+    public String getSuitcaseWeight() {
+        return suitcaseWeight;
+    }
+
+    public String getSuitcaseDims() {
+        return suitcaseDims;
+    }
 }

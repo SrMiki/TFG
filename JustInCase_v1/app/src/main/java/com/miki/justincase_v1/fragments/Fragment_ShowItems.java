@@ -2,7 +2,6 @@ package com.miki.justincase_v1.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.miki.justincase_v1.Binding_Item_focusItem;
+import com.miki.justincase_v1.bindings.Binding_Item_focusItem;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.adapter.Adapter_item;
+import com.miki.justincase_v1.adapters.Adapter_item;
 import com.miki.justincase_v1.db.AppDatabase;
 import com.miki.justincase_v1.db.entity.Item;
 
@@ -28,9 +27,10 @@ import java.util.ArrayList;
 public class Fragment_ShowItems extends Fragment {
 
     AppDatabase db;
+
     Adapter_item adapter_item;
-    RecyclerView itemRecyclerView;
     ArrayList<Item> itemArrayList;
+    RecyclerView itemRecyclerView;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -47,10 +47,10 @@ public class Fragment_ShowItems extends Fragment {
 
         itemFloatingActionButton = view.findViewById(R.id.fragment_showItem_btn_add);
 
-        itemFloatingActionButton.setOnClickListener(view1 -> {
+        itemFloatingActionButton.setOnClickListener(v -> {
             fragmentManager = getActivity().getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.content_main_layout,new Fragment_CreateItem());
+            fragmentTransaction.replace(R.id.content_main_layout, new Fragment_CreateItem());
             fragmentTransaction.commit();
         });
 

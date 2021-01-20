@@ -35,7 +35,7 @@ public class Fragment_CreateItem extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_item, container, false);
 
-        CAMPOnombre = view.findViewById(R.id.activity_createItem_input_ItemName);
+        CAMPOnombre = view.findViewById(R.id.fragment_createItem_input_ItemName);
 
         btn = view.findViewById(R.id.fragment_createItem_btn_add);
 
@@ -62,13 +62,9 @@ public class Fragment_CreateItem extends Fragment {
 
             fragmentManager = getActivity().getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.content_main_layout, new Fragment_ShowItems());
+            fragmentTransaction.replace(R.id.content_main_layout, new Fragment_ItemManager());
             fragmentTransaction.commit();
         });
-
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
-//        finish();
         return view;
     }
 

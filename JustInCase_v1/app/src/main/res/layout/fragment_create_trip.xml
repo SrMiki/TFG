@@ -3,15 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="10dp"
+    android:layout_marginTop="60dp"
     android:layout_marginRight="15dp"
-    android:orientation="vertical"
-    android:layout_marginTop="70dp">
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         android:text="@string/activity_createTrip_title"
         android:textSize="30sp"
         android:textStyle="bold" />
@@ -24,16 +22,16 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/text_Destino"
             android:layout_weight="1"
+            android:text="@string/text_Destino"
             android:textSize="20sp" />
 
         <EditText
             android:id="@+id/activity_createTrip_input_tripDestino"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:layout_weight="3"
+            android:ems="10"
             android:hint="@string/text_hintInputDestino"
             android:inputType="textPersonName" />
     </LinearLayout>
@@ -41,34 +39,57 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="@string/text_date"
-            android:textSize="20sp"/>
+            android:layout_weight="2"
+            android:text="@string/text_travelDate"
+            android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/activity_createTrip_input_tripDate"
+            android:id="@+id/activity_createTrip_input_travelDate"
             android:layout_width="0dp"
-            android:layout_weight="3"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="@string/text_hintInputDate" />
+            android:hint="@string/text_hintInputDate"
+            android:inputType="textPersonName" />
 
     </LinearLayout>
+<!-- TODO campo returnDate, travelTrip returnTravel
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/text_returnDate"
+            android:layout_weight="2"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/activity_createTrip_input_tripReturnDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_weight="2"
+            android:hint="@string/text_hintInputDate"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    -->
 
     <Button
         android:id="@+id/fragment_createTrip_btn_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_next"
-        android:layout_marginTop="20dp"
         android:layout_gravity="end"
-        >
+        android:layout_marginTop="20dp"
+        android:text="@string/btn_next">
 
     </Button>
 

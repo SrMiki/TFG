@@ -3,7 +3,6 @@ package com.miki.justincase_v1.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,27 +17,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.miki.justincase_v1.Binding_Suitcase_focusSuitcase;
+import com.miki.justincase_v1.bindings.Binding_Suitcase_focusSuitcase;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.adapter.Adapter_suitcases;
+import com.miki.justincase_v1.adapters.Adapter_suitcases;
 import com.miki.justincase_v1.db.AppDatabase;
 import com.miki.justincase_v1.db.entity.Suitcase;
 
 import java.util.ArrayList;
 
-/*
-Fragmento que se corresponde al apartado "Mis maletas" al pulsar
-en el drawer menu
- */
 public class Fragment_ShowSuitcases extends Fragment {
 
     AppDatabase db;
     Adapter_suitcases adapter_suitcases;
     RecyclerView suitcaseRecyclerView;
-    ArrayList<Suitcase> listOfSuitcases;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
+
+    ArrayList<Suitcase> listOfSuitcases;
 
     //referencia para la comunicacion de fragment
     Activity activity;
@@ -68,8 +64,6 @@ public class Fragment_ShowSuitcases extends Fragment {
         suitcaseRecyclerView = view.findViewById(R.id.fragment_showSuitcase_recyclerview);
         //mostramos los datos
         mostrarDatos();
-
-
         return view;
     }
 
@@ -80,9 +74,7 @@ public class Fragment_ShowSuitcases extends Fragment {
 
         adapter_suitcases.setListener(view -> {
             bindingSuitcasefocusSuitcase.sendSuitcase(listOfSuitcases.get(suitcaseRecyclerView.getChildAdapterPosition(view)));
-
         });
-
     }
 
     //Comunicacion entre el fragment Maleta y Detalles de la maleta
