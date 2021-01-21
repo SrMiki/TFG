@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- primary color -->
+    <color name="primary_200">#83d4ef</color>
+    <color name="primary_500">#16a9e3</color>
+    <color name="primary_700">#0288c2</color>
+    <color name="primary_500_variant">#16e3b6</color>
+
+    <!-- secundary color -->
+    <color name="secundary_200">#fc5d1f</color>
+    <color name="secundary_700">#e35016</color>
+
+    <color name="grey">#424242</color>
+    <color name="white">#FFFFFFFF</color>
+
+
+    <color name="green">#008000</color>
+
+
+
+</resources>
+
+
