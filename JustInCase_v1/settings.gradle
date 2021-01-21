@@ -1,2 +1,0 @@
-include ':app'
-rootProject.name = "JustInCase_v1"
