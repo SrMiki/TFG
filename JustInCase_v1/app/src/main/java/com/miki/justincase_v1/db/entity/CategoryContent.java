@@ -59,4 +59,9 @@ public class CategoryContent {
         this.categoryCount++;
     }
 
+    public void decreaseThisItem() {
+        if (categoryCount > 0) {
+            categoryCount--;
+        }
+    }
 }

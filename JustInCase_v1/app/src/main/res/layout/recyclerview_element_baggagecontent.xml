@@ -35,11 +35,25 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/recyclerview_baggageContent_btn_add"
+            android:id="@+id/recyclerview_baggageContent_btn_decrease"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:backgroundTint="@color/red"
+            android:text="-"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/recyclerview_baggageContent_btn_increase"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
             android:backgroundTint="@color/green"
-            android:text="+" />
+            android:text="+"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

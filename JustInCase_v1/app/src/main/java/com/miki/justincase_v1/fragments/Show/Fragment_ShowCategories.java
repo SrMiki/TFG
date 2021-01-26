@@ -6,39 +6,33 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_category;
 import com.miki.justincase_v1.bindings.Binding_Entity_focusEntity;
-import com.miki.justincase_v1.db.AppDatabase;
 import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.fragments.BaseFragment;
-import com.miki.justincase_v1.fragments.Create.Fragment_CreateCategory;
 
 import java.util.ArrayList;
 
 public class Fragment_ShowCategories extends BaseFragment {
 
-    AppDatabase db;
-
     Adapter_category adapterCategory;
     ArrayList<Category> categories;
     RecyclerView categoryRecyclerView;
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-
     Activity activity;
     Binding_Entity_focusEntity bindingCategoryFocusCategory;
+    Button btnShowItems;
 
     FloatingActionButton categoryFloatingActionButton;
 
@@ -50,19 +44,23 @@ public class Fragment_ShowCategories extends BaseFragment {
         categoryFloatingActionButton = view.findViewById(R.id.fragment_showCategories_btn_add);
 
         categoryFloatingActionButton.setOnClickListener(v -> {
-            doFragmentTransaction(new Fragment_CreateCategory());
+            getNav().navigate(R.id.fragment_CreateCategory);
         });
 
-        db = AppDatabase.getInstance(getContext());
-        categories = (ArrayList<Category>) db.categoryDAO().getAll();
+        btnShowItems = view.findViewById(R.id.fragment_itemManager_btn_items);
+        btnShowItems.setOnClickListener(v -> {
+            getNav().navigate(R.id.fragment_ShowItems);
+        });
+
+        categories = Presented.getAllCategories(view);
 
         categoryRecyclerView = view.findViewById(R.id.fragment_showCategories_recyclerview);
 
-        mostrarDatos();
+        loadRecyclerView();
         return view;
     }
 
-    private void mostrarDatos() {
+    private void loadRecyclerView() {
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapterCategory = new Adapter_category(getContext(), categories);
         categoryRecyclerView.setAdapter(adapterCategory);

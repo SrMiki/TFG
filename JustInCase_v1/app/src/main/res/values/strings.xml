@@ -44,6 +44,7 @@
 
     <string name="mainFragment_title">Menu principal</string>
     <string name="title_activity_addBaggage">Agregar Equipaje</string>
+    <string name="activity_addSuitcaseContent">¿?¿?¿?</string>
 
     <!-- Suitcase -->
     <string name="fragment_showSuticase_title">Mis maletas</string>
@@ -76,5 +77,6 @@
     <string name="activity_createCategory_title">Nueva categoria</string>
     <string name="fragment_focusCategory_title">Detalles categoria</string>
     <string name="fragment_addCategoryContent">Añade items a la CATEGORIA</string>
+    <string name="mainFragmentTitle">Menu Principal</string>
 
 </resources>

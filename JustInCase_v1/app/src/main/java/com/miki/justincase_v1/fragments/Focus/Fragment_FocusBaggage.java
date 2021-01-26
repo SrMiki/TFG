@@ -7,22 +7,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adaptador_baggageContent;
 import com.miki.justincase_v1.bindings.Binding_Entity_focusEntity;
-import com.miki.justincase_v1.db.AppDatabase;
 import com.miki.justincase_v1.db.entity.Baggage;
 import com.miki.justincase_v1.db.entity.BaggageContent;
 import com.miki.justincase_v1.db.entity.Suitcase;
 import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
-import com.miki.justincase_v1.fragments.Fragment_Add_item_to_Baggage;
+import com.miki.justincase_v1.fragments.Edit.Fragment_Edit_Baggage;
+import com.miki.justincase_v1.fragments.Add.Fragment_Add_item_to_Baggage;
 
 import java.util.ArrayList;
 
@@ -31,15 +29,12 @@ public class Fragment_FocusBaggage extends BaseFragment {
     //SUITCASE OF THE BAGGAGE!
     TextView suitcaseName, suitcaseColor, suticaseWeight, suitcaseDimns;
 
-    Button btn_focusBaggage_add, btn_focusBaggage_delete;
+    Button btn_focusBaggage_add, btn_focusBaggage_delete, btn_focusBaggage_edit;
     RecyclerView BaggageContentrecyclerView;
     Adaptador_baggageContent adaptador_baggageContent;
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
     Binding_Entity_focusEntity bindingTripFocusTrip;
 
-    AppDatabase db;
     ArrayList<BaggageContent> contenidoDeEsteBaggage;
     Fragment_Add_item_to_Baggage fragmentAddItemToBaggage;
 
@@ -59,44 +54,40 @@ public class Fragment_FocusBaggage extends BaseFragment {
         Baggage baggage;
 
         if (bundle != null) {
-            //pillamos la maleta que nos han pasado a traves del bundle
             baggage = (Baggage) bundle.getSerializable("baggage");
 
-            db = AppDatabase.getInstance(view.getContext());
-
-            suitcase = db.suitcaseDAO().getSuitcase(baggage.getFKsuitcaseID());
+            suitcase = Presented.getSuitcaseAsociatedWithThisBaggage(baggage, view);
 
             suitcaseName.setText(suitcase.getSuitcaseName());
             suitcaseColor.setText(suitcase.getSuitcaseColor());
             suticaseWeight.setText(suitcase.getSuitcaseWeight());
             suitcaseDimns.setText(suitcase.getSuitcaseDims());
 
-            //ahora vamos a (si tiene) mostrar el contenido de la maleta
-            contenidoDeEsteBaggage = (ArrayList<BaggageContent>) db.baggageContentDAO().getItemsFromThisBaggage(baggage.baggageID);
+            contenidoDeEsteBaggage = Presented.getItemsFromThisBaggage(baggage, view);
 
             BaggageContentrecyclerView = view.findViewById(R.id.fragment_focusBaggage_recyclerView);
-            mostrarDatos();
+            loadRecyclerView();
 
-            //Baggage delete button
             btn_focusBaggage_delete = view.findViewById(R.id.fragment_focusBaggage_btn_delete);
             btn_focusBaggage_delete.setOnClickListener(v -> {
-                Trip trip;
-                trip = db.tripDao().getTrip(baggage.getFKtripID());
+                Presented.deleteBaggage(baggage, view);
 
-                db.baggageDAO().deleteBaggage(baggage);
-
+                Trip trip = Presented.getTheTripAsociatedWithThisBaggage(baggage, view);
                 bindingTripFocusTrip.sendTrip(trip);
-
-
             });
 
-            //Baggage add items to THIS Baggage button
             btn_focusBaggage_add = view.findViewById(R.id.fragment_focusBaggage_btn_add);
             btn_focusBaggage_add.setOnClickListener(v -> {
                 Bundle obundle = new Bundle();
                 obundle.putSerializable("ThisBaggage", baggage);
-                doFragmentTransaction(new Fragment_Add_item_to_Baggage());
+                getNav().navigate(R.id.fragment_Add_item_to_Baggage, obundle);
+            });
 
+            btn_focusBaggage_edit = view.findViewById(R.id.fragment_focusBaggage_btn_edit);
+            btn_focusBaggage_edit.setOnClickListener(v -> {
+                Bundle obundle = new Bundle();
+                obundle.putSerializable("ThisSuitcase", suitcase);
+                getNav().navigate(R.id.fragment_Edit_Baggage, obundle);
             });
 
 
@@ -104,7 +95,7 @@ public class Fragment_FocusBaggage extends BaseFragment {
         return view;
     }
 
-    private void mostrarDatos() {
+    private void loadRecyclerView() {
         //Esto sería los items que tiene la maleta!
         BaggageContentrecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adaptador_baggageContent = new Adaptador_baggageContent(getContext(), contenidoDeEsteBaggage);

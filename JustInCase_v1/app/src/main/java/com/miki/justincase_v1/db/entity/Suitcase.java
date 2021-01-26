@@ -39,7 +39,9 @@ public class Suitcase implements Serializable {
         this.suitcaseDims = suitcaseDims;
     }
 
-    public int getSuitcaseID(){ return suitcaseID; }
+    public int getSuitcaseID() {
+        return suitcaseID;
+    }
 
     public String getSuitcaseName() {
         return suitcaseName;
@@ -60,4 +62,13 @@ public class Suitcase implements Serializable {
     public String getSuitcaseDims() {
         return suitcaseDims;
     }
+
+    public void setSuticase(String suitcaseName, String suitcaseColor, String suitcaseWeight, String suitcaseDims) {
+        this.suitcaseName = suitcaseName;
+        this.suitcaseColor = suitcaseColor;
+        this.suitcaseWeight = suitcaseWeight;
+        this.suitcaseDims = suitcaseDims;
+    }
+
+
 }

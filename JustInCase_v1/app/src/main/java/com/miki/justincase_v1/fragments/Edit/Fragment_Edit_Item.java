@@ -1,4 +1,4 @@
-package com.miki.justincase_v1.fragments.Create;
+package com.miki.justincase_v1.fragments.Edit;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +17,12 @@ import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.fragments.BaseFragment;
 import com.miki.justincase_v1.fragments.Show.Fragment_ItemManager;
 
-public class Fragment_CreateItem extends BaseFragment {
+public class Fragment_Edit_Item extends BaseFragment {
 
     EditText nameItemTV;
 
     Button btn;
+    Item item;
 
     @Nullable
     @Override
@@ -31,16 +31,25 @@ public class Fragment_CreateItem extends BaseFragment {
 
         nameItemTV = view.findViewById(R.id.fragment_createItem_input_ItemName);
 
-        btn = view.findViewById(R.id.fragment_createItem_btn_add);
-        btn.setOnClickListener(v -> {
+        Bundle bundle = getArguments();
 
-            String itemName = nameItemTV.getText().toString();
+        if (bundle != null) {
+            item = (Item) bundle.getSerializable("ThisItem");
 
-            Presented.createItem(itemName, view);
+            nameItemTV.setText(item.getItemName());
 
-            closeKeyBoard();
-           getNav().navigate(R.id.fragment_ItemManager);
-        });
+            btn = view.findViewById(R.id.fragment_createItem_btn_add);
+            btn.setOnClickListener(v -> {
+
+                String nombreItem = nameItemTV.getText().toString();
+                Presented.updateItem(item, nombreItem, view);
+
+                closeKeyBoard();
+                Bundle obundle = new Bundle();
+                obundle.putSerializable("item", item);
+                getNav().navigate(R.id.fragment_FocusItem, obundle);
+            });
+        }
         return view;
     }
 }

@@ -6,20 +6,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_item;
 import com.miki.justincase_v1.bindings.Binding_Entity_focusEntity;
-import com.miki.justincase_v1.db.AppDatabase;
 import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.fragments.BaseFragment;
 import com.miki.justincase_v1.fragments.Create.Fragment_CreateItem;
@@ -28,17 +27,14 @@ import java.util.ArrayList;
 
 public class Fragment_ShowItems extends BaseFragment {
 
-    AppDatabase db;
-
     Adapter_item adapter_item;
     ArrayList<Item> itemArrayList;
     RecyclerView itemRecyclerView;
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-
     Activity activity;
     Binding_Entity_focusEntity bindingItemfocusItem;
+
+    Button btnShowCategories;
 
     FloatingActionButton itemFloatingActionButton;
 
@@ -50,30 +46,27 @@ public class Fragment_ShowItems extends BaseFragment {
         itemFloatingActionButton = view.findViewById(R.id.fragment_showItem_btn_add);
 
         itemFloatingActionButton.setOnClickListener(v -> {
-
-            doFragmentTransaction(new Fragment_CreateItem());
+            getNav().navigate(R.id.fragment_CreateItem);
         });
 
-        //obtenemos los datos de la tabla
-        db = AppDatabase.getInstance(getContext());
-        itemArrayList = (ArrayList<Item>) db.itemDAO().getAll();
+        btnShowCategories = view.findViewById(R.id.fragment_itemManager_btn_categories);
+        btnShowCategories.setOnClickListener(v -> {
+            getNav().navigate(R.id.fragment_ShowCategories);
+        });
 
-        //vinculo con el recycler view
+        itemArrayList = Presented.getAllItems(view);
+
         itemRecyclerView = view.findViewById(R.id.fragment_showItems_recyclerview);
-
-        //mostramos los datos
-        mostrarDatos();
-
+        loadRecyclerView();
         return view;
     }
 
-    private void mostrarDatos() {
+    private void loadRecyclerView() {
         itemRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter_item = new Adapter_item(getContext(), itemArrayList);
         itemRecyclerView.setAdapter(adapter_item);
 
         adapter_item.setListener(view ->{
-            
             bindingItemfocusItem.sendItem(itemArrayList.get(itemRecyclerView.getChildAdapterPosition(view)));
         });
     }

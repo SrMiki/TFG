@@ -23,4 +23,7 @@ public class Category implements Serializable {
         return categoryName;
     }
 
+    public void setCategory(String categoryName) {
+        this.categoryName = categoryName;
+    }
 }

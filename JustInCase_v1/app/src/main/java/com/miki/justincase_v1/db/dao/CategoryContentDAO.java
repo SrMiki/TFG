@@ -10,6 +10,7 @@ import androidx.room.Update;
 import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.db.entity.CategoryContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -32,5 +33,6 @@ public interface CategoryContentDAO {
 
     @Delete
     void deleteCategoryContent(CategoryContent categoryContent);
+
 }
 

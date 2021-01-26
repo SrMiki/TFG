@@ -69,8 +69,18 @@ public class Adaptador_baggageContent extends RecyclerView.Adapter<Adaptador_bag
         holder.baggageContentCount.setText(baggageContent.getBaggageCount());
 
 
-        holder.baggageContentButtonAdd.setOnClickListener(v ->{
+        holder.baggageContentButtonIncrease.setOnClickListener(v ->{
             baggageContent.increaseThisItem();
+            db.baggageContentDAO().updateBaggageContent(baggageContent);
+
+            this.activity = (Activity) holder.context;
+            bindingBaggageFocusBaggage = (Binding_Entity_focusEntity) this.activity;
+            bindingBaggageFocusBaggage.sendBaggage(db.baggageDAO().getThisBagagge(baggageContent.FKbaggageID));
+
+        });
+
+        holder.baggageContentButtonDecrease.setOnClickListener(v ->{
+            baggageContent.decreaseThisItem();
             db.baggageContentDAO().updateBaggageContent(baggageContent);
 
             this.activity = (Activity) holder.context;
@@ -89,7 +99,7 @@ public class Adaptador_baggageContent extends RecyclerView.Adapter<Adaptador_bag
 
     public class BaggageContentViewHolder extends RecyclerView.ViewHolder {
         public TextView baggageContentName, baggageContentCount;
-        public Button baggageContentButtonAdd;
+        public Button baggageContentButtonIncrease, baggageContentButtonDecrease;
         Context context;
 
 
@@ -99,7 +109,8 @@ public class Adaptador_baggageContent extends RecyclerView.Adapter<Adaptador_bag
             context = itemView.getContext();
             baggageContentName = itemView.findViewById(R.id.recyclerview_baggageContent_itemName);
             baggageContentCount = itemView.findViewById(R.id.recyclerview_baggageContent_itemCount);
-            baggageContentButtonAdd = itemView.findViewById(R.id.recyclerview_baggageContent_btn_add);
+            baggageContentButtonIncrease = itemView.findViewById(R.id.recyclerview_baggageContent_btn_increase);
+            baggageContentButtonDecrease = itemView.findViewById(R.id.recyclerview_baggageContent_btn_decrease);
 
         }
     }

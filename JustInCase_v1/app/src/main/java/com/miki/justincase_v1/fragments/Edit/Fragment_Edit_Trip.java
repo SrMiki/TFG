@@ -1,4 +1,4 @@
-package com.miki.justincase_v1.fragments.Create;
+package com.miki.justincase_v1.fragments.Edit;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,11 +17,12 @@ import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
 import com.miki.justincase_v1.fragments.Show.Fragment_ShowTrips;
 
-public class Fragment_CreateTrip extends BaseFragment {
+public class Fragment_Edit_Trip extends BaseFragment {
 
     EditText travelDestinationTV, travelDateTV;
 
     Button btn;
+    Trip trip;
 
 
     @Nullable
@@ -33,22 +34,33 @@ public class Fragment_CreateTrip extends BaseFragment {
         travelDateTV = view.findViewById(R.id.activity_createTrip_input_travelDate);
 
         btn = view.findViewById(R.id.fragment_createTrip_btn_add);
-        btn.setOnClickListener(v -> {
 
-            String destination = travelDestinationTV.getText().toString();
-            String travelDate = travelDateTV.getText().toString();
+        Bundle bundle = getArguments();
 
-            //TODO add editText to this fields
+        if (bundle != null) {
+            trip = (Trip) bundle.getSerializable("ThisTrip");
 
-            String returnDate = "";
-            String travelTransport = "";
-            String returnTransport = "";
+            travelDestinationTV.setText(trip.destination);
+            travelDateTV.setText(trip.travelDate);
 
-            Presented.createTrip(destination, travelDate, returnDate, travelTransport, returnTransport, view);
+            btn.setOnClickListener(v -> {
 
-            closeKeyBoard();
-            getNav().navigate(R.id.fragment_ShowTrips);
-        });
+                String destination = travelDestinationTV.getText().toString();
+                String travelDate = travelDateTV.getText().toString();
+
+                //TODO add editText to this fields
+                String returnDate = "";
+                String travelTransport = "";
+                String returnTransport = "";
+
+                Presented.updateTrip(trip, destination, travelDate, returnDate, travelTransport, returnTransport, view);
+
+                closeKeyBoard();
+                Bundle obundle = new Bundle();
+                obundle.putSerializable("trip", trip);
+                getNav().navigate(R.id.fragment_FocusTrip2, obundle);
+            });
+        }
         return view;
     }
 }

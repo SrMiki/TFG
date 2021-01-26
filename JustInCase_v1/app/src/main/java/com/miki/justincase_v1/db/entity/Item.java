@@ -36,5 +36,8 @@ public class Item implements Serializable {
     }
 
 
+    public void setItem(String itemName) {
+        this.itemName = itemName;
+    }
 }
 

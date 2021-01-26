@@ -1,4 +1,4 @@
-package com.miki.justincase_v1.fragments;
+package com.miki.justincase_v1.fragments.Add;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,10 +13,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_item;
 import com.miki.justincase_v1.bindings.Binding_Entity_focusEntity;
-import com.miki.justincase_v1.db.AppDatabase;
 import com.miki.justincase_v1.db.entity.Baggage;
 import com.miki.justincase_v1.db.entity.BaggageContent;
 import com.miki.justincase_v1.db.entity.Item;
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 
 public class Fragment_Add_item_to_Baggage extends Fragment {
 
-    AppDatabase db;
     Adapter_item adapter_item;
     RecyclerView itemRecyclerView;
     ArrayList<Item> listaDeItems;
@@ -33,52 +33,51 @@ public class Fragment_Add_item_to_Baggage extends Fragment {
     Activity activity;
     Binding_Entity_focusEntity bindingBaggageFocusBaggage;
 
-    Fragment parentFragment;
+    ArrayList<BaggageContent> baggageContentArrayList;
+    FloatingActionButton floatingActionButton;
+
     Baggage thisBagagge;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_baggagecontent, container, false);
-        parentFragment = getParentFragment();
-
         Bundle bundle = getArguments();
 
-        //validacion
+        baggageContentArrayList = new ArrayList<>();
+
         if (bundle != null) {
-            //pillamos la maleta que nos han pasado a traves del bundle
             thisBagagge = (Baggage) bundle.getSerializable("ThisBaggage");
-            //obtenemos los datos de la tabla
-            db = AppDatabase.getInstance(getContext());
-            listaDeItems = (ArrayList<Item>) db.itemDAO().getAllItemsThatItNotInThisBaggage(thisBagagge.baggageID);
-            //vinculo con el recycler view
+
+            floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Baggage_btn_finish);
+            floatingActionButton.setOnClickListener(v ->{
+                Presented.addThosesItemsForThisBaggage(baggageContentArrayList, view);
+                bindingBaggageFocusBaggage.sendBaggage(thisBagagge);
+
+            });
+
+            listaDeItems = Presented.getAllItemsThatItNotInThisBaggage(thisBagagge, view);
+
             itemRecyclerView = view.findViewById(R.id.fragment_addBaggageContent_recyclerview);
-            mostrarDatos();
+            loadRecyclerView();
         }
         return view;
     }
 
-    private void mostrarDatos() {
+    private void loadRecyclerView() {
         itemRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter_item = new Adapter_item(getContext(), listaDeItems);
         itemRecyclerView.setAdapter(adapter_item);
 
-        //Cuando pulse en un dato
         adapter_item.setListener(view -> {
 
-
             Item item = listaDeItems.get(itemRecyclerView.getChildAdapterPosition(view));
-
             BaggageContent baggageContent = new BaggageContent(item.itemID, thisBagagge.baggageID, item.itemName);
-
-            db.baggageContentDAO().addANewItemForThisSuitcase(baggageContent);
-
-            bindingBaggageFocusBaggage.sendBaggage(thisBagagge);
-
-
+            if(!baggageContentArrayList.contains(baggageContent)){
+                baggageContentArrayList.add(baggageContent);
+            }
         });
     }
-
 
     //Comunicacion entre el fragment Maleta y Detalles de la maleta
     @Override

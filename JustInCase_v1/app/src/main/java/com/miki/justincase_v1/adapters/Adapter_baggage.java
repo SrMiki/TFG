@@ -48,11 +48,10 @@ public class Adapter_baggage extends RecyclerView.Adapter<Adapter_baggage.Baggag
 
     @Override
     public void onBindViewHolder(@NonNull Adapter_baggage.BaggageViewHolder holder, int position) {
-
         db = AppDatabase.getInstance(holder.baggageName.getContext());
+
         int id = dataset.get(position).FKsuitcaseID;
         Suitcase suitcase = db.suitcaseDAO().getSuitcase(id);
-        holder.setFKsuitcaseID(id);
         holder.baggageName.setText(suitcase.getSuitcaseName());
     }
 
@@ -61,22 +60,11 @@ public class Adapter_baggage extends RecyclerView.Adapter<Adapter_baggage.Baggag
     public int getItemCount() { return dataset == null ? 0 : dataset.size(); }
 
     public class BaggageViewHolder extends RecyclerView.ViewHolder {
-
         public TextView baggageName;
-        private int FKsuitcaseID;
 
         public BaggageViewHolder(@NonNull View v) {
             super(v);
             baggageName = v.findViewById(R.id.recyclerview_baggage_baggageName);
-        }
-
-        public void setFKsuitcaseID(int FKsuitcaseID) {
-            this.FKsuitcaseID = FKsuitcaseID;
-        }
-
-
-        public int getFKsuitcaseID() {
-            return FKsuitcaseID;
         }
     }
 }

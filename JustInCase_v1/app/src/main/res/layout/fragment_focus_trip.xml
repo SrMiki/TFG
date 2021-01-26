@@ -79,7 +79,6 @@
             android:id="@+id/fragment_focusTrip_btn_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
             android:text="@string/btn_add"
             app:backgroundTint="@color/primary_700" />
 
@@ -89,7 +88,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:onClick="onClick"
             android:text="@string/btn_edit"
             app:backgroundTint="@color/primary_200" />
 
@@ -97,7 +95,6 @@
             android:id="@+id/fragment_focusTrip_btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
             android:text="@string/btn_delete"
             app:backgroundTint="@color/secundary_700" />
     </LinearLayout>

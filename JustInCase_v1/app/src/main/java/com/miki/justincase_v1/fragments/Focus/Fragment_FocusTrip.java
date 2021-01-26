@@ -5,9 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,26 +14,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_baggage;
 import com.miki.justincase_v1.bindings.Binding_Entity_focusEntity;
-import com.miki.justincase_v1.db.AppDatabase;
 import com.miki.justincase_v1.db.entity.Baggage;
 import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
-import com.miki.justincase_v1.fragments.Fragment_Add_Baggage;
+import com.miki.justincase_v1.fragments.Edit.Fragment_Edit_Trip;
+import com.miki.justincase_v1.fragments.Add.Fragment_Add_Baggage;
 import com.miki.justincase_v1.fragments.Show.Fragment_ShowTrips;
 
 import java.util.ArrayList;
 
 public class Fragment_FocusTrip extends BaseFragment {
 
-    AppDatabase db;
-
     Activity activity;
     TextView tripDestination, tripTravelDate;
-    Button btn_focusTrip_delete, btn_focusTrip_addNewBaggage;
-
+    Button btn_focusTrip_delete, btn_focusTrip_addNewBaggage, btn_focusTrip_edit;
 
     Adapter_baggage adapter_baggage;
     ArrayList<Baggage> maletasDeEsteViaje;
@@ -51,7 +46,6 @@ public class Fragment_FocusTrip extends BaseFragment {
         tripDestination = view.findViewById(R.id.fragment_focusTrip_tripDestino);
         tripTravelDate = view.findViewById(R.id.fragment_focusTrip_tripDate);
 
-        //bundle for information
         Bundle bundle = getArguments();
         Trip trip;
 
@@ -61,37 +55,35 @@ public class Fragment_FocusTrip extends BaseFragment {
             tripDestination.setText(trip.getDestination());
             tripTravelDate.setText(trip.getTravelDate());
 
-            db = AppDatabase.getInstance(view.getContext());
-
-            maletasDeEsteViaje = (ArrayList<Baggage>) db.baggageDAO().getTheBaggageOfThisTrip(trip.tripID);
+            maletasDeEsteViaje = Presented.getTheBaggageOfThisTrip(trip, view);
 
             baggageRecyclerview = view.findViewById(R.id.fragment_focusTrip_recyclerView);
-            mostrarDatos();
+            loadRecyclerView();
 
-            //trip delete btn
             btn_focusTrip_delete = view.findViewById(R.id.fragment_focusTrip_btn_delete);
             btn_focusTrip_delete.setOnClickListener(v -> {
-                db = AppDatabase.getInstance(view.getContext());
-                db.tripDao().delete(trip);
-
-                doFragmentTransaction(new Fragment_ShowTrips());
+                Presented.deleteTrip(trip, view);
+               getNav().navigate(R.id.fragment_ShowTrips);
             });
 
-            //trip add baggage btn
             btn_focusTrip_addNewBaggage = view.findViewById(R.id.fragment_focusTrip_btn_add);
             btn_focusTrip_addNewBaggage.setOnClickListener(v -> {
-
                 Bundle obundle = new Bundle();
-
                 obundle.putSerializable("ThisTrip", trip);
-               doFragmentTransactionWithBundle(new Fragment_Add_Baggage(), obundle);
+                getNav().navigate(R.id.fragment_Add_Baggage, obundle);
+            });
+
+            btn_focusTrip_edit = view.findViewById(R.id.fragment_focusTrip_btn_edit);
+            btn_focusTrip_edit.setOnClickListener(v -> {
+                Bundle obundle = new Bundle();
+                obundle.putSerializable("ThisTrip", trip);
+                getNav().navigate(R.id.fragment_Edit_Trip, obundle);
             });
         }
         return view;
     }
 
-
-    private void mostrarDatos() {
+    private void loadRecyclerView() {
         baggageRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter_baggage = new Adapter_baggage(getContext(), maletasDeEsteViaje);
         baggageRecyclerview.setAdapter(adapter_baggage);

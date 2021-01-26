@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.adapters.Adapter_trip;
 import com.miki.justincase_v1.bindings.Binding_Entity_focusEntity;
 import com.miki.justincase_v1.db.AppDatabase;
@@ -28,16 +29,12 @@ import java.util.ArrayList;
 
 public class Fragment_ShowTrips extends BaseFragment {
 
-    AppDatabase db;
-
     Adapter_trip adaptertrip;
     ArrayList<Trip> listOfTrips;
     Binding_Entity_focusEntity bindingTripfocusTrip;
     RecyclerView recyclerView;
 
     Activity activity;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
 
     FloatingActionButton floatingActionButton;
 
@@ -47,24 +44,19 @@ public class Fragment_ShowTrips extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_show_trips, container, false);
 
         floatingActionButton = view.findViewById(R.id.fragment_showTrips_btn_add);
-        /**
-         * (new View.OnClickListener() {
-         *             @Override
-         *             public void onClick(View view) {
-         */
-        floatingActionButton.setOnClickListener(v -> {
-           doFragmentTransaction(new Fragment_CreateTrip());
-        });
 
-        db = AppDatabase.getInstance(getContext());
-        listOfTrips = (ArrayList<Trip>) db.tripDao().getAllTrips();
+        floatingActionButton.setOnClickListener(v -> {
+           getNav().navigate(R.id.fragment_CreateTrip);
+        });
+        listOfTrips = Presented.getAllTrips(view);
 
         recyclerView = view.findViewById(R.id.fragment_showTrips_recyclerview);
-        mostrarDatos();
+        loadRecyclerView();
+
         return view;
     }
 
-    private void mostrarDatos() {
+    private void loadRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adaptertrip = new Adapter_trip(getContext(), listOfTrips);
         recyclerView.setAdapter(adaptertrip);

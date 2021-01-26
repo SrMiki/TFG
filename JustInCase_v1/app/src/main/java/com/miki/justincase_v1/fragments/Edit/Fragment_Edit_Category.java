@@ -1,4 +1,4 @@
-package com.miki.justincase_v1.fragments.Create;
+package com.miki.justincase_v1.fragments.Edit;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,7 +17,7 @@ import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.fragments.BaseFragment;
 import com.miki.justincase_v1.fragments.Show.Fragment_ItemManager;
 
-public class Fragment_CreateCategory extends BaseFragment {
+public class Fragment_Edit_Category extends BaseFragment {
 
     EditText nameCategoryTV;
 
@@ -31,16 +31,27 @@ public class Fragment_CreateCategory extends BaseFragment {
         nameCategoryTV = view.findViewById(R.id.fragment_createCategory_input_CategoryName);
 
         btn = view.findViewById(R.id.fragment_createCategory_btn_add);
-        btn.setOnClickListener(v -> {
 
-            String nameCategory = nameCategoryTV.getText().toString();
+        Bundle bundle = getArguments();
 
-            Presented.createCategory(nameCategory, view);
+        if (bundle != null) {
 
-            closeKeyBoard();
+            Category category = (Category) bundle.getSerializable("ThisCategory");
 
-            getNav().navigate(R.id.fragment_ShowCategories);
-        });
+            nameCategoryTV.setText(category.getCategoryName());
+
+            btn.setOnClickListener(v -> {
+
+                String nameCategory = nameCategoryTV.getText().toString();
+                Presented.updateCategory(category, nameCategory, view);
+
+                closeKeyBoard();
+
+                Bundle obundle = new Bundle();
+                obundle.putSerializable("category", category);
+                getNav().navigate(R.id.fragment_FocusCategory, obundle);
+            });
+        }
         return view;
     }
 }

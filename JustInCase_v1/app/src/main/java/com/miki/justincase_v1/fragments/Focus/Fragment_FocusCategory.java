@@ -10,40 +10,33 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_CategoryContent;
 import com.miki.justincase_v1.bindings.Binding_Entity_focusEntity;
-import com.miki.justincase_v1.db.AppDatabase;
 import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.db.entity.CategoryContent;
 import com.miki.justincase_v1.fragments.BaseFragment;
-import com.miki.justincase_v1.fragments.Fragment_Add_Item_To_Category;
-import com.miki.justincase_v1.fragments.Fragment_ItemManager;
+import com.miki.justincase_v1.fragments.Edit.Fragment_Edit_Category;
+import com.miki.justincase_v1.fragments.Add.Fragment_Add_Item_To_Category;
+import com.miki.justincase_v1.fragments.Show.Fragment_ItemManager;
 
 import java.util.ArrayList;
 
 public class Fragment_FocusCategory extends BaseFragment {
 
-    AppDatabase db;
-
     TextView categoryNameTV, categorySizeTV;
-    Button btn_focusCategory_delete, btn_focusCategory_add;
+    Button btn_focusCategory_delete, btn_focusCategory_add, btn_focusCategory_edit;
     RecyclerView categoryContentRecyclerView;
     Adapter_CategoryContent adapterCategoryContent;
-
 
     Binding_Entity_focusEntity bindingCategoryFocusCategory;
     Activity activity;
     ArrayList<CategoryContent> categoryContent;
-    Fragment_Add_Item_To_Category fragmentAddItemToCategory;
-    private Adapter_CategoryContent adapter_categoryContent;
-    private Category category;
+    Category category;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,34 +52,37 @@ public class Fragment_FocusCategory extends BaseFragment {
 
             categoryNameTV.setText(category.getCategoryName());
 
-
-            db = AppDatabase.getInstance(view.getContext());
-
-            categoryContent = (ArrayList<CategoryContent>) db.categoryContentDAO().getAllItemsFromThisCategory(category.categoryID);
+            categoryContent = Presented.getAllItemsFromThisCategory(category, view);
             categoryContentRecyclerView = view.findViewById(R.id.fragment_focusCategory_recyclerView);
 
             categorySizeTV.setText(String.valueOf(categoryContent.size()));
-            mostrarDatos();
+            loadRecyclerView();
 
-            //Baggage add items to THIS Baggage button
             btn_focusCategory_add = view.findViewById(R.id.fragment_focusCategory_btn_add);
             btn_focusCategory_add.setOnClickListener(v -> {
                 Bundle obundle = new Bundle();
                 obundle.putSerializable("ThisCategory", category);
-                doFragmentTransaction(new Fragment_Add_Item_To_Category());
+                getNav().navigate(R.id.fragment_Add_Item_To_Category, obundle);
             });
-
 
             btn_focusCategory_delete = view.findViewById(R.id.fragment_focusCategory_btn_delete);
             btn_focusCategory_delete.setOnClickListener(v -> {
-                db.categoryDAO().delete(category);
-                doFragmentTransaction(new Fragment_ItemManager());
+                Presented.deleteCategory(category, view);
+                getNav().navigate(R.id.fragment_ShowCategories);
+
+            });
+
+            btn_focusCategory_edit = view.findViewById(R.id.fragment_focusCategory_btn_edit);
+            btn_focusCategory_edit.setOnClickListener(v -> {
+                Bundle obundle = new Bundle();
+                obundle.putSerializable("ThisCategory", category);
+                getNav().navigate(R.id.fragment_Edit_Category, obundle);
             });
         }
         return view;
     }
 
-    private void mostrarDatos() {
+    private void loadRecyclerView() {
         categoryContentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapterCategoryContent = new Adapter_CategoryContent(getContext(), categoryContent);
         categoryContentRecyclerView.setAdapter(adapterCategoryContent);

@@ -41,6 +41,14 @@ public class Trip implements Serializable {
         this.returnTransport = returnTransport;
     }
 
+    public void setTrip(String destination, String travelDate, String returnDate, String travelTransport, String returnTransport) {
+        this.destination = destination;
+        this.travelDate = travelDate;
+        this.returnDate = returnDate;
+        this.travelTransport = travelTransport;
+        this.returnTransport = returnTransport;
+    }
+
 
     public String getDestination() {
         return destination;

@@ -70,8 +70,17 @@ public class Adapter_CategoryContent extends RecyclerView.Adapter<Adapter_Catego
 
         holder.categoryContentCount.setText(categoryContent.getCategoryCount());
 
-        holder.categoryContentButtonAdd.setOnClickListener(v -> {
+        holder.categoryContentButtonIncrease.setOnClickListener(v -> {
             categoryContent.increaseThisItem();
+            db.categoryContentDAO().updateCategoryContent(categoryContent);
+
+            this.activity = (Activity) holder.context;
+            bindingCategoryFocusCategory = (Binding_Entity_focusEntity) this.activity;
+            bindingCategoryFocusCategory.sendCategory(db.categoryDAO().getCategory(categoryContent.FKcategoryID));
+        });
+
+        holder.categoryContentButtonDecrease.setOnClickListener(v -> {
+            categoryContent.decreaseThisItem();
             db.categoryContentDAO().updateCategoryContent(categoryContent);
 
             this.activity = (Activity) holder.context;
@@ -89,7 +98,7 @@ public class Adapter_CategoryContent extends RecyclerView.Adapter<Adapter_Catego
 
     public class CategoryContentViewHolder extends RecyclerView.ViewHolder {
         public TextView categoryContentName, categoryContentCount;
-        public Button categoryContentButtonAdd;
+        public Button categoryContentButtonIncrease, categoryContentButtonDecrease;
 
         Context context;
 
@@ -99,7 +108,8 @@ public class Adapter_CategoryContent extends RecyclerView.Adapter<Adapter_Catego
             context = itemView.getContext();
             categoryContentName = itemView.findViewById(R.id.recyclerview_categoryContent_itemName);
             categoryContentCount = itemView.findViewById(R.id.recyclerview_categoryContent_itemCount);
-            categoryContentButtonAdd = itemView.findViewById(R.id.recyclerview_categoryContent_btn_add);
+            categoryContentButtonIncrease = itemView.findViewById(R.id.recyclerview_categoryContent_btn_increase);
+            categoryContentButtonDecrease = itemView.findViewById(R.id.recyclerview_categoryContent_btn_decrease);
         }
     }
 }

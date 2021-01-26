@@ -63,4 +63,10 @@ public class BaggageContent implements Serializable {
     public void increaseThisItem() {
         this.baggageCount++;
     }
+
+    public void decreaseThisItem() {
+        if (baggageCount > 0) {
+            this.baggageCount--;
+        }
+    }
 }
