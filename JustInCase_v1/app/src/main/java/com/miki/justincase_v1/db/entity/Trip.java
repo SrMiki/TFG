@@ -17,9 +17,6 @@ public class Trip implements Serializable {
     @ColumnInfo(name = "destination")
     public String destination;
 
-    /**
-     * Dates must be YYYY-MM-DD!
-     */
     @NonNull
     @ColumnInfo(name = "travelDate")
     public String travelDate;
@@ -66,4 +63,7 @@ public class Trip implements Serializable {
         this.travelDate = travelDate;
     }
 
+    public String getReturnDate() {
+        return returnDate;
+    }
 }

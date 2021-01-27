@@ -10,6 +10,7 @@ import com.miki.justincase_v1.db.entity.CategoryContent;
 import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.db.entity.Suitcase;
 import com.miki.justincase_v1.db.entity.Trip;
+import com.miki.justincase_v1.fragments.DatePickerFragment;
 
 import java.util.ArrayList;
 

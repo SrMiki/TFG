@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class Fragment_FocusCategory extends BaseFragment {
 
-    TextView categoryNameTV, categorySizeTV;
+    TextView categoryNameTV;
     Button btn_focusCategory_delete, btn_focusCategory_add, btn_focusCategory_edit;
     RecyclerView categoryContentRecyclerView;
     Adapter_CategoryContent adapterCategoryContent;
@@ -43,7 +43,6 @@ public class Fragment_FocusCategory extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_focus_category, container, false);
 
         categoryNameTV = view.findViewById(R.id.fragment_focusCategory_categoryName);
-        categorySizeTV = view.findViewById(R.id.fragment_focusCategory_categorySize);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -55,7 +54,6 @@ public class Fragment_FocusCategory extends BaseFragment {
             categoryContent = Presented.getAllItemsFromThisCategory(category, view);
             categoryContentRecyclerView = view.findViewById(R.id.fragment_focusCategory_recyclerView);
 
-            categorySizeTV.setText(String.valueOf(categoryContent.size()));
             loadRecyclerView();
 
             btn_focusCategory_add = view.findViewById(R.id.fragment_focusCategory_btn_add);

@@ -58,8 +58,6 @@ public class Adapter_category extends RecyclerView.Adapter<Adapter_category.Cate
 
         int categoryID = dataset.get(position).categoryID;
         int size = db.categoryContentDAO().getAllItemsFromThisCategory(categoryID).size();
-
-        holder.categorySizeTV.setText(String.valueOf(size));
     }
 
     @Override
@@ -68,12 +66,11 @@ public class Adapter_category extends RecyclerView.Adapter<Adapter_category.Cate
     }
 
     public class CategoryViewHolder extends RecyclerView.ViewHolder {
-        public TextView categoryNameTV, categorySizeTV;
+        public TextView categoryNameTV;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
             categoryNameTV = itemView.findViewById(R.id.recyclerview_category_categoryName);
-            categorySizeTV = itemView.findViewById(R.id.recyclerview_category_categorySize);
         }
     }
 }

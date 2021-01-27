@@ -7,7 +7,7 @@
     android:layout_marginTop="75dp">
 
     <include
-        layout="@layout/fragment_item_manager">
+        layout="@layout/item_manager_fragment">
     </include>
 
     <TextView

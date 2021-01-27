@@ -73,7 +73,9 @@ public class Fragment_FocusBaggage extends BaseFragment {
                 Presented.deleteBaggage(baggage, view);
 
                 Trip trip = Presented.getTheTripAsociatedWithThisBaggage(baggage, view);
-                bindingTripFocusTrip.sendTrip(trip);
+                Bundle obundle = new Bundle();
+                obundle.putSerializable("trip", trip);
+                getNav().navigate(R.id.fragment_FocusTrip2, obundle);
             });
 
             btn_focusBaggage_add = view.findViewById(R.id.fragment_focusBaggage_btn_add);
@@ -86,7 +88,7 @@ public class Fragment_FocusBaggage extends BaseFragment {
             btn_focusBaggage_edit = view.findViewById(R.id.fragment_focusBaggage_btn_edit);
             btn_focusBaggage_edit.setOnClickListener(v -> {
                 Bundle obundle = new Bundle();
-                obundle.putSerializable("ThisSuitcase", suitcase);
+                obundle.putSerializable("ThisBaggage", baggage);
                 getNav().navigate(R.id.fragment_Edit_Baggage, obundle);
             });
 

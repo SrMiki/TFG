@@ -5,21 +5,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.db.AppDatabase;
 import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
-import com.miki.justincase_v1.fragments.Show.Fragment_ShowTrips;
 
 public class Fragment_Edit_Trip extends BaseFragment {
 
-    EditText travelDestinationTV, travelDateTV;
+    EditText travelDestinationTV, travelDateTV, returnDateTV;
+
+    Switch dateSwitch;
 
     Button btn;
     Trip trip;
@@ -29,11 +32,14 @@ public class Fragment_Edit_Trip extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_trip, container, false);
+        LinearLayout linearLayout = view.findViewById(R.id.fragment_createTrip_LayoutInput_tripReturnDate);
 
-        travelDestinationTV = view.findViewById(R.id.activity_createTrip_input_tripDestino);
+        travelDestinationTV = view.findViewById(R.id.fragment_createTrip_input_tripDestino);
         travelDateTV = view.findViewById(R.id.activity_createTrip_input_travelDate);
+        returnDateTV = view.findViewById(R.id.fragment_createTrip_input_tripReturnDate);
 
         btn = view.findViewById(R.id.fragment_createTrip_btn_add);
+        dateSwitch = view.findViewById(R.id.fragment_createTrip_switch);
 
         Bundle bundle = getArguments();
 
@@ -43,19 +49,53 @@ public class Fragment_Edit_Trip extends BaseFragment {
             travelDestinationTV.setText(trip.destination);
             travelDateTV.setText(trip.travelDate);
 
-            btn.setOnClickListener(v -> {
+            if(trip.getReturnDate().isEmpty()){
+                dateSwitch.setChecked(true);
+                linearLayout.setVisibility(view.GONE);
+            } else {
+                returnDateTV.setText(trip.getReturnDate());
+            }
 
+            dateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        linearLayout.setVisibility(view.GONE);
+                    } else {
+                        linearLayout.setVisibility(view.VISIBLE);
+                        travelDateTV.setText("");
+                        returnDateTV.setText("");
+                    }
+                }
+            });
+
+            travelDateTV.setOnClickListener(v -> {
+                showDatePickerDialog(travelDateTV);
+                returnDateTV.setText("");
+            });
+
+            returnDateTV.setOnClickListener(v -> {
+                //cannot used until insert TravelDate
+                if (!dateSwitch.isChecked())
+                    if (!travelDateTV.getText().toString().isEmpty()) {
+                        showDatePickerDialog(travelDateTV, returnDateTV);
+                    }
+            });
+
+            btn.setOnClickListener(v -> {
                 String destination = travelDestinationTV.getText().toString();
                 String travelDate = travelDateTV.getText().toString();
+                String returnDate = returnDateTV.getText().toString();
 
                 //TODO add editText to this fields
-                String returnDate = "";
                 String travelTransport = "";
                 String returnTransport = "";
 
+                //If dont change the destination the keyboard it's not opened
+                if(!destination.equals(trip.getDestination())){
+                    closeKeyBoard();
+                }
                 Presented.updateTrip(trip, destination, travelDate, returnDate, travelTransport, returnTransport, view);
 
-                closeKeyBoard();
                 Bundle obundle = new Bundle();
                 obundle.putSerializable("trip", trip);
                 getNav().navigate(R.id.fragment_FocusTrip2, obundle);

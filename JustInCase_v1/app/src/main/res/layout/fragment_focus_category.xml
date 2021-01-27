@@ -24,14 +24,6 @@
         android:text="nombre categoria"
         android:textSize="25sp" />
 
-    <TextView
-        android:id="@+id/fragment_focusCategory_categorySize"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="nº items"
-        android:textSize="25sp" />
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

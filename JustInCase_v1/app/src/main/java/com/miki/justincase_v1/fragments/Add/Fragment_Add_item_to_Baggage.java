@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,10 +22,11 @@ import com.miki.justincase_v1.bindings.Binding_Entity_focusEntity;
 import com.miki.justincase_v1.db.entity.Baggage;
 import com.miki.justincase_v1.db.entity.BaggageContent;
 import com.miki.justincase_v1.db.entity.Item;
+import com.miki.justincase_v1.fragments.BaseFragment;
 
 import java.util.ArrayList;
 
-public class Fragment_Add_item_to_Baggage extends Fragment {
+public class Fragment_Add_item_to_Baggage extends BaseFragment {
 
     Adapter_item adapter_item;
     RecyclerView itemRecyclerView;
@@ -36,17 +38,24 @@ public class Fragment_Add_item_to_Baggage extends Fragment {
     ArrayList<BaggageContent> baggageContentArrayList;
     FloatingActionButton floatingActionButton;
 
+    Button btn_category;
+
     Baggage thisBagagge;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_baggagecontent, container, false);
+
         Bundle bundle = getArguments();
 
         baggageContentArrayList = new ArrayList<>();
 
         if (bundle != null) {
+            btn_category = view.findViewById(R.id.fragment_itemManager_btn_categories);
+            btn_category.setOnClickListener(v -> {
+                getNav().navigate(R.id.fragment_Add_Category_To_Baggage, bundle);
+            });
             thisBagagge = (Baggage) bundle.getSerializable("ThisBaggage");
 
             floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Baggage_btn_finish);
@@ -78,6 +87,7 @@ public class Fragment_Add_item_to_Baggage extends Fragment {
             }
         });
     }
+
 
     //Comunicacion entre el fragment Maleta y Detalles de la maleta
     @Override

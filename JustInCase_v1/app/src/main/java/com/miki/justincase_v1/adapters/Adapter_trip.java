@@ -38,11 +38,15 @@ public class Adapter_trip extends RecyclerView.Adapter<Adapter_trip.MyViewHolder
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // Get the element from the dataset
-        String tripName = dataset.get(position).getDestination();
-        String tripDescription = dataset.get(position).getTravelDate();
+        String destination = dataset.get(position).getDestination();
+        String travelDate = dataset.get(position).getTravelDate();
+        String returnDate = dataset.get(position).getReturnDate();
 
-        holder.tripName_TextView.setText(tripName);
-        holder.tripDescription_TextView.setText(tripDescription);
+        if(!returnDate.isEmpty()){
+            travelDate += " - " + returnDate;
+        }
+        holder.tripName_TextView.setText(destination);
+        holder.tripDescription_TextView.setText(travelDate);
     }
 
     // List size, defult 0
@@ -51,11 +55,7 @@ public class Adapter_trip extends RecyclerView.Adapter<Adapter_trip.MyViewHolder
         return dataset == null ? 0 : dataset.size();
     }
 
-    /**
-     * Add a listener to all elements of the recycler view
-     *
-     * @param listener
-     */
+
     public void setListener(View.OnClickListener listener) {
         this.listener = listener;
     }

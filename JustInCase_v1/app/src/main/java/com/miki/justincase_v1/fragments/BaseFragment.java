@@ -1,9 +1,13 @@
 package com.miki.justincase_v1.fragments;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -52,5 +56,45 @@ public class    BaseFragment extends Fragment {
         inputManager.hideSoftInputFromWindow(
                 getActivity().getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    /**
+     * @param dateTextView The EditText to put the Date
+     */
+    protected void showDatePickerDialog(EditText dateTextView) {
+
+        DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                // +1 because January is zero
+                final String selectedDate = twoDigits(day) + " / " + twoDigits(month+1) + " / " + year;
+                dateTextView.setText(selectedDate);
+            }
+        });
+
+        newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+    }
+
+    /**
+     *
+     * @param selectedDateTextView
+     * @param dateTextView
+     */
+    protected void showDatePickerDialog(EditText selectedDateTextView, EditText dateTextView) {
+        String selectedDate = selectedDateTextView.getText().toString();
+        DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                // +1 because January is zero
+                final String selectedDate = twoDigits(day) + " / " + twoDigits(month+1) + " / " + year;
+                dateTextView.setText(selectedDate);
+            }
+        }, selectedDate);
+
+        newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+    }
+
+    private String twoDigits(int n) {
+        return (n<=9) ? ("0"+n) : String.valueOf(n);
     }
 }

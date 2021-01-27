@@ -78,5 +78,6 @@
     <string name="fragment_focusCategory_title">Detalles categoria</string>
     <string name="fragment_addCategoryContent">Añade items a la CATEGORIA</string>
     <string name="mainFragmentTitle">Menu Principal</string>
+    <string name="switchDates_text">Viaje solo de ida</string>
 
 </resources>

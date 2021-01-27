@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.miki.justincase_v1.Presented;
@@ -21,16 +22,13 @@ import com.miki.justincase_v1.bindings.Binding_Entity_focusEntity;
 import com.miki.justincase_v1.db.entity.Baggage;
 import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
-import com.miki.justincase_v1.fragments.Edit.Fragment_Edit_Trip;
-import com.miki.justincase_v1.fragments.Add.Fragment_Add_Baggage;
-import com.miki.justincase_v1.fragments.Show.Fragment_ShowTrips;
 
 import java.util.ArrayList;
 
 public class Fragment_FocusTrip extends BaseFragment {
 
     Activity activity;
-    TextView tripDestination, tripTravelDate;
+    TextView tripDestinationTV, tripTravelDateTV, returnDateTV;
     Button btn_focusTrip_delete, btn_focusTrip_addNewBaggage, btn_focusTrip_edit;
 
     Adapter_baggage adapter_baggage;
@@ -42,9 +40,12 @@ public class Fragment_FocusTrip extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_focus_trip, container, false);
+        LinearLayout linearLayout = view.findViewById(R.id.fragment_focusTrip_LayoutReturnDate);
 
-        tripDestination = view.findViewById(R.id.fragment_focusTrip_tripDestino);
-        tripTravelDate = view.findViewById(R.id.fragment_focusTrip_tripDate);
+
+        tripDestinationTV = view.findViewById(R.id.fragment_focusTrip_tripDestino);
+        tripTravelDateTV = view.findViewById(R.id.fragment_focusTrip_tripDate);
+        returnDateTV = view.findViewById(R.id.fragment_focusTrip_returnDate);
 
         Bundle bundle = getArguments();
         Trip trip;
@@ -52,8 +53,14 @@ public class Fragment_FocusTrip extends BaseFragment {
         if (bundle != null) {
             trip = (Trip) bundle.getSerializable("trip");
 
-            tripDestination.setText(trip.getDestination());
-            tripTravelDate.setText(trip.getTravelDate());
+            tripDestinationTV.setText(trip.getDestination());
+            tripTravelDateTV.setText(trip.getTravelDate());
+
+            if (trip.getReturnDate().isEmpty()) {
+                linearLayout.setVisibility(view.GONE);
+            } else {
+                returnDateTV.setText(trip.getReturnDate());
+            }
 
             maletasDeEsteViaje = Presented.getTheBaggageOfThisTrip(trip, view);
 
@@ -63,7 +70,7 @@ public class Fragment_FocusTrip extends BaseFragment {
             btn_focusTrip_delete = view.findViewById(R.id.fragment_focusTrip_btn_delete);
             btn_focusTrip_delete.setOnClickListener(v -> {
                 Presented.deleteTrip(trip, view);
-               getNav().navigate(R.id.fragment_ShowTrips);
+                getNav().navigate(R.id.fragment_ShowTrips);
             });
 
             btn_focusTrip_addNewBaggage = view.findViewById(R.id.fragment_focusTrip_btn_add);

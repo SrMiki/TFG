@@ -154,6 +154,9 @@
         <action
             android:id="@+id/action_fragment_Add_item_to_Baggage_to_fragment_FocusBaggage"
             app:destination="@id/fragment_FocusBaggage" />
+        <action
+            android:id="@+id/action_fragment_Add_item_to_Baggage_to_fragment_Add_Category_To_Baggage"
+            app:destination="@id/fragment_Add_Category_To_Baggage" />
     </fragment>
     <fragment
         android:id="@+id/fragment_Edit_Baggage"
@@ -235,5 +238,13 @@
         <action
             android:id="@+id/action_fragment_FocusCategory_to_fragment_ShowCategories"
             app:destination="@id/fragment_ShowCategories" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Add_Category_To_Baggage"
+        android:name="com.miki.justincase_v1.fragments.Add.Fragment_Add_Category_To_Baggage"
+        android:label="Fragment_Add_Category_To_Baggage" >
+        <action
+            android:id="@+id/action_fragment_Add_Category_To_Baggage_to_fragment_Add_item_to_Baggage"
+            app:destination="@id/fragment_Add_item_to_Baggage" />
     </fragment>
 </navigation>

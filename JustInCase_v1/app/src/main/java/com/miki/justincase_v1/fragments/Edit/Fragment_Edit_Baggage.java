@@ -47,17 +47,21 @@ public class Fragment_Edit_Baggage extends BaseFragment {
             suitcaseWeightTV.setText(suitcase.getSuitcaseWeight());
             suitcaseDimnsTV.setText(suitcase.getSuitcaseDims());
 
-            String nombreMaleta = suitcaseNameTV.getText().toString();
-            String color = suitcaseColorTV.getText().toString();
-            String weight = suitcaseWeightTV.getText().toString();
-            String dimns = suitcaseDimnsTV.getText().toString();
 
             bnt = view.findViewById(R.id.fragment_createSuitcase_btn_add);
             bnt.setOnClickListener(v -> {
+
+                String nombreMaleta = suitcaseNameTV.getText().toString();
+                String color = suitcaseColorTV.getText().toString();
+                String weight = suitcaseWeightTV.getText().toString();
+                String dimns = suitcaseDimnsTV.getText().toString();
+
                 Presented.updateBaggage(baggage, nombreMaleta, color, weight, dimns, view);
 
                 closeKeyBoard();
-                binding_baggage_focusBaggage.sendBaggage(baggage);
+                Bundle obundle = new Bundle();
+                obundle.putSerializable("baggage", baggage);
+               getNav().navigate(R.id.fragment_FocusBaggage, obundle );
             });
         }
         return view;
