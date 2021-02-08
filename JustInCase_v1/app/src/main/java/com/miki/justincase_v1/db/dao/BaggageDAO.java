@@ -5,28 +5,33 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.miki.justincase_v1.db.entity.Baggage;
 
 import java.util.List;
 
-//Data access object of "Baggage"
+//Data access object de "SuitcaseContent"
 
 @Dao
 public interface BaggageDAO {
-    @Query("SELECT * FROM baggage")
+    //LiveData
+    @Query("SELECT * FROM Baggage ORDER BY itemName")
     List<Baggage> getAll();
 
-    @Query("SELECT * FROM baggage WHERE baggageID IS :baggageID")
-    Baggage getThisBagagge(int baggageID);
+    @Query("SELECT * FROM Baggage WHERE baggageID IS :baggageID")
+    Baggage getBaggageContent(int baggageID);
 
-    @Query("SELECT * FROM baggage WHERE FKtripID IS :tripID ")
-    List<Baggage> getTheBaggageOfThisTrip(int tripID);
+    @Query("SELECT * FROM Baggage WHERE FKbaggageID IS :baggageID ORDER BY itemName ")
+    List<Baggage> getItemsFromThisBaggage(int baggageID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void addANewBaggageForThisTrip(Baggage baggage);
+    void addANewBaggage(Baggage baggage);
 
     @Delete
-    void deleteBaggage(Baggage baggage);
+    void delete(Baggage baggage);
+
+    @Update
+    void update(Baggage baggage);
 }
 

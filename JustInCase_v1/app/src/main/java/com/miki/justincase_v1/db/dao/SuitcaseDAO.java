@@ -9,6 +9,7 @@ import androidx.room.Update;
 
 import com.miki.justincase_v1.db.entity.Suitcase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //Data access object de "suitcase"
@@ -23,11 +24,14 @@ public interface SuitcaseDAO {
     Suitcase getSuitcase(int suitcaseID);
 
     //@Query("SELECT * FROM items WHERE NOT itemID IN (SELECT baggageContent.FKitemID from baggageContent WHERE baggageContent.FKbaggageID IS :baggageID) ORDER BY itemName")
-    @Query("SELECT * FROM suitcases WHERE NOT suitcaseID IN (SELECT FKsuitcaseID FROM baggage WHERE FKtripID IS :tripID  )ORDER BY suitcaseName")
+    @Query("SELECT * FROM suitcases WHERE NOT suitcaseID IN (SELECT FKsuitcaseID FROM HandLuggage WHERE FKtripID IS :tripID  )ORDER BY suitcaseName")
     List<Suitcase> getAllSuitcaseThatItNotInThisTrip(int tripID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void addANewSuitcase(Suitcase suitcase);
+    void insert(Suitcase suitcase);
+
+    @Insert
+    void insertAll(ArrayList<Suitcase> suitcases);
 
     @Delete
     void delete(Suitcase suitcase);

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,19 +16,61 @@ import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.db.entity.Item;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class Adapter_item extends RecyclerView.Adapter<Adapter_item.ItemViewHolder> implements View.OnClickListener {
+public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewHolder> implements View.OnClickListener, Filterable {
 
-    private final ArrayList<Item> dataset;
     private View.OnClickListener listener;
+    List<Item> dataset;
+    List<Item> referencesDataset; //for search
+    private boolean selectionMode = false;
 
-    public Adapter_item(Context context, ArrayList<Item> dataset) {
+    public Adapter_Item(List<Item> dataset) {
         this.dataset = dataset;
+        referencesDataset = new ArrayList<>(dataset);
     }
 
-    public void setListener(View.OnClickListener listener) {
-        this.listener = listener;
+    /**
+     * Avaible the selection mode
+     */
+    public void setSelectionMode() {
+        selectionMode = true;
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    Filter filter = new Filter() {
+        //run on background thread
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Item> filteredList = new ArrayList<>();
+
+            if (constraint.toString().isEmpty()) {
+                filteredList.addAll(referencesDataset);
+            } else {
+                for (Item e : referencesDataset) {
+                    if (e.getItemName().toLowerCase().startsWith(constraint.toString().toLowerCase())) {
+                        filteredList.add(e);
+                    }
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+            return filterResults;
+        }
+
+        //run on UI thread
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            dataset.clear();
+            dataset.addAll((Collection<? extends Item>) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -34,20 +79,38 @@ public class Adapter_item extends RecyclerView.Adapter<Adapter_item.ItemViewHold
         }
     }
 
+    public void setListener(View.OnClickListener listener) {
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
-    public Adapter_item.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_element_item, parent, false);
-        v.setOnClickListener(this);
-        ItemViewHolder vh = new ItemViewHolder(v);
-        return vh;
+    public Adapter_Item.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.card_view_simple, parent, false);
+        view.setOnClickListener(this);
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Adapter_item.ItemViewHolder holder, int position) {
-        String itemName = dataset.get(position).getItemName();
-        holder.itemName_TextView.setText(itemName);
+    public void onBindViewHolder(@NonNull Adapter_Item.AdapterViewHolder holder, int position) {
+
+        String elementName = dataset.get(position).getItemName();
+        holder.elementNameTV.setText(elementName);
+
+        Context mContext = holder.itemView.getContext();
+
+        if (selectionMode) {
+            if (holder.isSelected) {
+                holder.layout.setBackgroundColor(mContext.getResources().getColor(R.color.selected2));
+                holder.isSelected = false;
+            } else {
+                holder.layout.setBackgroundColor(mContext.getResources().getColor(R.color.design_default_color_on_primary));
+                holder.isSelected = true;
+
+            }
+
+        }
     }
 
     @Override
@@ -55,13 +118,27 @@ public class Adapter_item extends RecyclerView.Adapter<Adapter_item.ItemViewHold
         return dataset == null ? 0 : dataset.size();
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView itemName_TextView;
+    public void removeItem(int position) {
+        dataset.remove(position);
+        notifyItemRemoved(position);
+    }
 
-        public ItemViewHolder(@NonNull View v) {
-            super(v);
-            itemName_TextView = v.findViewById(R.id.recyclerview_Item_itemName);
+    public void restoreItem(Item e, int position) {
+        dataset.add(position, e);
+        notifyItemInserted(position);
+    }
+
+    public class AdapterViewHolder extends RecyclerView.ViewHolder {
+
+        TextView elementNameTV;
+        public LinearLayout layout;
+        private boolean isSelected = false;
+
+        public AdapterViewHolder(View view) {
+            super(view);
+            elementNameTV = view.findViewById(R.id.simpleCardView_name);
+            layout = view.findViewById(R.id.simpleCardView_layout);
         }
     }
 }

@@ -7,12 +7,6 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-
-//Clase "maleta" (suitcase)
-//esta entidad es independiente y agrupa un conjuto de items también independientes
-//es decir la relacion es "1 maleta puede pertenecer a 1 o varios viajes" y "un item puede pertenecer a
-//1 o varias maletas"
-//la foreing key por tanto tiene que ir en "viajes"
 @Entity(tableName = "suitcases")
 public class Suitcase implements Serializable {
 
@@ -37,6 +31,10 @@ public class Suitcase implements Serializable {
         this.suitcaseColor = suitcaseColor;
         this.suitcaseWeight = suitcaseWeight;
         this.suitcaseDims = suitcaseDims;
+    }
+
+    public static boolean check(Suitcase newSuitcase) {
+        return  newSuitcase.getSuitcaseName().isEmpty();
     }
 
     public int getSuitcaseID() {
@@ -70,5 +68,19 @@ public class Suitcase implements Serializable {
         this.suitcaseDims = suitcaseDims;
     }
 
+    public void setSuitcaseID(int suitcaseID) {
+        this.suitcaseID = suitcaseID;
+    }
 
+    public void setSuitcaseColor(String suitcaseColor) {
+        this.suitcaseColor = suitcaseColor;
+    }
+
+    public void setSuitcaseWeight(String suitcaseWeight) {
+        this.suitcaseWeight = suitcaseWeight;
+    }
+
+    public void setSuitcaseDims(String suitcaseDims) {
+        this.suitcaseDims = suitcaseDims;
+    }
 }

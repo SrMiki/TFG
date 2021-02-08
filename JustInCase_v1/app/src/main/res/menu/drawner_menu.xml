@@ -5,28 +5,28 @@
     <item android:title="@string/main">
         <menu>
             <item
-                android:id="@+id/ic_home"
+                android:id="@+id/mainFragment"
                 android:icon="@drawable/ic_home"
                 android:title="@string/ic_home">
             </item>
             <item
-                android:id="@+id/ic_Trips"
-                android:icon="@drawable/ic_baseline_language_24"
+                android:id="@+id/fragment_ShowTrips"
+                android:icon="@drawable/ic_language"
                 android:title="@string/ic_Trips">
             </item>
             <item
-                android:id="@+id/ic_suitcases"
+                android:id="@+id/fragment_ShowSuitcases"
                 android:icon="@drawable/ic_card_travel"
                 android:title="@string/ic_suitcase">
             </item>
             <item
-                android:id="@+id/ic_items"
-                android:icon="@drawable/ic_baseline_article_24"
+                android:id="@+id/fragment_ShowItems"
+                android:icon="@drawable/ic_article"
                 android:title="@string/ic_items">
             </item>
             <item
                 android:id="@+id/ic_alojamiento"
-                android:icon="@drawable/ic_baseline_favorite_border_24"
+                android:icon="@drawable/ic_favorite"
                 android:title="@string/ic_alojamiento">
             </item>
 
@@ -37,17 +37,17 @@
         <menu>
             <item
                 android:id="@+id/ic_ofertas"
-                android:icon="@drawable/ic_baseline_monetization_on_24"
+                android:icon="@drawable/ic_monetization"
                 android:title="@string/ic_ofertas">
             </item>
             <item
                 android:id="@+id/ic_coche"
-                android:icon="@drawable/ic_baseline_directions_car_24"
+                android:icon="@drawable/ic_car"
                 android:title="@string/ic_coche">
             </item>
             <item
                 android:id="@+id/ic_COVID"
-                android:icon="@drawable/ic_baseline_masks_24"
+                android:icon="@drawable/ic_masks"
                 android:title="@string/ic_COVID">
             </item>
 

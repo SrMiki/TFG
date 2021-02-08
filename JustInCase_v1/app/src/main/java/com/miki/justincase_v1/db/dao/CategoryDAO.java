@@ -11,6 +11,7 @@ import androidx.room.Update;
 import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.db.entity.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -23,7 +24,10 @@ public interface CategoryDAO {
     Category getCategory(int thisCategoryID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void addANewCategory(Category newCategory);
+    void insert(Category newCategory);
+
+    @Insert
+    void insertAll(ArrayList<Category> newCategory);
 
     @Delete
     void delete(Category categoryToDelete);

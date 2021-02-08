@@ -18,7 +18,7 @@ import java.util.List;
 public interface TripDAO {
     //LiveData
     @Query("SELECT * FROM trips")
-    List<Trip> getAllTrips();
+    List<Trip> getAllEntity();
 
     @Query("SELECT * FROM trips WHERE tripID IS :tripID")
     Trip getTrip(int tripID);

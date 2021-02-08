@@ -1,52 +1,39 @@
 package com.miki.justincase_v1.fragments;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.adapters.Adapter_trip;
-import com.miki.justincase_v1.bindings.Binding_Entity_focusEntity;
-import com.miki.justincase_v1.fragments.Show.Fragment_ShowTrips;
+import com.miki.justincase_v1.adapters.Adapter_Item;
+import com.miki.justincase_v1.db.entity.Item;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class    BaseFragment extends Fragment {
+public class BaseFragment extends Fragment {
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-
-    public void doFragmentTransaction(Fragment fragment) {
-        fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
-        fragmentTransaction.commit();
-    }
-
-    public void doFragmentTransactionWithBundle(Fragment fragment, Bundle bundle){
-        /*fragment.setArguments(bundle);
-        fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content_main_layout, fragment);
-        fragmentTransaction.commit();*/
-    }
-
-    protected NavController getNav(){
-        return Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+    protected NavController getNav() {
+        return Navigation.findNavController(getActivity(), R.id.fragment);
     }
 
     public void closeKeyBoard() {
@@ -58,6 +45,32 @@ public class    BaseFragment extends Fragment {
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+    public void openKeyBoard() {
+        InputMethodManager inputManager = (InputMethodManager) getContext().
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.showSoftInput(getActivity().getCurrentFocus(),
+                InputMethodManager.SHOW_IMPLICIT);
+    }
+
+
+    @NotNull
+    public AlertDialog.Builder getCreateBuilder(String entity) {
+        AlertDialog.Builder builder =  new AlertDialog.Builder(getContext());
+        String title = getString(R.string.text_new) + entity;
+        String cancel = getString(R.string.text_cancel);
+
+
+        builder.setTitle(title);
+        builder.setCancelable(true);
+
+        builder.setNegativeButton(cancel, ((dialog, which) -> dialog.dismiss()));
+
+        return builder;
+    }
+
+
+
+
     /**
      * @param dateTextView The EditText to put the Date
      */
@@ -67,7 +80,7 @@ public class    BaseFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 // +1 because January is zero
-                final String selectedDate = twoDigits(day) + " / " + twoDigits(month+1) + " / " + year;
+                final String selectedDate = twoDigits(day) + " / " + twoDigits(month + 1) + " / " + year;
                 dateTextView.setText(selectedDate);
             }
         });
@@ -76,7 +89,6 @@ public class    BaseFragment extends Fragment {
     }
 
     /**
-     *
      * @param selectedDateTextView
      * @param dateTextView
      */
@@ -86,7 +98,7 @@ public class    BaseFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 // +1 because January is zero
-                final String selectedDate = twoDigits(day) + " / " + twoDigits(month+1) + " / " + year;
+                final String selectedDate = twoDigits(day) + " / " + twoDigits(month + 1) + " / " + year;
                 dateTextView.setText(selectedDate);
             }
         }, selectedDate);
@@ -95,6 +107,14 @@ public class    BaseFragment extends Fragment {
     }
 
     private String twoDigits(int n) {
-        return (n<=9) ? ("0"+n) : String.valueOf(n);
+        return (n <= 9) ? ("0" + n) : String.valueOf(n);
+    }
+
+
+    public void makeToast(Context context, String text) {
+        Toast toast =
+                Toast.makeText(context,
+                        text, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

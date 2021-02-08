@@ -19,6 +19,9 @@ public interface CategoryContentDAO {
     @Query("SELECT * FROM categoryContent ORDER BY itemName")
     List<CategoryContent> getAll();
 
+    @Query("SELECT * FROM categoryContent WHERE FKitemID IS :FKitemID")
+    CategoryContent getCategoryContentByItemID(int FKitemID);
+
     @Query("SELECT * FROM categoryContent WHERE FKcategoryID IS :categoryID ORDER BY itemName")
     List<CategoryContent> getAllItemsFromThisCategory(int categoryID);
 
@@ -26,13 +29,13 @@ public interface CategoryContentDAO {
     CategoryContent getCategoryContent(int categoryContentID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void addANewItemForThisCategory(CategoryContent categoryContent);
+    void insert(CategoryContent categoryContent);
 
     @Update
-    void updateCategoryContent(CategoryContent categoryContent);
+    void update(CategoryContent categoryContent);
 
     @Delete
-    void deleteCategoryContent(CategoryContent categoryContent);
+    void delete(CategoryContent categoryContent);
 
 }
 

@@ -17,11 +17,14 @@ public interface ItemDAO {
     @Query("SELECT * FROM items ORDER BY itemName")
     List<Item> getAll();
 
-    @Query("SELECT * FROM items WHERE NOT itemID IN (SELECT baggageContent.FKitemID from baggageContent WHERE baggageContent.FKbaggageID IS :baggageID) ORDER BY itemName")
+    @Query("SELECT * FROM items WHERE NOT itemID IN (SELECT Baggage.FKitemID from Baggage WHERE Baggage.FKbaggageID IS :baggageID) ORDER BY itemName")
     List<Item> getAllItemsThatItNotInThisBaggage(int baggageID);
 
-    @Query("SELECT * FROM items WHERE NOT itemID IN (SELECT categoryContent.FKitemID from categoryContent WHERE categoryContent.FKcategoryID IS :categoryID) ORDER BY itemName")
-    List<Item> getAllItemsThatItNotInThisCategory(int categoryID);
+    @Query("SELECT * FROM items WHERE NOT itemID IN (SELECT categoryContent.FKitemID from categoryContent) ORDER BY itemName")
+    List<Item> getAllItemsThatItNotInThisCategory();
+
+    @Query("SELECT * FROM items WHERE itemID IN (SELECT categoryContent.FKitemID from categoryContent WHERE FKcategoryID IS :categoryID) ORDER BY itemName")
+    List<Item> getAllItemsFromThisCategory(int categoryID);
 
     @Query("SELECT * FROM items WHERE itemID IS :itemID")
     Item getItem(int itemID);
@@ -33,6 +36,9 @@ public interface ItemDAO {
     //default >> ABORT
     @Insert
     void addItem(Item item);
+
+    @Insert
+    void addListItem(List<Item> item);
 
     @Delete
     void delete(Item item);

@@ -1,6 +1,7 @@
 package com.miki.justincase_v1.db.entity;
 
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
@@ -8,45 +9,62 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-//Baggage of a especific trip
 @Entity(tableName = "baggage",
         foreignKeys = {
-                @ForeignKey(entity = Trip.class,
-                        parentColumns = "tripID",
-                        childColumns = "FKtripID",
+                @ForeignKey(entity = Item.class,
+                        parentColumns = "itemID",
+                        childColumns = "FKitemID",
                         onDelete = ForeignKey.CASCADE,
                         onUpdate = ForeignKey.CASCADE
                 ),
-                @ForeignKey(entity = Suitcase.class,
-                        parentColumns = "suitcaseID",
-                        childColumns = "FKsuitcaseID",
+                @ForeignKey(entity = HandLuggage.class,
+                        parentColumns = "handLuggageID",
+                        childColumns = "FKbaggageID",
                         onDelete = ForeignKey.CASCADE,
                         onUpdate = ForeignKey.CASCADE
                 )},
-        indices = {@Index(value = "FKtripID"), @Index(value = "FKsuitcaseID")}
+        indices = {@Index(value = "FKbaggageID"), @Index(value = "FKitemID")}
 )
 public class Baggage implements Serializable {
-
     @PrimaryKey(autoGenerate = true)
     public int baggageID;
 
-    public int FKtripID; //trip ID foreign key
-    public int FKsuitcaseID; //suitcase ID foreign key
+    @ColumnInfo(name = "itemCount")
+    public int baggageCount;
 
-    public Baggage(int FKtripID, int FKsuitcaseID) {
-        this.FKtripID = FKtripID;
-        this.FKsuitcaseID = FKsuitcaseID;
+    @ColumnInfo(name = "itemName")
+    public String baggageName;
+
+
+    public int FKitemID; // trip ID foreign key
+    public int FKbaggageID; // baggage ID foreign key
+
+    public Baggage(int FKitemID, int FKbaggageID, String baggageName) {
+        this.FKitemID = FKitemID;
+        this.FKbaggageID = FKbaggageID;
+        this.baggageCount = 0;
+        this.baggageName = baggageName;
     }
 
-    public int getBaggageID() {
-        return baggageID;
+    public int getFKitemID() {
+        return FKitemID;
     }
 
-    public int getFKtripID() {
-        return FKtripID;
+    public int getFKbaggageID() {
+        return FKbaggageID;
     }
 
-    public int getFKsuitcaseID() {
-        return FKsuitcaseID;
+    public String getBaggageCount() {
+        return String.valueOf(baggageCount);
+    }
+
+    public void increaseThisItem() {
+        this.baggageCount++;
+    }
+
+    public void decreaseThisItem() {
+        if (baggageCount > 0) {
+            this.baggageCount--;
+        }
     }
 }

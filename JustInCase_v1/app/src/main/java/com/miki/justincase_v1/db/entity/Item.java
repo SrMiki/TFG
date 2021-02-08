@@ -5,7 +5,6 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity(tableName = "items")
 public class Item implements Serializable {
@@ -35,9 +34,9 @@ public class Item implements Serializable {
         return getItemName().equals(item.getItemName());
     }
 
-
     public void setItem(String itemName) {
         this.itemName = itemName;
     }
+
 }
 

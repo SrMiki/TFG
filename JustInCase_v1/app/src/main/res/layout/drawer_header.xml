@@ -18,7 +18,7 @@
             android:id="@+id/dragwerHeader_img_profile"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/ic_baseline_account_circle_24" />
+            android:src="@drawable/ic_account" />
 
         <TextView
             android:id="@+id/drawerHeader_text_username"

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,30 +16,74 @@ import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.db.entity.Trip;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class Adapter_trip extends RecyclerView.Adapter<Adapter_trip.MyViewHolder> implements View.OnClickListener {
+public class Adapter_trip extends RecyclerView.Adapter<Adapter_trip.AdapterViewHolder> implements View.OnClickListener, Filterable {
 
+    private List<Trip> referencesDataset;
     private ArrayList<Trip> dataset;
-    private View.OnClickListener listener;
+    View.OnClickListener listener;
 
-    public Adapter_trip(Context context, ArrayList<Trip> myDataset) {
+    public Adapter_trip(Context contex, ArrayList<Trip> myDataset) {
         dataset = myDataset;
+        referencesDataset = new ArrayList<>(dataset);
     }
 
-    // new "View"
     @Override
-    public Adapter_trip.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_element_trip, parent, false);
+    public Filter getFilter() {
+        return filter;
+    }
 
+    Filter filter = new Filter() {
+        //run on background thread
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Trip> filteredList = new ArrayList<>();
+
+            if (constraint.toString().isEmpty()) {
+                filteredList.addAll(referencesDataset);
+            } else {
+                for (Trip e : referencesDataset) {
+                    if (searchByDestination(constraint, e) || searchByDate(constraint, e)) {
+                        filteredList.add(e);
+                    }
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+            return filterResults;
+        }
+
+        //run on UI thread
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            dataset.clear();
+            dataset.addAll((Collection<? extends Trip>) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    private boolean searchByDate(CharSequence constraint, Trip e) {
+        return e.getTravelDate().toLowerCase().startsWith(constraint.toString().toLowerCase());
+    }
+
+    private boolean searchByDestination(CharSequence constraint, Trip e) {
+        return e.getDestination().toLowerCase().startsWith(constraint.toString().toLowerCase());
+    }
+
+    @Override
+    public AdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.card_view_trip, parent, false);
         v.setOnClickListener(this);
-        MyViewHolder vh = new MyViewHolder(v);
+        AdapterViewHolder vh = new AdapterViewHolder(v);
         return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(AdapterViewHolder holder, int position) {
         // Get the element from the dataset
         String destination = dataset.get(position).getDestination();
         String travelDate = dataset.get(position).getTravelDate();
@@ -49,7 +96,6 @@ public class Adapter_trip extends RecyclerView.Adapter<Adapter_trip.MyViewHolder
         holder.tripDescription_TextView.setText(travelDate);
     }
 
-    // List size, defult 0
     @Override
     public int getItemCount() {
         return dataset == null ? 0 : dataset.size();
@@ -65,17 +111,16 @@ public class Adapter_trip extends RecyclerView.Adapter<Adapter_trip.MyViewHolder
         if (listener != null) {
             listener.onClick(v);
         }
-
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         public TextView tripName_TextView, tripDescription_TextView;
-
-        public MyViewHolder(@NonNull View v) {
-            super(v);
-            tripName_TextView = v.findViewById(R.id.recyclerview_Trip_tripDestino);
-            tripDescription_TextView = v.findViewById(R.id.recyclerview_Trip_tripDate);
+        public RelativeLayout relativeLayout;
+        public AdapterViewHolder(@NonNull View view) {
+            super(view);
+            tripName_TextView = view.findViewById(R.id.recyclerview_Trip_tripDestino);
+            tripDescription_TextView = view.findViewById(R.id.recyclerview_Trip_tripDate);
+            relativeLayout = view.findViewById(R.id.tripCardView_layoutToDeleted);
         }
     }
 }
