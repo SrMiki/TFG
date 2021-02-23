@@ -20,6 +20,10 @@ public interface SuitcaseDAO {
     @Query("SELECT * FROM suitcases ORDER BY name")
     List<Suitcase> selectAll();
 
+    @Query("SELECT * FROM suitcases")
+    List<Suitcase> getAll();
+
+
     @Query("SELECT * FROM suitcases WHERE suitcaseID IS :suitcaseID")
     Suitcase getSuitcase(int suitcaseID);
 
@@ -38,5 +42,6 @@ public interface SuitcaseDAO {
     @Update
     void update(Suitcase suitcase);
 
+    @Update
+    void updateListOfSuitcase(List<Suitcase> arrayList);
 }
-

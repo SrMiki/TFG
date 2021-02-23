@@ -19,11 +19,11 @@ public class Adapter_ItemSeleccionados extends RecyclerView.Adapter<Adapter_Item
 
     private View.OnClickListener listener;
     ArrayList<Item> dataset;
-    boolean isSelected;
+    int focusPosition;
+    boolean state;
 
     public Adapter_ItemSeleccionados(ArrayList<Item> dataset) {
         this.dataset = dataset;
-        isSelected = false;
     }
 
     @Override
@@ -31,10 +31,6 @@ public class Adapter_ItemSeleccionados extends RecyclerView.Adapter<Adapter_Item
         if (listener != null) {
             listener.onClick(v);
         }
-    }
-
-    public void setSelectedState(boolean newState) {
-        this.isSelected = newState;
     }
 
     public void setListener(View.OnClickListener listener) {
@@ -56,11 +52,12 @@ public class Adapter_ItemSeleccionados extends RecyclerView.Adapter<Adapter_Item
         holder.elementNameTV.setText(item.getItemName());
         Context context = holder.itemView.getContext();
 
-        if (isSelected) {
-            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.item_selected));
+        if (item.isSelectedState()) {
+            holder.color = context.getResources().getColor(R.color.item_selected);
         } else {
-            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
+            holder.color = context.getResources().getColor(R.color.design_default_color_on_primary);
         }
+        holder.layout.setBackgroundColor(holder.color);
     }
 
     @Override
@@ -68,16 +65,37 @@ public class Adapter_ItemSeleccionados extends RecyclerView.Adapter<Adapter_Item
         return dataset == null ? 0 : dataset.size();
     }
 
+    public void setFocusItem(int position) {
+        this.focusPosition = position;
+    }
+
+    public void setSelectedState(boolean b) {
+        this.state = b;
+    }
+
 
     public class AdapterViewHolder extends RecyclerView.ViewHolder {
 
         TextView elementNameTV;
         public LinearLayout layout;
+        public boolean isSelected;
+        int color;
 
         public AdapterViewHolder(View view) {
             super(view);
             elementNameTV = view.findViewById(R.id.simpleCardView_name);
             layout = view.findViewById(R.id.simpleCardView_layout);
+            color = view.getResources().getColor(R.color.design_default_color_on_primary);
+            layout.setBackgroundColor(color);
+            isSelected = false;
+        }
+
+        public boolean isSelected(){
+            return isSelected;
+        }
+
+        public void setSeletecState(Boolean isSelected){
+            this.isSelected = isSelected;
         }
     }
 }

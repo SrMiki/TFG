@@ -35,6 +35,8 @@ public class MainFragment extends BaseFragment {
         textView = view.findViewById(R.id.mainFragmnet_text);
 
         dataset = Presented.selectAllTripsInProgress(getContext());
+
+
         recyclerView = view.findViewById(R.id.recyclerview_progressTrip);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

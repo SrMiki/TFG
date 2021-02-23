@@ -36,7 +36,6 @@
     <string name="title_checkList">hacer la maleta</string>
 
 
-
     <!-- forms -->
     <string name="text_new">Nuevo</string>
     <string name="text_edit">Editar</string>
@@ -60,6 +59,7 @@
     <string name="text_restore">deshacer</string>
     <string name="text_search">buscar</string>
     <string name="text_add">Agregar</string>
+    <string name="text_addDirect">Agregar directamente</string>
 
 
     <string name="text_hintInputName">Introduzca el nombre</string>
@@ -84,7 +84,16 @@
     <string name="text_suticaseWeight">Peso: </string>
     <string name="text_hintInputSuitcaseWeight">Introduzca el peso</string>
     <string name="text_suticaseDims">Dimensiones: </string>
+
+    <string name="heigth">heigth</string>
+    <string name="width">width</string>
+    <string name="depth">depth</string>
+    <string name="x">x</string>
+    <string name="number_0">0</string>
+
     <!-- Item -->
+
+    <string name="fragment_createItem_hint">camisa, pantalón, pasaporte</string>
 
     <!-- Categories -->
 
@@ -94,12 +103,12 @@
 
     <string name="fragment_addCategoryContent">Añade items a la CATEGORIA</string>
 
-    <string name="text_haveBeenAdded">agregado</string>
+    <string name="text_haveBeenAdded">La maleta ha sido agregada</string>
     <string name="tripDeletedQuestion">¿Seguro que quieres eliminar este viaje?</string>
     <string name="text_restoreWarning">Esta acción no puede deshacerse</string>
 
-    <string name="fragment_createItem_hint">camisa, pantalón, pasaporte</string>
-    <string name="text_haveBeenUpdated">Ha sido actualizado</string>
+
+    <string name="text_haveBeenUpdated">Item actualizado</string>
     <string name="warning_fastClicking">No pulses tan rápido</string>
     <string name="text_trip">viaje</string>
     <string name="text_no">no</string>
@@ -116,12 +125,8 @@
     <string name="text_ask_newHandluggage">¿Quiere agregar maletas al viaje ahora?</string>
     <string name="warning_noSuitcase">Parece que no tienes maletas disponibles, ¿quieres crear una nueva?</string>
     <string name="text_ask_anotherSuitcase">¿Quiere crear otra maleta?</string>
-    <string name="heigth">heigth</string>
-    <string name="width">width</string>
-    <string name="depth">depth</string>
-    <string name="x">x</string>
+
     <string name="error">Se ha producido un error</string>
-    <string name="number_0">0</string>
     <string name="warning_title">Atención</string>
     <string name="warning_deleteTrip">"¿Está seguro de querer eliminar este viaje?"</string>
     <string name="warning_deleteSuitcase">¿Quiere eliminar esta maleta?</string>
@@ -131,7 +136,6 @@
     <string name="warning_deleteItem">¿Quiere eliminar este item?</string>
     <string name="warning_deleteCategory">¿Quiere eliminar esta categoria?</string>
     <string name="warning_createItem">el item ya existe</string>
-    <string name="warning_updateItem">Campo vacio o Item ya existente</string>
     <string name="title_country">Destinos</string>
     <string name="title_showCategoryContent">Categoria</string>
     <string name="ic_settings">Ajustes</string>
@@ -148,7 +152,7 @@
     <string name="text_newSuitcase">Nueva maleta</string>
     <string name="text_editCategory">Editar categoria</string>
     <string name="warning_updateCategory">Ya existe esa categoria</string>
-    <string name="warning_emptyName">Nombre vacio</string>
+    <string name="warning_emptyName">Ha dejado el campo vacio</string>
     <string name="ask_deleteItemsToo">¿Quieres eliminar los items que pertenecen a esta categoría tambien?</string>
     <string name="text_addToCategory">Agregar directamente</string>
     <string name="text_create">Crear</string>
@@ -157,8 +161,7 @@
     <string name="text_startTrip">Empezar viaje</string>
 
 
-
-    <string name="switch_showCategories">Mostrar categorias</string>
+    <string name="switch_showCategories">Mostrar por categorias</string>
     <string name="title_DoCheckListByCategory">Hacer la maleta</string>
     <string name="title_CheckOut">Check Out</string>
     <string name="text_addCategoryContent">Seleccione los items que quiere agregar a la categoria</string>
@@ -167,6 +170,14 @@
     <string name="text_progressTrip">Viajes en proceso</string>
     <string name="text_NOprogressTrip">Aun no tiene viajes activos</string>
     <string name="title_Fragment_ShowFinishedTrip">Viajes realizados</string>
-
+    <string name="tripForm_days">Número de días:</string>
+    <string name="warning_updateItem">Ya existe este item</string>
+    <string name="text_addBaggage">Seleccione los Item que quiere agregar a la maleta</string>
+    <string name="btn_newItem">Crear item</string>
+    <string name="text_suitcaseHaveBeenCreate">La maleta ha sido creada</string>
+    <string name="warning_duplicatedSuitcase">Ya existe una maleta con ese nombre</string>
+    <string name="text_itemCreated">Item creado</string>
+    <string name="text_ask_changeCategory">¿Quieres cambiar la categoría?</string>
+    <string name="text_doCheckOut">Deshacer maleta</string>
 
 </resources>

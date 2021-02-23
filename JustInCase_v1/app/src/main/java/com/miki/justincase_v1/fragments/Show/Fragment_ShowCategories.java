@@ -224,6 +224,7 @@ public class Fragment_ShowCategories extends BaseFragment implements Category_Re
         }));
 
         builder.setPositiveButton(getString(R.string.text_yes), ((dialog, which) -> {
+            Presented.deleteItemFromTrips(focusCategory, getContext());
             Presented.deleteItemOfThisCategory(focusCategory, getContext());
             Presented.deleteCategory(focusCategory, getContext());
             getNav().navigate(R.id.fragment_ShowCategories);

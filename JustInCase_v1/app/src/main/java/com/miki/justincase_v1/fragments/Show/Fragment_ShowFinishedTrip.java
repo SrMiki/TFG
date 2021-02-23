@@ -40,7 +40,8 @@ public class Fragment_ShowFinishedTrip extends BaseFragment {
 
     Button button;
 
-    TextView textView;
+    TextView finishedTripTv, planingTripTV;
+
     Trip focusTrip;
     private boolean showOptionMenu = false;
 
@@ -50,8 +51,11 @@ public class Fragment_ShowFinishedTrip extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_show_trip, container, false);
         setHasOptionsMenu(true);
 
-        textView = view.findViewById(R.id.showTrip_trips);
-        textView.setOnClickListener(v -> {
+        finishedTripTv = view.findViewById(R.id.showTrip_finishedTrips);
+        finishedTripTv.setTextColor(view.getResources().getColor(R.color.item_selected));
+
+        planingTripTV = view.findViewById(R.id.showTrip_trips);
+        planingTripTV.setOnClickListener(v -> {
             getNav().navigate(R.id.fragment_ShowTrips);
         });
 

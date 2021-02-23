@@ -77,22 +77,33 @@ public class initDB {
     private static ArrayList<Item> initItems(ArrayList<Category> categories) {
         ArrayList<Item> items = new ArrayList<>();
 
-        items.add(new Item("camisa"));
-        items.add(new Item("pantalon"));
         items.add(new Item("billete"));
+        items.add(new Item("bufanda"));
+
+        items.add(new Item("camisa"));
+        items.add(new Item("cartera"));
+        items.add(new Item("corbata"));
+        items.add(new Item("cerillas"));
+        items.add(new Item("caramelos"));
+
+        items.add(new Item("deportivas"));
+        items.add(new Item("dados"));
+
+        items.add(new Item("guantes"));
+
+        items.add(new Item("llaves"));
+
         items.add(new Item("ordenador"));
 
-//        items.add(new Item("bufanda"));
-//        items.add(new Item("guantes"));
-//
-        items.add(new Item("cartera"));
-        items.add(new Item("llaves"));
-//        items.add(new Item("pantalón"));
-//        items.add(new Item("vaqueros"));
+        items.add(new Item("pantalon"));
+        items.add(new Item("peine"));
+        items.add(new Item("portatil"));
+        items.add(new Item("pasaporte"));
+
+        items.add(new Item("vaqueros"));
         items.add(new Item("zapatos"));
-//        items.add(new Item("portatil"));
-//        items.add(new Item("pasaporte"));
-//        items.add(new Item("deportivas"));
+
+
         return items;
     }
 }

@@ -22,6 +22,7 @@ import com.miki.justincase_v1.adapters.Adapter_CategoryBaggage;
 import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.db.entity.HandLuggage;
 import com.miki.justincase_v1.db.entity.Suitcase;
+import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class Fragment_ShowBaggageByCategory extends BaseFragment {
     Bundle bundle;
     Switch switchShowCategories;
     SharedPreferences sp;
-    private Button btn_delete, btn_edit;
+    Button btn_delete, btn_edit, btn_generateBaggage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,6 +71,9 @@ public class Fragment_ShowBaggageByCategory extends BaseFragment {
                 getNav().navigate(R.id.fragment_ShowBaggageByItem, bundle);
             });
 
+            setHasOptionsMenu(true);
+            handLuggage = (HandLuggage) bundle.getSerializable("handluggage");
+
             btn_edit = view.findViewById(R.id.showBaggage_button_edit);
             btn_edit.setOnClickListener(v -> {
                 editHandLuggageDialog();
@@ -80,8 +84,15 @@ public class Fragment_ShowBaggageByCategory extends BaseFragment {
                 deleteHandLuggageDialog(v);
             });
 
-            setHasOptionsMenu(true);
-            handLuggage = (HandLuggage) bundle.getSerializable("handluggage");
+            btn_generateBaggage = view.findViewById(R.id.btn_generateBaggage);
+            btn_generateBaggage.setOnClickListener(v -> {
+                Trip trip = Presented.getTrip(handLuggage, getContext());
+
+                Bundle obundle = new Bundle();
+                obundle.putSerializable("handLuggage", handLuggage);
+                obundle.putSerializable("trip", trip);
+                getNav().navigate(R.id.algoritm, obundle);
+            });
 
             suitcaseName = view.findViewById(R.id.suitcaseNameTV);
             suitcaseName.setText(handLuggage.getHandLuggageName());

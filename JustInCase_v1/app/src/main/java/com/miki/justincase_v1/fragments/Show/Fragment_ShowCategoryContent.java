@@ -59,7 +59,7 @@ public class Fragment_ShowCategoryContent extends BaseFragment implements Item_R
 
             recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new Adapter_Item(dataset);
+            adapter = new Adapter_Item(dataset, getActivity());
             recyclerView.setAdapter(adapter);
 
             ItemTouchHelper.SimpleCallback simpleCallback = new Item_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);

@@ -34,7 +34,7 @@ public interface BaggageDAO {
     Baggage getBaggage(int baggageID);
 
     @Query("SELECT * FROM baggage WHERE FKitemID IS :itemID")
-    Baggage getBaggageByItem(int itemID);
+    List<Baggage> getBaggageByItem(int itemID);
     // DB
 
     @Query("SELECT * FROM Baggage WHERE FKHandLuggageID IS :handluggageID")

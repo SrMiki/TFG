@@ -25,10 +25,13 @@ public interface TripDAO {
     Trip getTrip(int tripID);
 
     @Query("SELECT * FROM trips WHERE travelling IS 0 ORDER BY date(travelDate)")
-    List<Trip> selectTripsNP();
+    List<Trip> selectPlanningTrip();
 
-    @Query("SELECT * FROM trips WHERE (travelling IS 1) OR (travelling IS 2) OR (travelling IS 3)ORDER BY date(travelDate)")
-    List<Trip> selectProgressTrip();
+    @Query("SELECT * FROM trips WHERE ((travelling IS 1) OR (travelling IS 3)) ORDER BY date(travelDate)")
+    List<Trip> selectCheckOutTrip();
+
+    @Query("SELECT * FROM trips WHERE travelling IS 2 ORDER BY date(travelDate)")
+    List<Trip> selectCheckInBACKtrip();
 
     @Query("SELECT * FROM trips WHERE travelling IS 4 ORDER BY date(travelDate)")
     List<Trip> selectFinishedTrip();

@@ -87,7 +87,7 @@ public class Fragment_CheckIn extends BaseFragment {
 
             setCheckTripStatus();
             button.setOnClickListener(v -> {
-                Presented.clearCheckHandLuggage(trip, getContext());
+//                Presented.clearCheckHandLuggage(trip, getContext());
                 Presented.updateTrip(trip, getContext());
                 getNav().navigate(R.id.fragment_ShowTrips);
             });
@@ -109,18 +109,21 @@ public class Fragment_CheckIn extends BaseFragment {
      */
     private void setCheckTripStatus() {
         if (trip.isTravelling() == 0) {
-            trip.setTravelling(1);
-
-        } else if (!trip.returnDate.isEmpty() && trip.isTravelling() == 1) {
-            trip.setTravelling(2);
-            button.setText(getString(R.string.text_finish));
-        } else if (!trip.returnDate.isEmpty() && trip.isTravelling() == 2) {
+            trip.setTravelling(1); //start
+        } else if(trip.isTravelling()==2) {
             trip.setTravelling(3);
-            button.setText(getString(R.string.text_doCheckIn));
-        } else {
-            trip.setTravelling(4);
-            button.setText(getString(R.string.text_finish));
         }
+
+//        } else if (!trip.returnDate.isEmpty() && trip.isTravelling() == 1) {
+//            trip.setTravelling(2);
+//            button.setText(getString(R.string.text_finish));
+//        } else if (!trip.returnDate.isEmpty() && trip.isTravelling() == 2) {
+//            trip.setTravelling(3);
+//            button.setText(getString(R.string.text_doCheckIn));
+//        } else {
+//            trip.setTravelling(4);
+//            button.setText(getString(R.string.text_finish));
+//        }
     }
 
     private void setTrip(View view) {

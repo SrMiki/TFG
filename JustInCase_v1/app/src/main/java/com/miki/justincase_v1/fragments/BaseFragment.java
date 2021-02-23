@@ -33,6 +33,18 @@ public class BaseFragment extends Fragment {
                 getActivity().getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
+//
+//    public void openKeyBoard() {
+//        InputMethodManager inputManager =
+//                (InputMethodManager) getContext().
+//                        getSystemService(Context.INPUT_METHOD_SERVICE);
+//        inputManager.hideSoftInputFromWindow(
+//                getActivity().getCurrentFocus().getWindowToken(),
+//                InputMethodManager.SHOW_IMPLICIT);
+//    }
+
+
+
 
     /**
      * @param dateTextView The EditText to put the Date

@@ -14,8 +14,11 @@ public class Item implements Serializable {
     @ColumnInfo(name = "itemName")
     public String itemName;
 
+    private boolean selectedState;
+
     public Item(String itemName) {
         this.itemName = itemName;
+        selectedState = false;
     }
 
     public String getItemName() {
@@ -27,6 +30,7 @@ public class Item implements Serializable {
     }
 
 
+
     @Override
     public boolean equals(Object o) {
         Item item = (Item) o;
@@ -35,6 +39,14 @@ public class Item implements Serializable {
 
     public void setItem(String itemName) {
         this.itemName = itemName;
+    }
+
+    public boolean isSelectedState() {
+        return selectedState;
+    }
+
+    public void setSelectedState(boolean selectedState) {
+        this.selectedState = selectedState;
     }
 
 }

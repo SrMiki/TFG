@@ -52,7 +52,7 @@ public class Fragment_Add_Category_To_Baggage extends BaseFragment {
             suitcaseNameTV = view.findViewById(R.id.suitcaseNameTV);
             suitcaseNameTV.setText(handLuggage.getHandLuggageName());
 
-            recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
+            recyclerView = view.findViewById(R.id.fragment_Add_Item_To_Baggage_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             adapter = new Adapter_AddCategoryToBaggage(dataset, getActivity(), handLuggage);
             recyclerView.setAdapter(adapter);
@@ -73,7 +73,7 @@ public class Fragment_Add_Category_To_Baggage extends BaseFragment {
 ////                }
 //            });
 
-            floatingActionButton = view.findViewById(R.id.fragment_show_entity_btn_add);
+            floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Baggage_finish);
             floatingActionButton.setOnClickListener(v -> {
                 ArrayList<Item> itemArrayList = adapter.itemArrayList;
                 Presented.createBaggageByItems(itemArrayList, handLuggage, getContext());

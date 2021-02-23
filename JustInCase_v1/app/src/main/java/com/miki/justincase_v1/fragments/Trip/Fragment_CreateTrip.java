@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -104,20 +105,20 @@ public class Fragment_CreateTrip extends BaseFragment {
     private void ask_newHandluggageDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        String NegativeButton = getString(R.string.text_no);
-        String positiveButton = getString(R.string.text_yes);
-        String string = getString(R.string.text_ask_newHandluggage);
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        builder.setCancelable(true);
+        View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
-        EditText editText = new EditText(getContext());
-        editText.setText(string);
-        builder.setView(editText);
-        builder.setNegativeButton(NegativeButton, ((dialog, which) -> {
+        TextView textView = view.findViewById(R.id.alertdialog_textView);
+        textView.setText(getString(R.string.text_ask_newHandluggage));
+
+        builder.setView(view);
+
+        builder.setNegativeButton(getString(R.string.text_no), ((dialog, which) -> {
             dialog.dismiss();
             getNav().navigate(R.id.fragment_ShowTrips);
         }));
-        builder.setPositiveButton(positiveButton, ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.text_yes), ((dialog, which) -> {
             Bundle bundle = new Bundle();
             // We can't use the new Trip cause we need the trip ID
             // The new Trip ID is the last register on the DataBase (size()-1 of all trips)

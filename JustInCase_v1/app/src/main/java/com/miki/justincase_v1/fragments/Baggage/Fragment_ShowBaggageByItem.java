@@ -26,6 +26,7 @@ import com.miki.justincase_v1.adapters.Adapter_Baggage;
 import com.miki.justincase_v1.db.entity.Baggage;
 import com.miki.justincase_v1.db.entity.HandLuggage;
 import com.miki.justincase_v1.db.entity.Suitcase;
+import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class Fragment_ShowBaggageByItem extends BaseFragment implements Baggage_
 
     Bundle bundle;
 
-    Button btn_edit, btn_delete;
+    Button btn_edit, btn_delete, btn_generateBaggage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +75,9 @@ public class Fragment_ShowBaggageByItem extends BaseFragment implements Baggage_
                 getNav().navigate(R.id.fragment_ShowBaggageByCategory, bundle);
             });
 
+            setHasOptionsMenu(true);
+            handLuggage = (HandLuggage) bundle.getSerializable("handluggage");
+
             btn_edit = view.findViewById(R.id.showBaggage_button_edit);
             btn_edit.setOnClickListener(v -> {
                 editHandLuggageDialog();
@@ -85,8 +89,16 @@ public class Fragment_ShowBaggageByItem extends BaseFragment implements Baggage_
                 deleteHandLuggageDialog(v);
             });
 
-            setHasOptionsMenu(true);
-            handLuggage = (HandLuggage) bundle.getSerializable("handluggage");
+            btn_generateBaggage = view.findViewById(R.id.btn_generateBaggage);
+            btn_generateBaggage.setOnClickListener(v -> {
+                Trip trip = Presented.getTrip(handLuggage, getContext());
+
+                Bundle obundle = new Bundle();
+                obundle.putSerializable("handLuggage", handLuggage);
+                obundle.putSerializable("trip", trip);
+                getNav().navigate(R.id.algoritm, obundle);
+            });
+
 
             suitcaseName = view.findViewById(R.id.suitcaseNameTV);
             suitcaseName.setText(handLuggage.getHandLuggageName());

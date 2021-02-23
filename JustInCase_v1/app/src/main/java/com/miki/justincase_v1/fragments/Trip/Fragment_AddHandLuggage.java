@@ -20,6 +20,8 @@ import com.miki.justincase_v1.db.entity.Suitcase;
 import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 public class Fragment_AddHandLuggage extends BaseFragment {
@@ -48,34 +50,37 @@ public class Fragment_AddHandLuggage extends BaseFragment {
 
             if (dataset.isEmpty()) {
                 warningDialog(view);
+            } else {
+                Presented.removeSuitcaseSelectedState(dataset, getContext());
+
+                recyclerView = view.findViewById(R.id.fragment_addBaggage_recyclerview);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                adapter = new Adapter_Suitcase(dataset);
+                recyclerView.setAdapter(adapter);
+
+                adapter.setListener(v -> {
+                    int position = recyclerView.getChildAdapterPosition(v);
+                    Suitcase suitcase = dataset.get(position);
+                    if (!arrayList.contains(suitcase)) {
+                        arrayList.add(suitcase);
+                        suitcase.setSelectedState(true);
+                    } else {
+                        arrayList.remove(suitcase);
+                        suitcase.setSelectedState(false);
+                    }
+                    Presented.updateSuitcaseState(suitcase, getContext());
+                    adapter.notifyItemChanged(position);
+                });
             }
-
-            floatingActionButton = view.findViewById(R.id.fragment_Add_HandLuggage_finish);
-            floatingActionButton.setOnClickListener(v -> {
-                Presented.addHandLuggageToThisTrip(arrayList, trip, getContext());
-                bundle.putSerializable("trip", trip);
-                getNav().navigate(R.id.fragment_ShowTrips, bundle);
-            });
-
-            recyclerView = view.findViewById(R.id.fragment_addBaggage_recyclerview);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new Adapter_Suitcase(dataset);
-            recyclerView.setAdapter(adapter);
-
-            adapter.setListener(v -> {
-                int position = recyclerView.getChildAdapterPosition(v);
-                Suitcase suitcase = dataset.get(position);
-
-                if (!arrayList.contains(suitcase)) {
-                    arrayList.add(suitcase);
-                    adapter.setSelectedState(true);
-                } else {
-                    arrayList.remove(suitcase);
-                    adapter.setSelectedState(false);
-                }
-                adapter.notifyItemChanged(position);
-            });
         }
+
+        floatingActionButton = view.findViewById(R.id.fragment_Add_HandLuggage_finish);
+        floatingActionButton.setOnClickListener(v -> {
+            Presented.addSomeSuitcaseToThisTrip(arrayList, trip, getContext());
+            Presented.removeSuitcaseSelectedState(arrayList, getContext());
+            bundle.putSerializable("trip", trip);
+            getNav().navigate(R.id.fragment_ShowTrips, bundle);
+        });
 
         return view;
     }
@@ -122,27 +127,45 @@ public class Fragment_AddHandLuggage extends BaseFragment {
         EditText depthET = view.findViewById(R.id.card_view_suitcase_depth);
 
         builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> {
+            getNav().navigate(R.id.fragment_ShowTrips);
             dialog.dismiss();
         }));
 
 
-        builder.setPositiveButton(getString(R.string.text_add), ((dialog, which) -> {
-            String name = nameET.getText().toString();
-            String color = colorET.getText().toString();
-            double weigth = Double.parseDouble(weigthET.getText().toString());
-
-            double heigth = Double.parseDouble(heigthET.getText().toString());
-            double width = Double.parseDouble(widthET.getText().toString());
-            double depth = Double.parseDouble(depthET.getText().toString());
-
-            Suitcase suitcase = new Suitcase(name, color, weigth, heigth, width, depth);
-            boolean haveBeenAdded = Presented.createSuitcase(suitcase, getContext());
-            if (haveBeenAdded) {
-                makeToast(v.getContext(), getString(R.string.text_haveBeenAdded));
+        builder.setPositiveButton(getString(R.string.text_addDirect), (dialog, which) -> {
+            if ((nameET.getText()).toString().isEmpty()) {
+                makeToast(v.getContext(), getString(R.string.warning_emptyName));
             } else {
-                makeToast(v.getContext(), getString(R.string.error));
+                Suitcase suitcase = createSuitcase(nameET, colorET, weigthET, heigthET, widthET, depthET);
+                boolean haveBeenAdded = Presented.createSuitcase(suitcase, getContext());
+                if (haveBeenAdded) {
+                    ArrayList<Suitcase> allSuitcase = Presented.getAllSuitcase(getContext());
+
+                    Suitcase lastSuitcase = allSuitcase.get(allSuitcase.size() - 1);
+
+                    Presented.addSuitcaseToThisTrip(lastSuitcase, trip, getContext());
+                    makeToast(v.getContext(), getString(R.string.text_haveBeenAdded));
+                } else {
+                    makeToast(v.getContext(), getString(R.string.warning_duplicatedSuitcase));
+                }
             }
             createAnotherSuitcaseDialog(v);
+        });
+
+        builder.setNeutralButton(getString(R.string.text_create), ((dialog, which) -> {
+            if ((nameET.getText()).toString().isEmpty()) {
+                makeToast(v.getContext(), getString(R.string.warning_emptyName));
+            } else {
+                Suitcase suitcase = createSuitcase(nameET, colorET, weigthET, heigthET, widthET, depthET);
+                boolean haveBeenAdded = Presented.createSuitcase(suitcase, getContext());
+                if (haveBeenAdded) {
+                    makeToast(v.getContext(), getString(R.string.text_suitcaseHaveBeenCreate));
+                } else {
+                    makeToast(v.getContext(), getString(R.string.warning_duplicatedSuitcase));
+                }
+            }
+            createAnotherSuitcaseDialog(v);
+
         }));
         builder.show();
     }
@@ -161,12 +184,25 @@ public class Fragment_AddHandLuggage extends BaseFragment {
         builder.setView(editText);
         builder.setNegativeButton(NegativeButton, ((dialog, which) -> {
             dialog.dismiss();
-            getNav().navigate(R.id.fragment_Add_HandLuggage, bundle);
+            getNav().navigate(R.id.fragment_ShowTrips);
         }));
         builder.setPositiveButton(positiveButton, ((dialog, which) -> {
             dialog.dismiss();
             createNewSuitcaseDialog(v);
         }));
         builder.show();
+    }
+
+    @NotNull
+    private Suitcase createSuitcase(EditText nameET, EditText colorET, EditText weigthET, EditText heigthET, EditText widthET, EditText depthET) {
+        String name = nameET.getText().toString();
+        String color = colorET.getText().toString();
+        double weigth = Double.parseDouble(weigthET.getText().toString());
+
+        double heigth = Double.parseDouble(heigthET.getText().toString());
+        double width = Double.parseDouble(widthET.getText().toString());
+        double depth = Double.parseDouble(depthET.getText().toString());
+
+        return new Suitcase(name, color, weigth, heigth, width, depth);
     }
 }

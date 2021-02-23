@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,14 +49,16 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
         dataset = Presented.selectAllItems(getContext());
         setHasOptionsMenu(true);
 
-        floatingButton.setOnClickListener(this::createNewItemDialog);
+        floatingButton.setOnClickListener(v -> {
+            createNewItemDialog();
+        });
 
         recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
         ItemTouchHelper.SimpleCallback simpleCallback = new Item_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new Adapter_Item(dataset);
+        adapter = new Adapter_Item(dataset, getActivity());
         recyclerView.setAdapter(adapter);
 
         adapter.setListener((View v) -> {
@@ -85,18 +88,23 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
 
         builder.setPositiveButton(getString(R.string.text_edit), ((dialog, which) -> {
             String itemName = editText.getText().toString();
-            boolean update = Presented.updateItem(item, itemName, getContext());
-            if (update) {
-                makeToast(v.getContext(), getString(R.string.text_haveBeenUpdated));
-                getNav().navigate(R.id.fragment_ShowItems);
+
+            if (itemName.isEmpty()) {
+                makeToast(v.getContext(), getString(R.string.warning_emptyName));
             } else {
-                makeToast(v.getContext(), getString(R.string.warning_updateItem));
+                boolean update = Presented.updateItem(item, itemName, getContext());
+                if (update) {
+                    makeToast(v.getContext(), getString(R.string.text_haveBeenUpdated));
+                    getNav().navigate(R.id.fragment_ShowItems);
+                } else {
+                    makeToast(v.getContext(), getString(R.string.warning_updateItem));
+                }
             }
         }));
         builder.show();
     }
 
-    private void createNewItemDialog(View v) {
+    private void createNewItemDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -110,19 +118,46 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
         EditText editText = view.findViewById(R.id.alertdialog_editText);
         editText.setHint(getString(R.string.fragment_createItem_hint));
         builder.setView(view);
+        editText.setFocusable(true);
+//        openKeyBoard();
 
         builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
 
         builder.setPositiveButton(getString(R.string.text_add), ((dialog, which) -> {
             String itemName = editText.getText().toString();
-            boolean create = Presented.createItem(itemName, getContext());
-            if (!create) {
-                makeToast(v.getContext(), getString(R.string.warning_createItem));
-                createNewItemDialog(v);
+            if (itemName.isEmpty()) {
+                makeToast(getContext(), getString(R.string.warning_emptyName));
             } else {
-                makeToast(v.getContext(), getString(R.string.text_haveBeenAdded));
-                getNav().navigate(R.id.fragment_ShowItems);
+                boolean create = Presented.createItem(itemName, getContext());
+                if (!create) {
+                    makeToast(getContext(), getString(R.string.warning_createItem));
+                    getNav().navigate(R.id.fragment_ShowItems);
+                } else {
+                    makeToast(getContext(), getString(R.string.text_itemCreated));
+                    anotherItemDialog();
+                    getNav().navigate(R.id.fragment_ShowItems);
+                }
             }
+        }));
+        builder.show();
+    }
+
+    private void anotherItemDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(getString(R.string.text_Item));
+
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.alertdialog_textview, null);
+
+        TextView textView = view.findViewById(R.id.alertdialog_textView);
+        textView.setText(getString(R.string.text_ask_anotherItem));
+        builder.setView(view);
+
+        builder.setNegativeButton(getString(R.string.text_no), ((dialog, which) -> dialog.dismiss()));
+
+        builder.setPositiveButton(getString(R.string.text_yes), ((dialog, which) -> {
+            createNewItemDialog();
         }));
         builder.show();
     }

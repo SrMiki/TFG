@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,7 +37,7 @@ public class Fragment_ShowTrips extends BaseFragment {
     Adapter_HandLuggage adapter_handLuggage;
 
     Button button;
-    TextView textView;
+    TextView finishedTripTv, planingTripTV;
 
     Trip focusTrip;
     private boolean showOptionMenu = false;
@@ -49,8 +48,11 @@ public class Fragment_ShowTrips extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_show_trip, container, false);
         setHasOptionsMenu(true);
 
-        textView = view.findViewById(R.id.showTrip_finishedTrips);
-        textView.setOnClickListener(v -> {
+        planingTripTV = view.findViewById(R.id.showTrip_trips);
+        planingTripTV.setTextColor(view.getResources().getColor(R.color.item_selected));
+
+        finishedTripTv = view.findViewById(R.id.showTrip_finishedTrips);
+        finishedTripTv.setOnClickListener(v -> {
             getNav().navigate(R.id.fragment_ShowFinishedTrip);
         });
 
@@ -116,45 +118,6 @@ public class Fragment_ShowTrips extends BaseFragment {
         adapter.activity = getActivity();
     }
 
-//    private void shoProgressTrips(View view) {
-//        if (progressTrips.size() != 0) {
-//            progressTripLayout = view.findViewById(R.id.layout_progressTrip);
-//            progressTripLayout.setVisibility(View.VISIBLE);
-//            progressTripRecyclerview = view.findViewById(R.id.progress_trip_recyclerview);
-//            progressTripRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-//            adapterP = new Adapter_trip(progressTrips);
-//            adapterP.activity = getActivity();
-//            progressTripRecyclerview.setAdapter(adapterP);
-//            adapterP.setListener(v -> {
-//                Trip trip = progressTrips.get(progressTripRecyclerview.getChildAdapterPosition(v));
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("trip", trip);
-//                getNav().navigate(R.id.fragment_startTrip, bundle);
-//
-//            });
-//        }
-//    }
-
-//    private void showFinishedTrips(View view) {
-//        if (finishedTrips.size() != 0) {
-//            finishedTripsLayout = view.findViewById(R.id.layout_finishedTrips);
-//            finishedTripsLayout.setVisibility(View.VISIBLE);
-//            finishedTripsRecyclerview = view.findViewById(R.id.finishedTrips_recyclerview);
-//            finishedTripsRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-//            adapterF = new Adapter_trip(getContext(), finishedTrips);
-//            adapterF.activity = getActivity();
-//            finishedTripsRecyclerview.setAdapter(adapterF);
-//            adapterF.setListener(v -> {
-//                setButton(view);
-//                int position = finishedTripsRecyclerview.getChildAdapterPosition(v);
-//                focusTrip = finishedTrips.get(position);
-//                adapterF.setCardSelected(position);
-//                getActivity().invalidateOptionsMenu();
-//                showOptionMenu = !showOptionMenu;
-//                adapterF.setSelectedState(showOptionMenu);
-//            });
-//        }
-//    }
 
     private void a(int position) {
         adapter.setCardSelected(position);

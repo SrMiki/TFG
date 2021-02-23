@@ -58,7 +58,7 @@ public class Presented {
 
     public static ArrayList<Trip> selectAllTripsInProgress(Context context) {
         db = AppDatabase.getInstance(context);
-        return (ArrayList<Trip>) db.tripDao().selectProgressTrip();
+        return (ArrayList<Trip>) db.tripDao().selectCheckOutTrip();
     }
 
     public static ArrayList<Trip> selectAllTripsFinished(Context context) {
@@ -78,7 +78,7 @@ public class Presented {
 
     public static ArrayList<Trip> selectAllTripsNP(Context context) {
         db = AppDatabase.getInstance(context);
-        return (ArrayList<Trip>) db.tripDao().selectTripsNP();
+        return (ArrayList<Trip>) db.tripDao().selectPlanningTrip();
     }
 
     public static ArrayList<Suitcase> selectAllSuitcase(Context context) {
@@ -127,9 +127,6 @@ public class Presented {
     }
 
     public static boolean createSuitcase(Suitcase suitcase, Context context) {
-        if (suitcase.getName().isEmpty()) {
-            return false;
-        }
         db = AppDatabase.getInstance(context);
         List<Suitcase> suitcases = db.suitcaseDAO().selectAll();
         if (!suitcases.contains(suitcase)) {
@@ -219,9 +216,6 @@ public class Presented {
     }
 
     public static boolean updateItem(Item updateItem, String nombreItem, Context context) {
-        if (nombreItem.isEmpty()) {
-            return false;
-        }
         db = AppDatabase.getInstance(context);
         List<Item> itemList = db.itemDAO().getAll();
         for (Item item : itemList) {
@@ -265,6 +259,22 @@ public class Presented {
 
     public static void deleteItem(Item item, Context context) {
         db = AppDatabase.getInstance(context);
+
+        CategoryContent categoryContentByItemID = db.categoryContentDAO().getCategoryContentByItemID(item.getItemID());
+        if (categoryContentByItemID != null) {
+            db.categoryContentDAO().delete(categoryContentByItemID);
+        }
+
+        List<Baggage> baggageByItem = db.baggageDAO().getBaggageByItem(item.getItemID());
+        for (Baggage baggage : baggageByItem) {
+            if (baggage != null) {
+                HandLuggage handLuggage = db.handLuggageDAO().getHandLuggage(baggage.FKHandLuggageID);
+                handLuggage.decreaseSize();
+                db.handLuggageDAO().update(handLuggage);
+                db.baggageDAO().delete(baggage);
+            }
+        }
+
         db.itemDAO().delete(item);
     }
 
@@ -307,7 +317,13 @@ public class Presented {
     }
 
 
-    public static void addHandLuggageToThisTrip(ArrayList<Suitcase> suitcaseArrayList, Trip trip, Context context) {
+    public static void addSuitcaseToThisTrip(Suitcase suitcase, Trip trip, Context context) {
+        db = AppDatabase.getInstance(context);
+        HandLuggage newHandLuggage = new HandLuggage(trip.tripID, suitcase.suitcaseID, suitcase.getName());
+        db.handLuggageDAO().insert(newHandLuggage);
+    }
+
+    public static void addSomeSuitcaseToThisTrip(ArrayList<Suitcase> suitcaseArrayList, Trip trip, Context context) {
         db = AppDatabase.getInstance(context);
         for (Suitcase suitcase : suitcaseArrayList) {
             HandLuggage newHandLuggage = new HandLuggage(trip.tripID, suitcase.suitcaseID, suitcase.getName());
@@ -413,5 +429,69 @@ public class Presented {
         }
 
         return result;
+    }
+
+    public static void deleteItemFromTrips(Category category, Context context) {
+        db = AppDatabase.getInstance(context);
+
+        List<CategoryContent> allItemsFromThisCategory = db.categoryContentDAO().getAllItemsFromThisCategory(category.categoryID);
+
+        for (CategoryContent categoryContent : allItemsFromThisCategory) {
+            List<Baggage> baggageByItem = db.baggageDAO().getBaggageByItem(categoryContent.getFKitemID());
+            for (Baggage baggage : baggageByItem) {
+                if (baggage != null) {
+                    HandLuggage handLuggage = db.handLuggageDAO().getHandLuggage(baggage.FKHandLuggageID);
+                    handLuggage.decreaseSize();
+                    db.handLuggageDAO().update(handLuggage);
+                    db.baggageDAO().delete(baggage);
+                }
+            }
+        }
+    }
+
+    public static ArrayList<Suitcase> getAllSuitcase(Context context) {
+        db = AppDatabase.getInstance(context);
+        return (ArrayList<Suitcase>) db.suitcaseDAO().getAll();
+    }
+
+
+    public static Category getCategoryOfThisItem(Item item, Context context) {
+        db = AppDatabase.getInstance(context);
+        return db.categoryContentDAO().getCategoryByItem(item.getItemID());
+    }
+
+    public static void updateItemState(Item item, Context context) {
+        db = AppDatabase.getInstance(context);
+
+        db.itemDAO().updateItem(item);
+    }
+
+    public static void removeItemSelectedState(ArrayList<Item> arrayList, Context context) {
+        db = AppDatabase.getInstance(context);
+
+        for (Item item: arrayList) {
+            item.setSelectedState(false);
+        }
+
+        db.itemDAO().updateListOfItem(arrayList);
+
+
+    }
+
+    public static void updateSuitcaseState(Suitcase suitcase, Context context) {
+        db = AppDatabase.getInstance(context);
+
+        db.suitcaseDAO().update(suitcase);
+    }
+
+    public static void removeSuitcaseSelectedState(ArrayList<Suitcase> arrayList, Context context) {
+        db = AppDatabase.getInstance(context);
+
+        for (Suitcase suitcase: arrayList) {
+            suitcase.setSelectedState(false);
+        }
+
+        db.suitcaseDAO().updateListOfSuitcase(arrayList);
+
     }
 }

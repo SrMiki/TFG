@@ -40,7 +40,7 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_categorycontent, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_item_to_category, container, false);
 
         bundle = getArguments();
         if (bundle != null) {
@@ -55,17 +55,12 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
             if (dataset.isEmpty()) {
                 noItemsDialog();
             }
+            Presented.removeItemSelectedState(dataset, getContext());
 
             recyclerView = view.findViewById(R.id.fragment_Add_Item_To_Category_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             adapter = new Adapter_ItemSeleccionados(dataset);
             recyclerView.setAdapter(adapter);
-
-            floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Category_finish);
-            floatingActionButton.setOnClickListener(v -> {
-                Presented.addItemToThisCategory(arrayList, category, getContext());
-                getNav().navigate(R.id.fragment_ShowCategoryContent, bundle);
-            });
 
             floatingActionButton.setVisibility(View.GONE);
             adapter.setListener(v -> {
@@ -74,19 +69,28 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
 
                 if (!arrayList.contains(item)) {
                     arrayList.add(item);
-                    adapter.setSelectedState(true);
-                    floatingActionButton.setVisibility(View.VISIBLE);
+                    item.setSelectedState(true);
                 } else {
                     arrayList.remove(item);
-                    adapter.setSelectedState(false);
+                    item.setSelectedState(false);
                 }
+                Presented.updateItemState(item, getContext());
+
                 adapter.notifyItemChanged(position);
                 if (arrayList.isEmpty()) {
                     floatingActionButton.setVisibility(View.GONE);
+                } else {
+                    floatingActionButton.setVisibility(View.VISIBLE);
                 }
 
             });
 
+            floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Category_finish);
+            floatingActionButton.setOnClickListener(v -> {
+                Presented.addItemToThisCategory(arrayList, category, getContext());
+                Presented.removeItemSelectedState(arrayList, getContext());
+                getNav().navigate(R.id.fragment_ShowCategoryContent, bundle);
+            });
 
         }
         return view;

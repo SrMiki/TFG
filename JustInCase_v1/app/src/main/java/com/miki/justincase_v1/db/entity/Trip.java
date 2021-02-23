@@ -75,11 +75,12 @@ public class Trip implements Serializable {
     /**
      *
      * @return
-     * 0 == planning
-     * 1 == check-in
-     * 2 == chek-out
-     * 3 == end chek-in (for returnTravel)
-     * 4 == finished
+     * 0 == planning + checking
+     * 1 == checkout
+     * 2 == checkin BACK*
+     * 3 == finshed (checout)
+     *
+     * 1 and 2 it's for "travel back"
      */
     public int isTravelling() {
         return travelling;

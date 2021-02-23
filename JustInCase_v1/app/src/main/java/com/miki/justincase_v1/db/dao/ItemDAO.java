@@ -9,6 +9,7 @@ import androidx.room.Update;
 import com.miki.justincase_v1.db.entity.Baggage;
 import com.miki.justincase_v1.db.entity.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //Item Data Acces Objet
@@ -46,6 +47,9 @@ public interface ItemDAO {
 
     @Update
     void updateItem(Item item);
+
+    @Update
+    void updateListOfItem(List<Item> arrayList);
 
     //(onConflict = OnConflictStrategy.REPLACE)
     //default >> ABORT

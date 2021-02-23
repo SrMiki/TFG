@@ -43,9 +43,6 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
 
     public Activity activity;
 
-    ArrayList<HandLuggage> childDataset;
-    Adapter_HandLuggage adapter_handLuggage;
-
     public int getCardSelected() {
         return cardSelected;
     }
@@ -134,7 +131,7 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
             travelDate += " - " + returnDate;
         }
         holder.tripName_TextView.setText(destination);
-        holder.tripDescription_TextView.setText(travelDate);
+        holder.tripDate_TextView.setText(travelDate);
 
         Context context = holder.itemView.getContext();
         holder.nestedRecyclerview_LinearLayout.setVisibility(View.GONE);
@@ -156,7 +153,7 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
 
         holder.deleteTrip.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-            builder.setTitle( v.getResources().getString(R.string.warning_title));
+            builder.setTitle(v.getResources().getString(R.string.warning_title));
 
             LayoutInflater inflater = activity.getLayoutInflater();
             View view = inflater.inflate(R.layout.alertdialog_textview, null);
@@ -165,7 +162,7 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
             textView.setText(v.getResources().getString(R.string.warning_deleteTrip));
             builder.setView(view);
 
-            builder.setNegativeButton( v.getResources().getString(R.string.text_no), ((dialog, which) -> dialog.dismiss()));
+            builder.setNegativeButton(v.getResources().getString(R.string.text_no), ((dialog, which) -> dialog.dismiss()));
             builder.setPositiveButton(v.getResources().getString(R.string.text_yes), ((dialog, which) -> {
                 Presented.deleteTrip(trip, holder.itemView.getContext());
                 navController.navigate(R.id.fragment_ShowTrips);
@@ -180,30 +177,31 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
 
     private void setChildRecyclerView(AdapterViewHolder holder, Trip trip) {
 
-        childDataset = Presented.getHandLuggage(trip, holder.itemView.getContext());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                 holder.itemView.getContext(),
                 LinearLayoutManager.VERTICAL,
                 false
         );
 
+        ArrayList<HandLuggage> childDataset;
+        Adapter_HandLuggage adapter_handLuggage;
+
+        childDataset = Presented.getHandLuggage(trip, holder.itemView.getContext());
+
         linearLayoutManager.setInitialPrefetchItemCount(childDataset.size());
 
-        ;
         adapter_handLuggage = new Adapter_HandLuggage(childDataset);
 
         holder.childRecyclerview.setLayoutManager(linearLayoutManager);
         holder.childRecyclerview.setAdapter(adapter_handLuggage);
         holder.childRecyclerview.setRecycledViewPool(recycledViewPool);
 
-        adapter_handLuggage.setListener(v ->
-        {
+        adapter_handLuggage.setListener(v -> {
             int adapterPosition = holder.childRecyclerview.getChildAdapterPosition(v);
             HandLuggage focusHandLuggage = childDataset.get(adapterPosition);
-            //
-//            showOptionMenu = !showOptionMenu;
-//            getActivity().invalidateOptionsMenu();
+
             NavController navController = Navigation.findNavController(activity, R.id.fragment);
+
             Bundle obundle = new Bundle();
             obundle.putSerializable("handluggage", focusHandLuggage);
             SharedPreferences sp;
@@ -218,7 +216,6 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
         });
 
     }
-
 
 
     private void isSelected(AdapterViewHolder holder, int position, Context context) {
@@ -258,7 +255,7 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         RecyclerView childRecyclerview;
-        public TextView tripName_TextView, tripDescription_TextView;
+        public TextView tripName_TextView, tripDate_TextView;
         public LinearLayout layout;
 
         LinearLayout nestedRecyclerview_LinearLayout;
@@ -271,7 +268,7 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
         public AdapterViewHolder(@NonNull View view) {
             super(view);
             tripName_TextView = view.findViewById(R.id.recyclerview_Trip_tripDestino);
-            tripDescription_TextView = view.findViewById(R.id.recyclerview_Trip_tripDate);
+            tripDate_TextView = view.findViewById(R.id.recyclerview_Trip_tripDate);
             layout = view.findViewById(R.id.tripCardView_layoutToDeleted);
 
             childRecyclerview = view.findViewById(R.id.cardviewtrip_nestedRecyclerView);

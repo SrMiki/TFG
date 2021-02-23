@@ -36,5 +36,8 @@ public interface CategoryContentDAO {
 
     @Delete
     void deleteAll(List<CategoryContent> allItemsFromThisCategory);
+
+    @Query("SELECT * FROM categories WHERE categoryID IN (SELECT FKcategoryID FROM categoryContent WHERE FKitemID IS :itemID)")
+    Category getCategoryByItem(int itemID);
 }
 

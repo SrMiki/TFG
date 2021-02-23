@@ -99,16 +99,15 @@ public class Fragment_CheckOut extends BaseFragment {
      * 2 & 3 for go and return travel
      */
     private void setCheckTripStatus() {
-        if (trip.isTravelling() == 0) {
-            trip.setTravelling(1);
+        if (trip.isTravelling() == 1) {
+            if (!trip.getReturnDate().isEmpty()) {
+                trip.setTravelling(2);
+            } else {
+                trip.setTravelling(4);
+            }
+            button.setText(getString(R.string.text_doCheckOut));
 
-        } else if (!trip.returnDate.isEmpty() && trip.isTravelling() == 1) {
-            trip.setTravelling(2);
-            button.setText(getString(R.string.text_finish));
-        } else if (!trip.returnDate.isEmpty() && trip.isTravelling() == 2) {
-            trip.setTravelling(3);
-            button.setText(getString(R.string.text_doCheckIn));
-        } else {
+        } else if (trip.isTravelling() == 3) {
             trip.setTravelling(4);
             button.setText(getString(R.string.text_finish));
         }

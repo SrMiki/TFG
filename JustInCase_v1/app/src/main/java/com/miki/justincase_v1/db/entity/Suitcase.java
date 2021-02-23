@@ -20,7 +20,6 @@ public class Suitcase implements Serializable {
     @ColumnInfo(name = "color")
     public String color;
 
-
     @ColumnInfo(name = "weight")
     public double weight;
 
@@ -33,6 +32,16 @@ public class Suitcase implements Serializable {
     @ColumnInfo(name = "depth")
     public double depth;
 
+    public boolean isSelectedState() {
+        return isSelectedState;
+    }
+
+    public void setSelectedState(boolean selectedState) {
+        isSelectedState = selectedState;
+    }
+
+    boolean isSelectedState;
+
     public Suitcase(@NonNull String name, String color, double weight, double heigth, double width, double depth) {
         this.name = name;
         this.color = color;
@@ -40,6 +49,7 @@ public class Suitcase implements Serializable {
         this.heigth = heigth;
         this.width = width;
         this.depth = depth;
+        isSelectedState = false;
     }
 
     public int getSuitcaseID() {

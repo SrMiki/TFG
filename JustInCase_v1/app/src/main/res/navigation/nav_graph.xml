@@ -92,4 +92,8 @@
         android:id="@+id/fragment_ShowFinishedTrip"
         android:name="com.miki.justincase_v1.fragments.Show.Fragment_ShowFinishedTrip"
         android:label="@string/title_Fragment_ShowFinishedTrip" />
+    <fragment
+        android:id="@+id/algoritm"
+        android:name="com.miki.justincase_v1.fragments.Trip.Algoritm"
+        android:label="Algoritm" />
 </navigation>
