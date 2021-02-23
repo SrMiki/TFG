@@ -9,6 +9,7 @@ import androidx.room.Update;
 
 import com.miki.justincase_v1.db.entity.Trip;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //Data access object de la tabla "viajes"
@@ -18,28 +19,30 @@ import java.util.List;
 public interface TripDAO {
     //LiveData
     @Query("SELECT * FROM trips")
-    List<Trip> getAllEntity();
+    List<Trip> getAll();
 
     @Query("SELECT * FROM trips WHERE tripID IS :tripID")
     Trip getTrip(int tripID);
 
-    //date "YYYY-MM-DD" time "HH:MM:SS" datetime "YYYY-MM-DD HH:MM:SS"
-    //TODO checkDateMethod!
+    @Query("SELECT * FROM trips WHERE travelling IS 0 ORDER BY date(travelDate)")
+    List<Trip> selectTripsNP();
 
-    /**
-     * required >> checkDateMethod
-     * @return the list of all trips order by Date
-     */
-    @Query("SELECT * FROM trips ORDER BY date(travelDate) DESC LIMIT 1")
-    List<Trip> getAllTripsOrderByTravelDate();
+    @Query("SELECT * FROM trips WHERE (travelling IS 1) OR (travelling IS 2) OR (travelling IS 3)ORDER BY date(travelDate)")
+    List<Trip> selectProgressTrip();
+
+    @Query("SELECT * FROM trips WHERE travelling IS 4 ORDER BY date(travelDate)")
+    List<Trip> selectFinishedTrip();
 
     @Update
     void update(Trip trip);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void addViaje(Trip trip);
+    void insert(Trip trip);
+
+    @Insert
+    void insertAll(ArrayList<Trip> trips);
 
     @Delete
     void delete(Trip trip);
-}
 
+}

@@ -25,9 +25,6 @@ public interface CategoryContentDAO {
     @Query("SELECT * FROM categoryContent WHERE FKcategoryID IS :categoryID ORDER BY itemName")
     List<CategoryContent> getAllItemsFromThisCategory(int categoryID);
 
-    @Query("SELECT * FROM categoryContent WHERE categoryContentID IS :categoryContentID")
-    CategoryContent getCategoryContent(int categoryContentID);
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(CategoryContent categoryContent);
 
@@ -37,5 +34,7 @@ public interface CategoryContentDAO {
     @Delete
     void delete(CategoryContent categoryContent);
 
+    @Delete
+    void deleteAll(List<CategoryContent> allItemsFromThisCategory);
 }
 

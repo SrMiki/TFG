@@ -17,8 +17,12 @@ import java.util.List;
 @Dao
 public interface CategoryDAO {
 
-    @Query("SELECT * FROM categories ORDER BY categoryName")
+    @Query("SELECT * FROM categories")
     List<Category> getAll();
+
+
+    @Query("SELECT * FROM categories ORDER BY categoryName")
+    List<Category> getAllOrdened();
 
     @Query("SELECT * FROM categories WHERE categoryID IS :thisCategoryID")
     Category getCategory(int thisCategoryID);
@@ -31,6 +35,9 @@ public interface CategoryDAO {
 
     @Delete
     void delete(Category categoryToDelete);
+
+    @Delete
+    void deleteSelected(List<Category> categories);
 
     @Update
     void update(Category category);

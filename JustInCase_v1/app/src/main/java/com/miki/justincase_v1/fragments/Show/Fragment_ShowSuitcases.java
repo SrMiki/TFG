@@ -11,22 +11,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.miki.justincase_v1.adapters.Item_RecyclerItemTouchHelper;
-import com.miki.justincase_v1.adapters.Suitcase_RecyclerItemTouchHelper;
 import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_Item;
 import com.miki.justincase_v1.adapters.Adapter_Suitcase;
+import com.miki.justincase_v1.Swipers.Item_RecyclerItemTouchHelper;
+import com.miki.justincase_v1.Swipers.Suitcase_RecyclerItemTouchHelper;
 import com.miki.justincase_v1.db.entity.Suitcase;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
@@ -39,68 +41,76 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
     RecyclerView recyclerView;
 
     FloatingActionButton floatingButton;
+    ItemTouchHelper.SimpleCallback simpleCallback;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_show_entity, container, false);
+        View view = inflater.inflate(R.layout.recyclerview_addbutton, container, false);
 
         floatingButton = view.findViewById(R.id.fragment_show_entity_btn_add);
-        dataset = Presented.getAllSuitcase(view);
+        dataset = Presented.selectAllSuitcase(getContext());
         setHasOptionsMenu(true);
 
         floatingButton.setOnClickListener(v -> {
-            createNewSuitcase(view, v);
+            createNewSuitcaseDialog(view, v);
         });
 
 
         recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
-        ItemTouchHelper.SimpleCallback simpleCallback = new Suitcase_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        simpleCallback = new Suitcase_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new Adapter_Suitcase(dataset);
         recyclerView.setAdapter(adapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), 1);
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         adapter.setListener(v -> {
+
             Suitcase suitcase = dataset.get(recyclerView.getChildAdapterPosition(v));
             editSuitcase(suitcase, view, v);
         });
         return view;
     }
 
-    private void createNewSuitcase(View vista, View v) {
+    private void createNewSuitcaseDialog(View vista, View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setTitle(getString(R.string.text_newSuitcase));
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-        String cancel = getString(R.string.text_cancel);
-        String haveBeenAdded = getString(R.string.text_haveBeenAdded);
-        String add = getString(R.string.text_add);
-        String title = getString(R.string.text_suitcase);
-
-        builder.setTitle(title);
-        View view = inflater.inflate(R.layout.form_suitcase, null);
+        View view = inflater.inflate(R.layout.alertdialog_suitcase, null);
         builder.setView(view);
 
-        EditText name = view.findViewById(R.id.activity_createSuitcase_input_suitcaseName);
-        EditText color = view.findViewById(R.id.activity_createSuitcase_input_suitcaseNameColor);
-        EditText weigth = view.findViewById(R.id.activity_createSuitcase_input_suitcaseWeight);
-        EditText dimns = view.findViewById(R.id.activity_createSuitcase_input_suitcaseDims);
-        name.setText("");
-        color.setText("");
-        weigth.setText("");
-        dimns.setText("");
+        EditText nameET = view.findViewById(R.id.activity_createSuitcase_input_suitcaseName);
+        EditText colorET = view.findViewById(R.id.activity_createSuitcase_input_suitcaseNameColor);
 
-        builder.setNegativeButton(cancel, ((dialog, which) -> {
+        EditText weigthET = view.findViewById(R.id.activity_createSuitcase_input_suitcaseWeight);
+
+        EditText heigthET = view.findViewById(R.id.card_view_suitcase_heigth);
+        EditText widthET = view.findViewById(R.id.card_view_suitcase_width);
+        EditText depthET = view.findViewById(R.id.card_view_suitcase_depth);
+
+        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> {
             dialog.dismiss();
         }));
-        builder.setPositiveButton(add, ((dialog, which) -> {
-            String itemName = name.getText().toString();
-            String colorS = color.getText().toString();
-            String weigthS = weigth.getText().toString();
-            String dimnS = dimns.getText().toString();
-            Presented.createSuitcase(itemName, colorS, weigthS, dimnS, view);
-            makeToast(v.getContext(), haveBeenAdded);
+        builder.setPositiveButton(getString(R.string.text_add), ((dialog, which) -> {
+            String name = nameET.getText().toString();
+            String color = colorET.getText().toString();
+            double weigth = Double.parseDouble(weigthET.getText().toString());
+
+            double heigth = Double.parseDouble(heigthET.getText().toString());
+            double width = Double.parseDouble(widthET.getText().toString());
+            double depth = Double.parseDouble(depthET.getText().toString());
+
+            Suitcase suitcase = new Suitcase(name, color, weigth, heigth, width, depth);
+            boolean haveBeenAdded = Presented.createSuitcase(suitcase, getContext());
+            if (haveBeenAdded) {
+                makeToast(v.getContext(), getString(R.string.text_haveBeenAdded));
+            } else {
+                makeToast(v.getContext(), getString(R.string.error));
+            }
             getNav().navigate(R.id.fragment_ShowSuitcases);
         }));
         builder.show();
@@ -109,34 +119,51 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
     private void editSuitcase(Suitcase suitcase, View w, View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        String cancel = getString(R.string.text_cancel);
-        String haveBeenAdded = getString(R.string.text_haveBeenAdded);
-        String add = getString(R.string.text_add);
 
+        String cancel = getString(R.string.text_cancel);
+        String add = getString(R.string.text_add);
         String title = getString(R.string.text_edit);
 
         builder.setTitle(title);
-        View view = inflater.inflate(R.layout.form_suitcase, null);
+        View view = inflater.inflate(R.layout.alertdialog_suitcase, null);
         builder.setView(view);
-        EditText name = view.findViewById(R.id.activity_createSuitcase_input_suitcaseName);
-        EditText color = view.findViewById(R.id.activity_createSuitcase_input_suitcaseNameColor);
-        EditText weigth = view.findViewById(R.id.activity_createSuitcase_input_suitcaseWeight);
-        EditText dimns = view.findViewById(R.id.activity_createSuitcase_input_suitcaseDims);
-        name.setText(suitcase.getSuitcaseName());
-        color.setText(suitcase.getSuitcaseColor());
-        weigth.setText(suitcase.getSuitcaseWeight());
-        dimns.setText(suitcase.getSuitcaseDims());
+
+        EditText nameET = view.findViewById(R.id.activity_createSuitcase_input_suitcaseName);
+        EditText colorET = view.findViewById(R.id.activity_createSuitcase_input_suitcaseNameColor);
+
+        EditText weigthET = view.findViewById(R.id.activity_createSuitcase_input_suitcaseWeight);
+
+        EditText heigthET = view.findViewById(R.id.card_view_suitcase_heigth);
+        EditText widthET = view.findViewById(R.id.card_view_suitcase_width);
+        EditText depthET = view.findViewById(R.id.card_view_suitcase_depth);
+
+        nameET.setText(suitcase.getName());
+        colorET.setText(suitcase.getColor());
+
+        weigthET.setText(String.valueOf(suitcase.getWeight()));
+
+        heigthET.setText(String.valueOf(suitcase.getHeigth()));
+        widthET.setText(String.valueOf(suitcase.getWidth()));
+        depthET.setText(String.valueOf(suitcase.getDepth()));
 
         builder.setNegativeButton(cancel, ((dialog, which) -> {
             dialog.dismiss();
         }));
         builder.setPositiveButton(add, ((dialog, which) -> {
-            String itemName = name.getText().toString();
-            String colorS = color.getText().toString();
-            String weigthS = weigth.getText().toString();
-            String dimnS = dimns.getText().toString();
-            Presented.updateSuitcase(suitcase, itemName, colorS, weigthS, dimnS, view);
-            makeToast(v.getContext(), haveBeenAdded);
+            String name = nameET.getText().toString();
+            String color = colorET.getText().toString();
+            double weigth = Double.parseDouble(weigthET.getText().toString());
+
+            double heigth = Double.parseDouble(heigthET.getText().toString());
+            double width = Double.parseDouble(widthET.getText().toString());
+            double depth = Double.parseDouble(depthET.getText().toString());
+            suitcase.setSuticase(name, color, weigth, heigth, width, depth);
+            boolean haveBeenUpdated = Presented.updateSuitcase(suitcase, getContext());
+            if (haveBeenUpdated) {
+                makeToast(v.getContext(), getString(R.string.text_haveBeenUpdated));
+            } else {
+                makeToast(v.getContext(), getString(R.string.error));
+            }
             getNav().navigate(R.id.fragment_ShowSuitcases);
         }));
         builder.show();
@@ -145,19 +172,38 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
     @Override
     public void onSwipe(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof Adapter_Suitcase.AdapterViewHolder) {
-
             int deletedIndex = viewHolder.getAdapterPosition();
 //            String name = dataset.get(deletedIndex).getSuitcaseName();
-            Suitcase deletedItem = dataset.get(deletedIndex);
+            Suitcase suitcase = dataset.get(deletedIndex);
 
-            adapter.removeItem(viewHolder.getAdapterPosition());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            String title = getString(R.string.warning_title);
+            builder.setTitle(title);
 
-//            restoreDeletedElement(viewHolder, name, deletedItem, deletedIndex);
-            //Note: if the item it's deleted and then restore, only restore in item. You must
-            //yo add again in Baggages and Categorys.
-            Presented.deleteSuitcase(deletedItem, viewHolder.itemView);
+            builder.setCancelable(true);
 
+
+            String text = getString(R.string.warning_deleteSuitcase);
+            TextView textView = new TextView(getContext());
+            textView.setText(text);
+
+            builder.setView(textView);
+            builder.setNegativeButton(getString(R.string.text_no), ((dialog, which) -> {
+                dialog.dismiss();
+                getNav().navigate(R.id.fragment_ShowSuitcases);
+            }));
+            builder.setPositiveButton(getString(R.string.text_yes), ((dialog, which) -> {
+                adapter.removeItem(viewHolder.getAdapterPosition());
+
+//            restoreDeletedElement(viewHolder, name, suitcase, deletedIndex);
+                //Note: if the item it's deleted and then restore, only restore in item. You must
+                //yo add again in Baggages and Categorys.
+                Presented.deleteSuitcase(suitcase, getContext());
+                getNav().navigate(R.id.fragment_ShowSuitcases);
+            }));
+            builder.show();
         }
+
     }
 
 

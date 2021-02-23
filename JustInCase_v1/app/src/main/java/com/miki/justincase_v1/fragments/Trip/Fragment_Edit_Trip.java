@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -44,9 +43,15 @@ public class Fragment_Edit_Trip extends BaseFragment {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-            trip = (Trip) bundle.getSerializable("ThisTrip");
+            trip = (Trip) bundle.getSerializable("trip");
 
             travelDestinationTV.setText(trip.destination);
+            travelDestinationTV.setOnClickListener(v -> {
+                getNav().navigate(R.id.fragment_CountryList, bundle);
+            });
+
+
+
             travelDateTV.setText(trip.travelDate);
 
             if(trip.getReturnDate().isEmpty()){
@@ -56,15 +61,13 @@ public class Fragment_Edit_Trip extends BaseFragment {
                 returnDateTV.setText(trip.getReturnDate());
             }
 
-            dateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        linearLayout.setVisibility(view.GONE);
-                    } else {
-                        linearLayout.setVisibility(view.VISIBLE);
-                        travelDateTV.setText("");
-                        returnDateTV.setText("");
-                    }
+            dateSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    linearLayout.setVisibility(view.GONE);
+                } else {
+                    linearLayout.setVisibility(view.VISIBLE);
+                    travelDateTV.setText("");
+                    returnDateTV.setText("");
                 }
             });
 
@@ -94,11 +97,10 @@ public class Fragment_Edit_Trip extends BaseFragment {
                 if(!destination.equals(trip.getDestination())){
                     closeKeyBoard();
                 }
-                Presented.updateTrip(trip, destination, travelDate, returnDate, travelTransport, returnTransport, view);
+                trip.setTrip(destination, travelDate, returnDate, travelTransport, returnTransport);
+                Presented.updateTrip(trip, getContext());
 
-                Bundle obundle = new Bundle();
-                obundle.putSerializable("trip", trip);
-                getNav().navigate(R.id.fragment_showHandLaggage, obundle);
+                getNav().navigate(R.id.fragment_ShowTrips );
             });
         }
         return view;

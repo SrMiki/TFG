@@ -11,7 +11,7 @@
     <string name="ic_coche">Alquiler de coches</string>
     <string name="ic_alojamiento">Alojamientos guardados</string>
     <string name="ic_ofertas">Ofertas</string>
-    <string name="ic_items">Items</string>
+    <string name="ic_items">Inventario</string>
     <string name="ic_categories">Categorias</string>
     <string name="open">open</string>
     <string name="close">close</string>
@@ -23,13 +23,18 @@
 
     <string name="title_showTrip">Mis viajes</string>
     <string name="title_createTrip">Nuevo Viaje</string>
-    <string name="title_showHandLuggage">Planificar maleta</string>
+    <string name="title_showHandLuggage">Mi Equipaje</string>
     <string name="title_showSuticase">Mis maletas</string>
-    <string name="title_showBaggage">Equipaje</string>
+    <string name="title_showBaggageByItem">Equipaje</string>
     <string name="title_showItem">Items</string>
     <string name="title_addBaggage">Agregar Maleta</string>
     <string name="title_showCategories">Categorias</string>
     <string name="title_editTrip">Editar Viaje</string>
+    <string name="title_addItemToCategory">Agregar Items</string>
+    <string name="title_addItemToBaggage">Agregar Items</string>
+    <string name="title_startTrip">Preparativos del viaje</string>
+    <string name="title_checkList">hacer la maleta</string>
+
 
 
     <!-- forms -->
@@ -75,10 +80,10 @@
 
     <!-- Suitcase -->
     <string name="text_SuitcaseColor">Color:</string>
-    <string name="text_hintInputSuitcaseColor">Introduzca el color</string>
+    <string name="text_hintInputSuitcaseColor">rojo, azul, verde...</string>
     <string name="text_suticaseWeight">Peso: </string>
     <string name="text_hintInputSuitcaseWeight">Introduzca el peso</string>
-    <string name="text_suticaseDims">Dim: </string>
+    <string name="text_suticaseDims">Dimensiones: </string>
     <!-- Item -->
 
     <!-- Categories -->
@@ -93,11 +98,75 @@
     <string name="tripDeletedQuestion">¿Seguro que quieres eliminar este viaje?</string>
     <string name="text_restoreWarning">Esta acción no puede deshacerse</string>
 
-    <string name="fragment_createItem_hint">Introduzca el nombre del item</string>
+    <string name="fragment_createItem_hint">camisa, pantalón, pasaporte</string>
     <string name="text_haveBeenUpdated">Ha sido actualizado</string>
+    <string name="warning_fastClicking">No pulses tan rápido</string>
+    <string name="text_trip">viaje</string>
+    <string name="text_no">no</string>
+    <string name="text_yes">si</string>
+    <string name="warning_createTrip">Destino vacio o fechas vacios</string>
+    <string name="text_doCheckIn">Hacer check-in</string>
+    <string name="text_newTrip">Nuevo viaje</string>
+    <string name="text_warning">Aviso</string>
+    <string name="warning_startTrip">El viaje no tiene maletas, ¿seguro que quieres continuar?</string>
+    <string name="showTrip_progressTrip">Viajes en proceso</string>
+    <string name="showTrip_viajesPendientes">Viajes pendientes</string>
+    <string name="showTrip_finishedTrip">Viajes realizados</string>
+    <string name="text_finish">Terminar</string>
+    <string name="text_ask_newHandluggage">¿Quiere agregar maletas al viaje ahora?</string>
+    <string name="warning_noSuitcase">Parece que no tienes maletas disponibles, ¿quieres crear una nueva?</string>
+    <string name="text_ask_anotherSuitcase">¿Quiere crear otra maleta?</string>
+    <string name="heigth">heigth</string>
+    <string name="width">width</string>
+    <string name="depth">depth</string>
+    <string name="x">x</string>
+    <string name="error">Se ha producido un error</string>
+    <string name="number_0">0</string>
+    <string name="warning_title">Atención</string>
+    <string name="warning_deleteTrip">"¿Está seguro de querer eliminar este viaje?"</string>
+    <string name="warning_deleteSuitcase">¿Quiere eliminar esta maleta?</string>
+    <string name="ask_addItemsToCategory">¿Quiere añadir items a esta categoria?</string>
+    <string name="ask_createNewItem">Parece que no tienes items disponibles, ¿quieres crear uno?</string>
+    <string name="text_ask_anotherItem">¿Quieres crear otro item?</string>
+    <string name="warning_deleteItem">¿Quiere eliminar este item?</string>
+    <string name="warning_deleteCategory">¿Quiere eliminar esta categoria?</string>
+    <string name="warning_createItem">el item ya existe</string>
+    <string name="warning_updateItem">Campo vacio o Item ya existente</string>
+    <string name="title_country">Destinos</string>
+    <string name="title_showCategoryContent">Categoria</string>
+    <string name="ic_settings">Ajustes</string>
+    <string name="button_newTrip">Nuevo viaje</string>
+
+    <string name="title_ShowBaggageByCategory">Equipaje</string>
+    <string name="text_newItem">Nuevo item</string>
+    <string name="text_newCategory">Nueva categoria</string>
+    <string name="fragment_createCategory_hint">ropa, electrónica</string>
+    <string name="text_editItem">Editar Item</string>
+    <string name="select_numberPicker">Indique la cantidad deseada</string>
+    <string name="text_itemCount">Cantidad de Items</string>
+    <string name="title_addCategoryToBaggage">Agregar Categoria</string>
+    <string name="text_newSuitcase">Nueva maleta</string>
+    <string name="text_editCategory">Editar categoria</string>
+    <string name="warning_updateCategory">Ya existe esa categoria</string>
+    <string name="warning_emptyName">Nombre vacio</string>
+    <string name="ask_deleteItemsToo">¿Quieres eliminar los items que pertenecen a esta categoría tambien?</string>
+    <string name="text_addToCategory">Agregar directamente</string>
+    <string name="text_create">Crear</string>
+    <string name="warningItemRepeted">Item repetido</string>
+    <string name="text_hintInputSuitcaseName">grande, maletín, mochila</string>
+    <string name="text_startTrip">Empezar viaje</string>
 
 
 
+    <string name="switch_showCategories">Mostrar categorias</string>
+    <string name="title_DoCheckListByCategory">Hacer la maleta</string>
+    <string name="title_CheckOut">Check Out</string>
+    <string name="text_addCategoryContent">Seleccione los items que quiere agregar a la categoria</string>
+    <string name="ask_deleteHandLuggage">¿Quiere eliminar esta maleta?</string>
+    <string name="warning_editHandLuggage">Esto eliminará el contenido de la maleta</string>
+    <string name="text_progressTrip">Viajes en proceso</string>
+    <string name="text_NOprogressTrip">Aun no tiene viajes activos</string>
+    <string name="title_Fragment_ShowFinishedTrip">Viajes realizados</string>
 
 
 </resources>

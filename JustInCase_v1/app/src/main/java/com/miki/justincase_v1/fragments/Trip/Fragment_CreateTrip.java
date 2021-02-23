@@ -1,5 +1,6 @@
 package com.miki.justincase_v1.fragments.Trip;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,10 @@ import androidx.annotation.Nullable;
 
 import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
+import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
+
+import java.util.ArrayList;
 
 public class Fragment_CreateTrip extends BaseFragment {
 
@@ -23,13 +27,14 @@ public class Fragment_CreateTrip extends BaseFragment {
     Switch dateSwitch;
 
     Button btn;
-
+    Trip newTrip;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_trip, container, false);
-        LinearLayout linearLayout = view.findViewById(R.id.fragment_createTrip_LayoutInput_tripReturnDate);
+        LinearLayout inputReturnDate = view.findViewById(R.id.fragment_createTrip_LayoutInput_tripReturnDate);
+
 
         travelDestinationTV = view.findViewById(R.id.fragment_createTrip_input_tripDestino);
         travelDateTV = view.findViewById(R.id.activity_createTrip_input_travelDate);
@@ -39,12 +44,22 @@ public class Fragment_CreateTrip extends BaseFragment {
         dateSwitch = view.findViewById(R.id.fragment_createTrip_switch);
         dateSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                linearLayout.setVisibility(view.GONE);
+                inputReturnDate.setVisibility(view.GONE);
             } else {
-                linearLayout.setVisibility(view.VISIBLE);
+                inputReturnDate.setVisibility(view.VISIBLE);
                 travelDateTV.setText("");
             }
             returnDateTV.setText("");
+        });
+
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String destination = (String) bundle.getSerializable("destination");
+            travelDestinationTV.setText(destination);
+        }
+        travelDestinationTV.setOnClickListener(v -> {
+            getNav().navigate(R.id.fragment_CountryList);
         });
 
 
@@ -74,11 +89,43 @@ public class Fragment_CreateTrip extends BaseFragment {
             String travelTransport = "";
             String returnTransport = "";
 
-            Presented.createTrip(destination, travelDate, returnDate, travelTransport, returnTransport, view);
-
-            closeKeyBoard();
-            getNav().navigate(R.id.fragment_ShowTrips);
+            newTrip = new Trip(destination, travelDate, returnDate, travelTransport, returnTransport);
+            if (!Presented.createTrip(newTrip, getContext())) {
+                printWarningToast(getContext(), getString(R.string.warning_createTrip));
+            } else {
+//                closeKeyBoard();
+                ask_newHandluggageDialog();
+            }
         });
         return view;
+    }
+
+
+    private void ask_newHandluggageDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        String NegativeButton = getString(R.string.text_no);
+        String positiveButton = getString(R.string.text_yes);
+        String string = getString(R.string.text_ask_newHandluggage);
+
+        builder.setCancelable(true);
+
+        EditText editText = new EditText(getContext());
+        editText.setText(string);
+        builder.setView(editText);
+        builder.setNegativeButton(NegativeButton, ((dialog, which) -> {
+            dialog.dismiss();
+            getNav().navigate(R.id.fragment_ShowTrips);
+        }));
+        builder.setPositiveButton(positiveButton, ((dialog, which) -> {
+            Bundle bundle = new Bundle();
+            // We can't use the new Trip cause we need the trip ID
+            // The new Trip ID is the last register on the DataBase (size()-1 of all trips)
+            ArrayList<Trip> allTrips = Presented.getAllTrips(getContext());
+            Trip trip = allTrips.get(allTrips.size() - 1);
+            bundle.putSerializable("trip", trip);
+            getNav().navigate(R.id.fragment_Add_HandLuggage, bundle);
+        }));
+        builder.show();
     }
 }

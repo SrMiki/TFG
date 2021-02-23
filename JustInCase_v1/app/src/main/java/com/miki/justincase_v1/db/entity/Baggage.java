@@ -19,11 +19,11 @@ import java.io.Serializable;
                 ),
                 @ForeignKey(entity = HandLuggage.class,
                         parentColumns = "handLuggageID",
-                        childColumns = "FKbaggageID",
+                        childColumns = "FKHandLuggageID",
                         onDelete = ForeignKey.CASCADE,
                         onUpdate = ForeignKey.CASCADE
                 )},
-        indices = {@Index(value = "FKbaggageID"), @Index(value = "FKitemID")}
+        indices = {@Index(value = "FKHandLuggageID"), @Index(value = "FKitemID")}
 )
 public class Baggage implements Serializable {
     @PrimaryKey(autoGenerate = true)
@@ -35,36 +35,43 @@ public class Baggage implements Serializable {
     @ColumnInfo(name = "itemName")
     public String baggageName;
 
+    @ColumnInfo(name = "check")
+    public boolean check;
 
-    public int FKitemID; // trip ID foreign key
-    public int FKbaggageID; // baggage ID foreign key
 
-    public Baggage(int FKitemID, int FKbaggageID, String baggageName) {
+
+    public int FKitemID;
+    public int FKHandLuggageID;
+
+    public Baggage(int FKitemID, int FKHandLuggageID, String baggageName) {
         this.FKitemID = FKitemID;
-        this.FKbaggageID = FKbaggageID;
-        this.baggageCount = 0;
+        this.FKHandLuggageID = FKHandLuggageID;
+        this.baggageCount = 1;
         this.baggageName = baggageName;
+        check = false;
     }
 
     public int getFKitemID() {
         return FKitemID;
     }
 
-    public int getFKbaggageID() {
-        return FKbaggageID;
+    public int getFKHandLuggageID() {
+        return FKHandLuggageID;
     }
 
-    public String getBaggageCount() {
-        return String.valueOf(baggageCount);
+    public int getBaggageCount() {
+        return baggageCount;
     }
 
-    public void increaseThisItem() {
-        this.baggageCount++;
+    public void setCount(int baggageCount) {
+        this.baggageCount = baggageCount;
+    }
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 
-    public void decreaseThisItem() {
-        if (baggageCount > 0) {
-            this.baggageCount--;
-        }
+    public boolean isCheck() {
+        return check;
     }
+
 }

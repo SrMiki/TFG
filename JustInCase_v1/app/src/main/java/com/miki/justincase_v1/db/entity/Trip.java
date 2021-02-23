@@ -30,12 +30,17 @@ public class Trip implements Serializable {
     @ColumnInfo(name = "returnTransport")
     public String returnTransport;
 
+
+    @ColumnInfo(name = "travelling")
+    public int travelling;
+
     public Trip(@NonNull String destination, @NonNull String travelDate, String returnDate, String travelTransport, String returnTransport) {
         this.destination = destination;
         this.travelDate = travelDate;
         this.returnDate = returnDate;
         this.travelTransport = travelTransport;
         this.returnTransport = returnTransport;
+        travelling = 0;
     }
 
     public void setTrip(String destination, String travelDate, String returnDate, String travelTransport, String returnTransport) {
@@ -66,4 +71,23 @@ public class Trip implements Serializable {
     public String getReturnDate() {
         return returnDate;
     }
+
+    /**
+     *
+     * @return
+     * 0 == planning
+     * 1 == check-in
+     * 2 == chek-out
+     * 3 == end chek-in (for returnTravel)
+     * 4 == finished
+     */
+    public int isTravelling() {
+        return travelling;
+    }
+
+    public void setTravelling(int travelling) {
+        this.travelling = travelling;
+    }
+
+
 }

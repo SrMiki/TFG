@@ -14,73 +14,90 @@ public class Suitcase implements Serializable {
     public int suitcaseID;
 
     @NonNull
-    @ColumnInfo(name = "suitcaseName")
-    public String suitcaseName;
+    @ColumnInfo(name = "name")
+    public String name;
 
-    @ColumnInfo(name = "suitcaseColor")
-    public String suitcaseColor;
+    @ColumnInfo(name = "color")
+    public String color;
 
-    @ColumnInfo(name = "suitcaseWeight")
-    public String suitcaseWeight;
 
-    @ColumnInfo(name = "suitcaseDims")
-    public String suitcaseDims; // heigth x width x depth
+    @ColumnInfo(name = "weight")
+    public double weight;
 
-    public Suitcase(@NonNull String suitcaseName, String suitcaseColor, String suitcaseWeight, String suitcaseDims) {
-        this.suitcaseName = suitcaseName;
-        this.suitcaseColor = suitcaseColor;
-        this.suitcaseWeight = suitcaseWeight;
-        this.suitcaseDims = suitcaseDims;
-    }
+    @ColumnInfo(name = "heigth")
+    public double heigth;
 
-    public static boolean check(Suitcase newSuitcase) {
-        return  newSuitcase.getSuitcaseName().isEmpty();
+    @ColumnInfo(name = "width")
+    public double width;
+
+    @ColumnInfo(name = "depth")
+    public double depth;
+
+    public Suitcase(@NonNull String name, String color, double weight, double heigth, double width, double depth) {
+        this.name = name;
+        this.color = color;
+        this.weight = weight;
+        this.heigth = heigth;
+        this.width = width;
+        this.depth = depth;
     }
 
     public int getSuitcaseID() {
         return suitcaseID;
     }
 
-    public String getSuitcaseName() {
-        return suitcaseName;
+    public String getName() {
+        return name;
     }
 
-    public void setSuitcaseName(String suitcaseName) {
-        this.suitcaseName = suitcaseName;
+
+    public String getColor() {
+        return color;
     }
 
-    public String getSuitcaseColor() {
-        return suitcaseColor;
+    public double getWeight() {
+        return weight;
     }
 
-    public String getSuitcaseWeight() {
-        return suitcaseWeight;
+    public double getHeigth() {
+        return heigth;
+    }
+    public double getWidth() {
+        return width;
+    }
+    public double getDepth() {
+        return depth;
     }
 
-    public String getSuitcaseDims() {
-        return suitcaseDims;
+
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setSuticase(String suitcaseName, String suitcaseColor, String suitcaseWeight, String suitcaseDims) {
-        this.suitcaseName = suitcaseName;
-        this.suitcaseColor = suitcaseColor;
-        this.suitcaseWeight = suitcaseWeight;
-        this.suitcaseDims = suitcaseDims;
+    public void setSuticase(String name, String color,  double weight, double heigth, double width, double depth) {
+        this.name = name;
+        this.color = color;
+        this.weight = weight;
+        this.heigth = heigth;
+        this.width = width;
+        this.depth = depth;
     }
 
     public void setSuitcaseID(int suitcaseID) {
         this.suitcaseID = suitcaseID;
     }
 
-    public void setSuitcaseColor(String suitcaseColor) {
-        this.suitcaseColor = suitcaseColor;
+    public void setColor(String color) {
+        this.color = color;
     }
 
-    public void setSuitcaseWeight(String suitcaseWeight) {
-        this.suitcaseWeight = suitcaseWeight;
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 
-    public void setSuitcaseDims(String suitcaseDims) {
-        this.suitcaseDims = suitcaseDims;
+    public void setDimns(double heigth, double width, double depth) {
+        this.heigth = heigth;
+        this.width = width;
+        this.depth = depth;
     }
 }

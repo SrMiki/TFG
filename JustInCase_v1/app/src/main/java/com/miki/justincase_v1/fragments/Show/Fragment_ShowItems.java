@@ -9,13 +9,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-
-import androidx.appcompat.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_Item;
-import com.miki.justincase_v1.adapters.Item_RecyclerItemTouchHelper;
+import com.miki.justincase_v1.Swipers.Item_RecyclerItemTouchHelper;
 import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
@@ -37,90 +35,94 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
     ArrayList<Item> dataset;
     RecyclerView recyclerView;
 
-    Button btnShowCategories;
-
     FloatingActionButton floatingButton;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_show_item, container, false);
+        View view = inflater.inflate(R.layout.recyclerview_addbutton, container, false);
 
 
         floatingButton = view.findViewById(R.id.fragment_show_entity_btn_add);
 
-        dataset = Presented.getAllItems(view);
-        setHasOptionsMenu(true); //Pido que se muestre el menu
+        dataset = Presented.selectAllItems(getContext());
+        setHasOptionsMenu(true);
 
-        floatingButton.setOnClickListener(v -> {
-            createNewItemDialog(view, v);
-        });
-
-        btnShowCategories = view.findViewById(R.id.fragment_btn_categories);
-        btnShowCategories.setOnClickListener(v -> {
-            getNav().navigate(R.id.fragment_ShowCategories);
-        });
+        floatingButton.setOnClickListener(this::createNewItemDialog);
 
         recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
         ItemTouchHelper.SimpleCallback simpleCallback = new Item_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
-//        simpleCallback = new Item_RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
-//        new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new Adapter_Item(dataset);
         recyclerView.setAdapter(adapter);
 
-        adapter.setListener(v -> {
+        adapter.setListener((View v) -> {
             Item item = dataset.get(recyclerView.getChildAdapterPosition(v));
-            editItemDialog(view, v, item);
+            editItemDialog(v, item);
+            return true;
         });
+
 
         return view;
     }
 
-    private void editItemDialog(View view, View v, Item item) {
+    private void editItemDialog(View v, Item item) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        String title = getString(R.string.text_edit);
-        builder.setTitle(title);
-        builder.setCancelable(true);
-        EditText editText = new EditText(getContext());
+        builder.setTitle(getString(R.string.text_editItem));
+
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.alertdialog_edittext, null);
+
+        EditText editText = view.findViewById(R.id.alertdialog_editText);
         editText.setText(item.getItemName());
-        builder.setView(editText);
-        String haveBeenAdded = getString(R.string.text_haveBeenUpdated);
-        String NegativeButton = getString(R.string.text_cancel);
-        String positiveButton = getString(R.string.text_edit);
-        builder.setNegativeButton(NegativeButton, ((dialog, which) -> {
-            dialog.dismiss();
-        }));
-        builder.setPositiveButton(positiveButton, ((dialog, which) -> {
+
+        builder.setView(view);
+
+        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
+
+        builder.setPositiveButton(getString(R.string.text_edit), ((dialog, which) -> {
             String itemName = editText.getText().toString();
-            Presented.updateItem(item, itemName, view);
-            makeToast(v.getContext(), haveBeenAdded);
-            getNav().navigate(R.id.fragment_ShowItems);
+            boolean update = Presented.updateItem(item, itemName, getContext());
+            if (update) {
+                makeToast(v.getContext(), getString(R.string.text_haveBeenUpdated));
+                getNav().navigate(R.id.fragment_ShowItems);
+            } else {
+                makeToast(v.getContext(), getString(R.string.warning_updateItem));
+            }
         }));
         builder.show();
     }
 
-    private void createNewItemDialog(View view, View v) {
+    private void createNewItemDialog(View v) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        String title = getString(R.string.text_Item);
-        builder.setTitle(title);
-        builder.setCancelable(true);
-        EditText editText = new EditText(getContext());
+
+        builder.setTitle(getString(R.string.text_newItem));
+
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.alertdialog_edittext, null);
+        builder.setView(view);
+
+        EditText editText = view.findViewById(R.id.alertdialog_editText);
         editText.setHint(getString(R.string.fragment_createItem_hint));
-        builder.setView(editText);
-        String cancel = getString(R.string.text_cancel);
-        String haveBeenAdded = getString(R.string.text_haveBeenAdded);
-        String add = getString(R.string.text_add);
-        builder.setNegativeButton(cancel, ((dialog, which) -> {
-            dialog.dismiss();
-        }));
-        builder.setPositiveButton(add, ((dialog, which) -> {
+        builder.setView(view);
+
+        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
+
+        builder.setPositiveButton(getString(R.string.text_add), ((dialog, which) -> {
             String itemName = editText.getText().toString();
-            Presented.createItem(itemName, view);
-            makeToast(v.getContext(), haveBeenAdded);
-            getNav().navigate(R.id.fragment_ShowItems);
+            boolean create = Presented.createItem(itemName, getContext());
+            if (!create) {
+                makeToast(v.getContext(), getString(R.string.warning_createItem));
+                createNewItemDialog(v);
+            } else {
+                makeToast(v.getContext(), getString(R.string.text_haveBeenAdded));
+                getNav().navigate(R.id.fragment_ShowItems);
+            }
         }));
         builder.show();
     }
@@ -138,7 +140,7 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
             restoreDeletedElement(viewHolder, name, deletedItem, deletedIndex);
             //Note: if the item it's deleted and then restore, only restore in item. You must
             //yo add again in Baggages and Categorys.
-            Presented.deleteItem(deletedItem, viewHolder.itemView);
+            Presented.deleteItem(deletedItem, getContext());
             getNav().navigate(R.id.fragment_ShowItems);
 
         }
@@ -153,7 +155,7 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
                 Snackbar.LENGTH_LONG);
         snackbar.setAction(restore, v -> {
             adapter.restoreItem(deletedItem, deletedIndex);
-            Presented.createItem(deletedItem.getItemName(), viewHolder.itemView);
+            Presented.createItem(deletedItem.getItemName(), getContext());
             getNav().navigate(R.id.fragment_ShowItems);
         });
 
@@ -168,17 +170,29 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
         androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) menuItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            //true if the query has been handled by the listener, false to let the SearchView perform the default action.
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
 
+            //false if the SearchView should perform the default action of showing any suggestions if available, true if the action was handled by the listener.
             @Override
             public boolean onQueryTextChange(String newText) {
+//                floatingButton.setVisibility(View.GONE);
                 adapter.getFilter().filter(newText);
                 return false;
             }
         });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+//                floatingButton.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
+
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 }

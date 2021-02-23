@@ -11,9 +11,6 @@
         android:id="@+id/fragment_ShowTrips"
         android:name="com.miki.justincase_v1.fragments.Trip.Fragment_ShowTrips"
         android:label="@string/ic_Trips" >
-        <action
-            android:id="@+id/action_fragment_ShowTrips_to_fragment_FocusTrip"
-            app:destination="@id/fragment_showHandLaggage" />
     </fragment>
     <fragment
         android:id="@+id/fragment_ShowItems"
@@ -32,17 +29,6 @@
         android:name="com.miki.justincase_v1.fragments.Show.Fragment_ShowCategories"
         android:label="@string/ic_categories" />
     <fragment
-        android:id="@+id/fragment_showHandLaggage"
-        android:name="com.miki.justincase_v1.fragments.Trip.Fragment_ShowHandLuggage"
-        android:label="@string/title_showHandLuggage" >
-        <action
-            android:id="@+id/action_fragment_FocusTrip_to_fragment_FocusBaggage"
-            app:destination="@id/fragment_ShowBaggage" />
-        <action
-            android:id="@+id/action_fragment_showHandLaggage_to_fragment_startTrip"
-            app:destination="@id/fragment_startTrip" />
-    </fragment>
-    <fragment
         android:id="@+id/fragment_CreateTrip"
         android:name="com.miki.justincase_v1.fragments.Trip.Fragment_CreateTrip"
         android:label="@string/title_createTrip" />
@@ -51,31 +37,59 @@
         android:name="com.miki.justincase_v1.fragments.Trip.Fragment_Edit_Trip"
         android:label="@string/title_editTrip" />
     <fragment
-        android:id="@+id/fragment_Add_Baggage"
-        android:name="com.miki.justincase_v1.fragments.Trip.Fragment_Add_Baggage"
+        android:id="@+id/fragment_Add_HandLuggage"
+        android:name="com.miki.justincase_v1.fragments.Trip.Fragment_AddHandLuggage"
         android:label="@string/title_addBaggage" />
     <fragment
         android:id="@+id/fragment_Add_item_to_Baggage"
         android:name="com.miki.justincase_v1.fragments.Baggage.Fragment_Add_item_to_Baggage"
-        android:label="Fragment_Add_item_to_Baggage" />
+        android:label="@string/title_addItemToBaggage" />
     <fragment
-        android:id="@+id/fragment_ShowBaggage"
-        android:name="com.miki.justincase_v1.fragments.Baggage.Fragment_ShowBaggage"
-        android:label="Equipaje"/>
-    <fragment
-        android:id="@+id/fragment_Add_Item_To_Category"
-        android:name="com.miki.justincase_v1.fragments.Show.Fragment_Add_Item_To_Category"
-        android:label="@string/title_addBaggage" />
-    <fragment
-        android:id="@+id/fragment_Add_Category_To_Baggage"
-        android:name="com.miki.justincase_v1.fragments.Baggage.Fragment_Add_Category_To_Baggage"
-        android:label="@string/title_addBaggage" />
+        android:id="@+id/fragment_ShowBaggageByItem"
+        android:name="com.miki.justincase_v1.fragments.Baggage.Fragment_ShowBaggageByItem"
+        android:label="@string/title_showBaggageByItem"/>
     <fragment
         android:id="@+id/fragment_ShowBaggageByCategory"
         android:name="com.miki.justincase_v1.fragments.Baggage.Fragment_ShowBaggageByCategory"
-        android:label="Fragment_ShowBaggageByCategory" />
+        android:label="@string/title_ShowBaggageByCategory" />
     <fragment
-        android:id="@+id/fragment_startTrip"
-        android:name="com.miki.justincase_v1.fragments.Trip.Fragment_startTrip"
-        android:label="Fragment_startTrip" />
+        android:id="@+id/fragment_Add_Item_To_Category"
+        android:name="com.miki.justincase_v1.fragments.Show.Fragment_Add_Item_To_Category"
+        android:label="@string/title_addItemToCategory" />
+    <fragment
+        android:id="@+id/fragment_Add_Category_To_Baggage"
+        android:name="com.miki.justincase_v1.fragments.Baggage.Fragment_Add_Category_To_Baggage"
+        android:label="@string/title_addCategoryToBaggage" />
+    <fragment
+        android:id="@+id/fragment_CheckIn"
+        android:name="com.miki.justincase_v1.fragments.Travel.Fragment_CheckIn"
+        android:label="@string/title_startTrip" >
+        <action
+            android:id="@+id/action_fragment_startTrip_to_fragment_CheckList"
+            app:destination="@string/title_checkList" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_DoCheckListByItem"
+        android:name="com.miki.justincase_v1.fragments.Travel.Fragment_DoCheckListByItem"
+        android:label="@string/title_checkList" />
+    <fragment
+        android:id="@+id/fragment_CountryList"
+        android:name="com.miki.justincase_v1.fragments.Trip.Fragment_CountryList"
+        android:label="@string/title_country" />
+    <fragment
+        android:id="@+id/fragment_ShowCategoryContent"
+        android:name="com.miki.justincase_v1.fragments.Show.Fragment_ShowCategoryContent"
+        android:label="@string/title_showCategoryContent" />
+    <fragment
+        android:id="@+id/fragment_CheckOut"
+        android:name="com.miki.justincase_v1.fragments.Travel.Fragment_CheckOut"
+        android:label="@string/title_CheckOut" />
+    <fragment
+        android:id="@+id/fragment_DoCheckListByCategory"
+        android:name="com.miki.justincase_v1.fragments.Travel.Fragment_DoCheckListByCategory"
+        android:label="@string/title_checkList" />
+    <fragment
+        android:id="@+id/fragment_ShowFinishedTrip"
+        android:name="com.miki.justincase_v1.fragments.Show.Fragment_ShowFinishedTrip"
+        android:label="@string/title_Fragment_ShowFinishedTrip" />
 </navigation>

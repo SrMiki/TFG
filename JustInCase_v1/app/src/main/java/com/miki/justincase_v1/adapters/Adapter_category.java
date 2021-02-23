@@ -1,5 +1,6 @@
 package com.miki.justincase_v1.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,38 +12,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.db.entity.Category;
-import com.miki.justincase_v1.db.entity.Item;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.AdapterViewHolder> implements View.OnClickListener, Filterable, Item_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.AdapterViewHolder> implements View.OnClickListener, View.OnLongClickListener, Filterable {
 
-    private View.OnClickListener listener;
-    Adapter_Item adapter_item;
+    private View.OnClickListener clickListener;
+    private View.OnLongClickListener longClickListener;
+
     ArrayList<Category> dataset;
-    ArrayList<Item> itemList;
     List<Category> referencesDataset; //for search
-    RecyclerView.RecycledViewPool recycledViewPool = new RecyclerView.RecycledViewPool();
-    private boolean isSelected = false;
-    private boolean noMore = false;
+    private boolean selectedState = false;
 
-    public void setCardSelected(int cardSelected) {
-        this.cardSelected = cardSelected;
-        notifyDataSetChanged();
+    public boolean isSelectedState() {
+        return selectedState;
     }
 
-    private int cardSelected = -1;
-
-    public Adapter_Category(ArrayList<Category> dataset) {
+    public Adapter_Category(ArrayList<Category> dataset, Activity activity) {
         this.dataset = dataset;
         referencesDataset = new ArrayList<>(dataset);
     }
@@ -83,92 +75,53 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.Adap
 
     @Override
     public void onClick(View v) {
-        if (listener != null) {
-            listener.onClick(v);
+        if (clickListener != null) {
+            clickListener.onClick(v);
         }
     }
 
-    public void setListener(View.OnClickListener listener) {
-        this.listener = listener;
+    @Override
+    public boolean onLongClick(View v) {
+        if (longClickListener != null) {
+            longClickListener.onLongClick(v);
+            return true;
+        }
+        return false;
     }
 
-    public boolean isSelected() {
-        return isSelected;
+    public void setOnLongClickListener(View.OnLongClickListener longClickListener) {
+        this.longClickListener = longClickListener;
     }
 
-    public void selected(boolean select) {
-        isSelected = select;
-    }
-
-    public boolean isNoMre() {
-        return noMore;
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        this.clickListener = onClickListener;
     }
 
     @NonNull
     @Override
     public Adapter_Category.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view_category, parent, false);
+                .inflate(R.layout.card_view_entity, parent, false);
         view.setOnClickListener(this);
+        view.setOnLongClickListener(this);
         return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Adapter_Category.AdapterViewHolder holder, int position) {
-        String elementName = dataset.get(position).getCategoryName();
-        holder.elementNameTV.setText(elementName);
+    public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
+        Category category = dataset.get(position);
 
-        Context mContext = holder.itemView.getContext();
-        if (cardSelected == position){
-            if(!holder.cardSelected) {
-                holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.selected2));
-                holder.cardSelected = true;
-            } else { // LAST ITEM!
-                holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.design_default_color_on_primary));
-                holder.cardSelected = false;
-                noMore = true;
-            }
+        holder.elementNameTV.setText(category.getCategoryName());
+
+        Context context = holder.itemView.getContext();
+
+        if (selectedState) {
+            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.item_selected));
         } else {
-            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.design_default_color_on_primary));
-            holder.cardSelected = false;
+            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
         }
 
-        /**
-         *  items recyclerview
-         */
-        setArrowActions(holder);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
-                holder.elementNameTV.getContext(),
-                LinearLayoutManager.VERTICAL,
-                false
-        );
 
-        Category category = dataset.get(position);
-        itemList = Presented.getAllItemsFromThisCategory(category, holder.itemView);
-        linearLayoutManager.setInitialPrefetchItemCount(itemList.size());
-
-        holder.nestedRecyclerView = holder.itemView.findViewById(R.id.categoryCardView_nestedRecyclerView);
-        ItemTouchHelper.SimpleCallback simpleCallback = new Item_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(simpleCallback).attachToRecyclerView(holder.nestedRecyclerView);
-
-        holder.nestedRecyclerView.setLayoutManager(linearLayoutManager);
-        adapter_item = new Adapter_Item(itemList);
-        holder.nestedRecyclerView.setAdapter(adapter_item);
-        holder.nestedRecyclerView.setRecycledViewPool(recycledViewPool);
-
-    }
-
-    private void setArrowActions(@NonNull AdapterViewHolder holder) {
-        holder.nestedRecyclerview_LinearLayout.setVisibility(View.GONE);
-        holder.arrow.setOnClickListener(v -> {
-            if (holder.nestedRecyclerview_LinearLayout.getVisibility() == View.GONE) {
-                holder.nestedRecyclerview_LinearLayout.setVisibility(View.VISIBLE);
-                holder.arrow.setImageResource(R.drawable.ic_down_arrow);
-            } else {
-                holder.nestedRecyclerview_LinearLayout.setVisibility(View.GONE);
-                holder.arrow.setImageResource(R.drawable.ic_right_arrow);
-            }
-        });
     }
 
     @Override
@@ -176,48 +129,24 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.Adap
         return dataset == null ? 0 : dataset.size();
     }
 
-    public void removeItem(int position) {
+    public void setSelectedState(boolean selectedState) {
+        this.selectedState = selectedState;
+    }
+
+    public void removeCategory(int position) {
         dataset.remove(position);
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(Category e, int position) {
-        dataset.add(position, e);
-        notifyItemInserted(position);
-    }
-
-    @Override
-    public void onSwipe(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof Adapter_Item.AdapterViewHolder) {
-
-            int deletedIndex = viewHolder.getAdapterPosition();
-            Item deletedItem = itemList.get(deletedIndex);
-
-            adapter_item.removeItem(viewHolder.getAdapterPosition());
-
-            Presented.removeFromThisCategory(deletedItem, viewHolder.itemView);
-            removeItem(position);
-        }
-    }
-
-
-
     public class AdapterViewHolder extends RecyclerView.ViewHolder {
 
         TextView elementNameTV;
-        public LinearLayout linearLayout;
-        ImageView arrow;
-        LinearLayout nestedRecyclerview_LinearLayout;
-        RecyclerView nestedRecyclerView;
-        private boolean cardSelected;
+        public LinearLayout layout;
 
         public AdapterViewHolder(View view) {
             super(view);
-            elementNameTV = view.findViewById(R.id.categoryCardView_name);
-            linearLayout = view.findViewById(R.id.categoryCardView_layout);
-            arrow = view.findViewById(R.id.categoryCardView_Arrow);
-            nestedRecyclerview_LinearLayout = view.findViewById(R.id.categoryCardView_itemLinearLayout);
-            nestedRecyclerView = view.findViewById(R.id.categoryCardView_nestedRecyclerView);
+            elementNameTV = view.findViewById(R.id.simpleCardView_name);
+            layout = view.findViewById(R.id.simpleCardView_layout);
         }
     }
 }

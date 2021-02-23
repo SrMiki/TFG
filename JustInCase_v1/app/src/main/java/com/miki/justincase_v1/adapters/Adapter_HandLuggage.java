@@ -21,6 +21,17 @@ public class Adapter_HandLuggage extends RecyclerView.Adapter<Adapter_HandLuggag
 
     private View.OnClickListener listener;
     ArrayList<HandLuggage> dataset;
+    HandLuggage focusHandLuggage;
+    int selected = -1;
+
+    public void setSelected(int selected){
+        this.selected = selected;
+        notifyDataSetChanged();
+    }
+
+    public HandLuggage getFocusHandLuggage(){
+        return this.focusHandLuggage;
+    }
 
     public Adapter_HandLuggage(ArrayList<HandLuggage> dataset) {
         this.dataset = dataset;
@@ -41,21 +52,21 @@ public class Adapter_HandLuggage extends RecyclerView.Adapter<Adapter_HandLuggag
     @Override
     public Adapter_HandLuggage.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view_suitcase, parent, false);
+                .inflate(R.layout.card_view_handluggage, parent, false);
         view.setOnClickListener(this);
-        AdapterViewHolder vh = new AdapterViewHolder(view);
-        return vh;
+        return new AdapterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull Adapter_HandLuggage.AdapterViewHolder holder, int position) {
 
         HandLuggage handLuggage = dataset.get(position);
-        Suitcase suitcase = Presented.getSuitcase(handLuggage, holder.itemView);
-        holder.elementNameTV.setText(suitcase.getSuitcaseName());
-        holder.colorTV.setText(suitcase.getSuitcaseColor());
-        holder.WeigthTV.setText(suitcase.getSuitcaseWeight());
-        holder.DimnsTV.setText(suitcase.getSuitcaseDims());
+        Suitcase suitcase = Presented.getSuitcase(handLuggage, holder.itemView.getContext());
+        holder.elementNameTV.setText(suitcase.getName());
+
+        if(position==selected){
+            focusHandLuggage= handLuggage;
+        }
     }
 
     @Override
@@ -65,16 +76,13 @@ public class Adapter_HandLuggage extends RecyclerView.Adapter<Adapter_HandLuggag
 
     public class AdapterViewHolder extends RecyclerView.ViewHolder {
 
-        TextView elementNameTV, colorTV, WeigthTV, DimnsTV;
-        public LinearLayout relativeLayout;
+        TextView elementNameTV;
+        public LinearLayout layout;
 
         public AdapterViewHolder(View view) {
             super(view);
-            elementNameTV = view.findViewById(R.id.card_view_suitcase_suitcaseName);
-            colorTV = view.findViewById(R.id.card_view_suitcase_suitcaseColor);
-            WeigthTV = view.findViewById(R.id.card_view_suitcase_suitcaseWeight);
-            DimnsTV = view.findViewById(R.id.card_view_suitcase_suitcaseDimns);
-            relativeLayout = view.findViewById(R.id.card_view_suitcase_layoutToDeleted);
+            elementNameTV = view.findViewById(R.id.handluggage_cardviewName);
+            layout = view.findViewById(R.id.handluggage_cardviewLayout);
         }
     }
 }

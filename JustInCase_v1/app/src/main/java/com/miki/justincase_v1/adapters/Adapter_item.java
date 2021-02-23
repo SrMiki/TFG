@@ -1,6 +1,5 @@
 package com.miki.justincase_v1.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,23 +18,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewHolder> implements View.OnClickListener, Filterable {
+public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewHolder> implements View.OnLongClickListener, Filterable {
 
-    private View.OnClickListener listener;
+    private View.OnLongClickListener listener;
     List<Item> dataset;
-    List<Item> referencesDataset; //for search
-    private boolean selectionMode = false;
 
+    List<Item> referencesDataset; //for search
     public Adapter_Item(List<Item> dataset) {
         this.dataset = dataset;
         referencesDataset = new ArrayList<>(dataset);
-    }
-
-    /**
-     * Avaible the selection mode
-     */
-    public void setSelectionMode() {
-        selectionMode = true;
     }
 
     @Override
@@ -73,13 +64,14 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
     };
 
     @Override
-    public void onClick(View v) {
+    public boolean onLongClick(View v) {
         if (listener != null) {
-            listener.onClick(v);
+            listener.onLongClick(v);
         }
+        return true;
     }
 
-    public void setListener(View.OnClickListener listener) {
+    public void setListener(View.OnLongClickListener listener) {
         this.listener = listener;
     }
 
@@ -87,30 +79,15 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
     @Override
     public Adapter_Item.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view_simple, parent, false);
-        view.setOnClickListener(this);
+                .inflate(R.layout.card_view_entity, parent, false);
+        view.setOnLongClickListener(this);
         return new AdapterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull Adapter_Item.AdapterViewHolder holder, int position) {
-
-        String elementName = dataset.get(position).getItemName();
+        String elementName =  dataset.get(position).getItemName();
         holder.elementNameTV.setText(elementName);
-
-        Context mContext = holder.itemView.getContext();
-
-        if (selectionMode) {
-            if (holder.isSelected) {
-                holder.layout.setBackgroundColor(mContext.getResources().getColor(R.color.selected2));
-                holder.isSelected = false;
-            } else {
-                holder.layout.setBackgroundColor(mContext.getResources().getColor(R.color.design_default_color_on_primary));
-                holder.isSelected = true;
-
-            }
-
-        }
     }
 
     @Override
@@ -133,12 +110,12 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
 
         TextView elementNameTV;
         public LinearLayout layout;
-        private boolean isSelected = false;
 
         public AdapterViewHolder(View view) {
             super(view);
             elementNameTV = view.findViewById(R.id.simpleCardView_name);
             layout = view.findViewById(R.id.simpleCardView_layout);
         }
+
     }
 }

@@ -3,40 +3,104 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
-    app:cardUseCompatPadding="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp">
+    app:cardUseCompatPadding="true">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/tripCardView_layoutToDeleted"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:background="@color/white">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/recyclerview_Trip_tripDestino"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/tripCardView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="destino"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/recyclerview_Trip_tripDate"
-            android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/recyclerview_Trip_tripDestino"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="destino"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/recyclerview_Trip_tripDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/recyclerview_Trip_tripDestino"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="descripcion" />
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/options_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="80dp">
+
+
+                <Button
+                    android:id="@+id/showTrip_button_addHandlugage"
+                    android:layout_width="75dp"
+                    android:layout_height="50dp"
+                    android:drawableRight="@drawable/ic_card_travel"
+                    android:layout_marginLeft="10dp"
+                    android:text="+"
+                    android:textColor="@color/grey"
+                    android:textSize="20dp"
+                    android:backgroundTint="@color/white"/>
+
+                <Button
+                    android:id="@+id/showTrip_button_editTrip"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:drawableRight="@drawable/ic_edit"
+                    android:layout_marginLeft="10dp"
+                    android:backgroundTint="@color/white"/>
+
+                <Button
+                    android:id="@+id/showTrip_button_deleteTrip"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:drawableRight="@drawable/ic_delete"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:backgroundTint="@color/white"
+                    android:drawableTint="@color/grey"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cardviewtrip_suitcasesLinearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/recyclerview_Trip_tripDestino"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="descripcion" />
+            android:layout_margin="20dp"
+            android:paddingLeft="50dp">
 
-    </RelativeLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cardviewtrip_nestedRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
+        </LinearLayout>
+
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
+

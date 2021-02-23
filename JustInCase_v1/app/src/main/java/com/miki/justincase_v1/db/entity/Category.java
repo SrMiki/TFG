@@ -27,4 +27,11 @@ public class Category implements Serializable {
         this.categoryName = categoryName;
     }
 
+    @Override
+    public boolean equals(Object o){
+        Category other = (Category) o;
+        return this.getCategoryName().equals(other.getCategoryName());
+
+    }
+
 }

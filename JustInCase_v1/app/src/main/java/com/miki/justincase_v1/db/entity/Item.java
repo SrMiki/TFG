@@ -29,7 +29,6 @@ public class Item implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
         return getItemName().equals(item.getItemName());
     }

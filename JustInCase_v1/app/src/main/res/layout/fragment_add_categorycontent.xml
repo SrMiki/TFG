@@ -7,35 +7,47 @@
     android:padding="10dp">
 
     <TextView
-        android:focusable="false"
+        android:id="@+id/Category_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:text="@string/fragment_addCategoryContent"
+        android:focusable="false"
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <LinearLayout
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:focusable="false">
+        android:layout_marginLeft="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:focusable="false"
+        android:textStyle="bold"
+        android:text="@string/text_addCategoryContent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_addCategoryContent_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusable="false"/>
-    </LinearLayout>
+            android:id="@+id/fragment_Add_Item_To_Category_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fragment_Add_Item_To_Category_btn_finish"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_margin="20dp"
-        app:backgroundTint="#009688"
-        app:srcCompat="@drawable/ic_check_box" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fragment_Add_Item_To_Category_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_add" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

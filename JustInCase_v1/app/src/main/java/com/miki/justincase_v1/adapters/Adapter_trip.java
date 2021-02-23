@@ -1,33 +1,72 @@
 package com.miki.justincase_v1.adapters;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
+import com.miki.justincase_v1.db.entity.HandLuggage;
 import com.miki.justincase_v1.db.entity.Trip;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Adapter_trip extends RecyclerView.Adapter<Adapter_trip.AdapterViewHolder> implements View.OnClickListener, Filterable {
+public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewHolder> implements View.OnClickListener, Filterable {
+
+    View.OnClickListener listener;
 
     private List<Trip> referencesDataset;
     private ArrayList<Trip> dataset;
-    View.OnClickListener listener;
 
-    public Adapter_trip(Context contex, ArrayList<Trip> myDataset) {
+    private boolean isSelected = false;
+    private int cardSelected = -1;
+
+    RecyclerView.RecycledViewPool recycledViewPool = new RecyclerView.RecycledViewPool();
+
+    public Activity activity;
+
+    ArrayList<HandLuggage> childDataset;
+    Adapter_HandLuggage adapter_handLuggage;
+
+    public int getCardSelected() {
+        return cardSelected;
+    }
+
+    public void setCardSelected(int cardSelected) {
+        this.cardSelected = cardSelected;
+        notifyDataSetChanged();
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelectedState(boolean newState) {
+        isSelected = newState;
+    }
+
+    public Adapter_Trip(Activity activity, ArrayList<Trip> myDataset) {
         dataset = myDataset;
         referencesDataset = new ArrayList<>(dataset);
+        this.activity = activity;
     }
 
     @Override
@@ -77,23 +116,127 @@ public class Adapter_trip extends RecyclerView.Adapter<Adapter_trip.AdapterViewH
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_view_trip, parent, false);
         v.setOnClickListener(this);
-        AdapterViewHolder vh = new AdapterViewHolder(v);
-        return vh;
+        return new AdapterViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(AdapterViewHolder holder, int position) {
         // Get the element from the dataset
-        String destination = dataset.get(position).getDestination();
-        String travelDate = dataset.get(position).getTravelDate();
-        String returnDate = dataset.get(position).getReturnDate();
+        Trip trip = dataset.get(position);
+        setOptionsButtons(holder, trip);
 
-        if(!returnDate.isEmpty()){
+        String destination = trip.getDestination();
+        String travelDate = trip.getTravelDate();
+        String returnDate = trip.getReturnDate();
+
+        if (!returnDate.isEmpty()) {
             travelDate += " - " + returnDate;
         }
         holder.tripName_TextView.setText(destination);
         holder.tripDescription_TextView.setText(travelDate);
+
+        Context context = holder.itemView.getContext();
+        holder.nestedRecyclerview_LinearLayout.setVisibility(View.GONE);
+        holder.optionLinearLayout.setVisibility(View.GONE);
+
+        isSelected(holder, position, context);
+
+        setChildRecyclerView(holder, trip);
+    }
+
+    private void setOptionsButtons(AdapterViewHolder holder, Trip trip) {
+        NavController navController = Navigation.findNavController(activity, R.id.fragment);
+
+        Bundle obundle = new Bundle();
+        obundle.putSerializable("trip", trip);
+        holder.editTrip.setOnClickListener(v -> {
+            navController.navigate(R.id.fragment_Edit_Trip, obundle);
+        });
+
+        holder.deleteTrip.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+            builder.setTitle( v.getResources().getString(R.string.warning_title));
+
+            LayoutInflater inflater = activity.getLayoutInflater();
+            View view = inflater.inflate(R.layout.alertdialog_textview, null);
+
+            TextView textView = view.findViewById(R.id.alertdialog_textView);
+            textView.setText(v.getResources().getString(R.string.warning_deleteTrip));
+            builder.setView(view);
+
+            builder.setNegativeButton( v.getResources().getString(R.string.text_no), ((dialog, which) -> dialog.dismiss()));
+            builder.setPositiveButton(v.getResources().getString(R.string.text_yes), ((dialog, which) -> {
+                Presented.deleteTrip(trip, holder.itemView.getContext());
+                navController.navigate(R.id.fragment_ShowTrips);
+            }));
+            builder.show();
+        });
+
+        holder.addHandluggage.setOnClickListener(v -> {
+            navController.navigate(R.id.fragment_Add_HandLuggage, obundle);
+        });
+    }
+
+    private void setChildRecyclerView(AdapterViewHolder holder, Trip trip) {
+
+        childDataset = Presented.getHandLuggage(trip, holder.itemView.getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
+                holder.itemView.getContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+        );
+
+        linearLayoutManager.setInitialPrefetchItemCount(childDataset.size());
+
+        ;
+        adapter_handLuggage = new Adapter_HandLuggage(childDataset);
+
+        holder.childRecyclerview.setLayoutManager(linearLayoutManager);
+        holder.childRecyclerview.setAdapter(adapter_handLuggage);
+        holder.childRecyclerview.setRecycledViewPool(recycledViewPool);
+
+        adapter_handLuggage.setListener(v ->
+        {
+            int adapterPosition = holder.childRecyclerview.getChildAdapterPosition(v);
+            HandLuggage focusHandLuggage = childDataset.get(adapterPosition);
+            //
+//            showOptionMenu = !showOptionMenu;
+//            getActivity().invalidateOptionsMenu();
+            NavController navController = Navigation.findNavController(activity, R.id.fragment);
+            Bundle obundle = new Bundle();
+            obundle.putSerializable("handluggage", focusHandLuggage);
+            SharedPreferences sp;
+            sp = v.getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            boolean showCategoires = sp.getBoolean("showCategories", false);
+            if (showCategoires) {
+                navController.navigate(R.id.fragment_ShowBaggageByCategory, obundle);
+            } else {
+                navController.navigate(R.id.fragment_ShowBaggageByItem, obundle);
+            }
+        });
+
+    }
+
+
+
+    private void isSelected(AdapterViewHolder holder, int position, Context context) {
+        if (cardSelected == position) {
+            if (!holder.selected) {
+                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.item_selected));
+                holder.selected = true;
+                holder.nestedRecyclerview_LinearLayout.setVisibility(View.VISIBLE);
+                holder.optionLinearLayout.setVisibility(View.VISIBLE);
+            } else { // LAST ITEM!
+                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
+                holder.selected = false;
+                isSelected = false;
+            }
+        } else {
+            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
+            holder.selected = false;
+        }
     }
 
     @Override
@@ -114,14 +257,34 @@ public class Adapter_trip extends RecyclerView.Adapter<Adapter_trip.AdapterViewH
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+        RecyclerView childRecyclerview;
         public TextView tripName_TextView, tripDescription_TextView;
-        public RelativeLayout relativeLayout;
+        public LinearLayout layout;
+
+        LinearLayout nestedRecyclerview_LinearLayout;
+
+        LinearLayout optionLinearLayout;
+        Button button, editTrip, deleteTrip, addHandluggage;
+
+        private boolean selected;
+
         public AdapterViewHolder(@NonNull View view) {
             super(view);
             tripName_TextView = view.findViewById(R.id.recyclerview_Trip_tripDestino);
             tripDescription_TextView = view.findViewById(R.id.recyclerview_Trip_tripDate);
-            relativeLayout = view.findViewById(R.id.tripCardView_layoutToDeleted);
+            layout = view.findViewById(R.id.tripCardView_layoutToDeleted);
+
+            childRecyclerview = view.findViewById(R.id.cardviewtrip_nestedRecyclerView);
+            nestedRecyclerview_LinearLayout = view.findViewById(R.id.cardviewtrip_suitcasesLinearLayout);
+
+            optionLinearLayout = view.findViewById(R.id.options_layout);
+            editTrip = view.findViewById(R.id.showTrip_button_editTrip);
+            deleteTrip = view.findViewById(R.id.showTrip_button_deleteTrip);
+            addHandluggage = view.findViewById(R.id.showTrip_button_addHandlugage);
+
         }
+
+
     }
 }
 

@@ -3,6 +3,7 @@ package com.miki.justincase_v1;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,11 +16,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.miki.justincase_v1.bindings.Binding_Entity_focusEntity;
-import com.miki.justincase_v1.db.entity.HandLuggage;
-import com.miki.justincase_v1.db.entity.Trip;
+import com.miki.justincase_v1.db.initDB;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Binding_Entity_focusEntity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     NavController navController;
     DrawerLayout drawerLayout;
     AppBarConfiguration appBarConfiguration;
@@ -35,7 +34,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.navigationView);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);   
+        setSupportActionBar(toolbar);
+//        // This callback will only be called when MyFragment is at least Started.
+//        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                getNav().navigate(R.id.fragment_ShowTrips);
+//            }
+//        };
+//        getOnBackPressedDispatcher().addCallback(this, callback);
+
 
         appBarConfiguration =
                 new AppBarConfiguration.Builder(R.id.mainFragment, R.id.fragment_ShowTrips,
@@ -43,12 +51,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .setOpenableLayout(drawerLayout)
                         .build();
 
+        //navigate to others parts.
+        navigationView.setNavigationItemSelectedListener(this);
+
         navController = Navigation.findNavController(this, R.id.fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
-
-        //navigate to others parts.
-        navigationView.setNavigationItemSelectedListener(this);
 
     }
 
@@ -60,11 +68,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==R.id.ic_COVID) {
-            Presented.initDB(getApplicationContext());
+        if (item.getItemId() == R.id.ic_COVID) {
+            initDB.initDB(getApplicationContext());
         }
         NavController navController = Navigation.findNavController(this, R.id.fragment);
         return NavigationUI.onNavDestinationSelected(item, navController)
@@ -78,21 +85,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    private NavController getNav() {
-        return Navigation.findNavController(this, R.id.fragment);
-    }
-
-    @Override
-    public void sendTrip(Trip trip) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("trip", trip);
-        getNav().navigate(R.id.fragment_showHandLaggage, bundle);
-    }
-
-    @Override
-    public void sendHandLuggage(HandLuggage handLuggage) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("baggage", handLuggage);
-        getNav().navigate(R.id.fragment_ShowBaggage, bundle);
-    }
 }

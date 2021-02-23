@@ -25,9 +25,9 @@
                 android:title="@string/ic_items">
             </item>
             <item
-                android:id="@+id/ic_alojamiento"
-                android:icon="@drawable/ic_favorite"
-                android:title="@string/ic_alojamiento">
+                android:id="@+id/fragment_ShowCategories"
+                android:icon="@drawable/ic_category_24"
+                android:title="@string/ic_categories">
             </item>
 
         </menu>
@@ -50,8 +50,6 @@
                 android:icon="@drawable/ic_masks"
                 android:title="@string/ic_COVID">
             </item>
-
-
         </menu>
 
 

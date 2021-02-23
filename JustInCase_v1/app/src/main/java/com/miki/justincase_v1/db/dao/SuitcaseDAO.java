@@ -17,15 +17,14 @@ import java.util.List;
 @Dao
 public interface SuitcaseDAO {
     //LiveData
-    @Query("SELECT * FROM suitcases ORDER BY suitcaseName")
-    List<Suitcase> getAll();
+    @Query("SELECT * FROM suitcases ORDER BY name")
+    List<Suitcase> selectAll();
 
     @Query("SELECT * FROM suitcases WHERE suitcaseID IS :suitcaseID")
     Suitcase getSuitcase(int suitcaseID);
 
-    //@Query("SELECT * FROM items WHERE NOT itemID IN (SELECT baggageContent.FKitemID from baggageContent WHERE baggageContent.FKbaggageID IS :baggageID) ORDER BY itemName")
-    @Query("SELECT * FROM suitcases WHERE NOT suitcaseID IN (SELECT FKsuitcaseID FROM HandLuggage WHERE FKtripID IS :tripID  )ORDER BY suitcaseName")
-    List<Suitcase> getAllSuitcaseThatItNotInThisTrip(int tripID);
+    @Query("SELECT * FROM suitcases WHERE NOT suitcaseID IN (SELECT FKsuitcaseID FROM HandLuggage WHERE FKtripID IS :tripID  )ORDER BY name")
+    List<Suitcase> selectSuitcaseNOTFromThisTrip(int tripID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Suitcase suitcase);
