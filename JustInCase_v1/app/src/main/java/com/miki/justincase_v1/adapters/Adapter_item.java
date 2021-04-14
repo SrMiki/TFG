@@ -1,13 +1,17 @@
 package com.miki.justincase_v1.adapters;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,22 +23,28 @@ import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.db.entity.Item;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewHolder> implements View.OnLongClickListener, Filterable {
 
-    private final Activity activity;
     private View.OnLongClickListener listener;
     List<Item> dataset;
 
     List<Item> referencesDataset; //for search
+    private Activity activity;
 
-    public Adapter_Item(List<Item> dataset, Activity activity) {
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public Adapter_Item(List<Item> dataset) {
         this.dataset = dataset;
         referencesDataset = new ArrayList<>(dataset);
-        this.activity = activity;
     }
 
     @Override
@@ -87,7 +97,7 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
     @Override
     public Adapter_Item.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view_entity, parent, false);
+                .inflate(R.layout.card_view_item, parent, false);
         view.setOnLongClickListener(this);
         return new AdapterViewHolder(view);
     }
@@ -97,35 +107,29 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
         Item item = dataset.get(position);
         holder.elementNameTV.setText(item.getItemName());
 
-//        Category category = Presented.getCategoryOfThisItem(item, holder.itemView.getContext());
-//        if (category != null) {
-//            holder.elementCategoryTV.setText(category.getCategoryName());
-//            holder.elementCategoryTV.setVisibility(View.VISIBLE);
-////            holder.elementCategoryTV.setOnClickListener( v -> {
-////                changeCategoryDialog(holder, category, position);
-////            });
+        String itemPhotoURI = item.getItemPhotoURI();
+        if (!itemPhotoURI.isEmpty() && activity!=null) {
+
+            Bitmap bitmap;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), Uri.parse(itemPhotoURI));
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 50 /*Ancho*/, 50 /*Alto*/, false /* filter*/);
+                ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
+                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytearrayoutputstream);
+
+                holder.itemViewPhoto.setVisibility(View.VISIBLE);
+                holder.itemViewPhoto.setImageBitmap(resizedBitmap);
+                holder.elementCategoryTV.setText(itemPhotoURI);
+                holder.elementCategoryTV.setVisibility(View.VISIBLE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+//        Category categoryOfThisItem = Presented.getCategoryOfThisItem(item, holder.itemView.getContext());
+//        if (categoryOfThisItem != null) {
+//            holder.elementCategoryTV.setText(categoryOfThisItem.categoryName);
 //        }
-    }
 
-    private void changeCategoryDialog(AdapterViewHolder vh, Category category, int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(vh.itemView.getContext());
-        builder.setTitle(vh.itemView.getResources().getString(R.string.text_Item));
-
-        LayoutInflater inflater = activity.getLayoutInflater();
-
-        View view = inflater.inflate(R.layout.alertdialog_textview, null);
-
-        TextView textView = view.findViewById(R.id.alertdialog_textView);
-        textView.setText(vh.itemView.getResources().getString(R.string.text_ask_changeCategory));
-        builder.setView(view);
-
-        builder.setNegativeButton(vh.itemView.getResources().getString(R.string.text_no), ((dialog, which) -> dialog.dismiss()));
-
-        builder.setPositiveButton(vh.itemView.getResources().getString(R.string.text_yes), ((dialog, which) -> {
-            Presented.deleteItemOfThisCategory(category, vh.itemView.getContext());
-            notifyItemChanged(position);
-        }));
-        builder.show();
     }
 
     @Override
@@ -144,16 +148,18 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
         notifyItemInserted(position);
     }
 
-    public class AdapterViewHolder extends RecyclerView.ViewHolder {
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
 
         TextView elementNameTV, elementCategoryTV;
         public LinearLayout layout;
+        ImageView itemViewPhoto;
 
         public AdapterViewHolder(View view) {
             super(view);
-            elementNameTV = view.findViewById(R.id.simpleCardView_name);
-            elementCategoryTV = view.findViewById(R.id.simpleCardView_category);
-            layout = view.findViewById(R.id.simpleCardView_layout);
+            elementNameTV = view.findViewById(R.id.itemCardView_name);
+            elementCategoryTV = view.findViewById(R.id.itemCardView_Category);
+            layout = view.findViewById(R.id.itemCardView_layout);
+            itemViewPhoto = view.findViewById(R.id.itemViewPhoto);
         }
 
     }

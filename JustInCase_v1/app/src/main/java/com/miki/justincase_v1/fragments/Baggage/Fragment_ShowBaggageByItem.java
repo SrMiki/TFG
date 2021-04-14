@@ -72,11 +72,11 @@ public class Fragment_ShowBaggageByItem extends BaseFragment implements Baggage_
             switchShowCategories.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 editor.putBoolean("showCategories", true);
                 editor.apply();
-                getNav().navigate(R.id.fragment_ShowBaggageByCategory, bundle);
+                getNav().navigate(R.id.action_fragment_ShowBaggageByItem_to_fragment_ShowBaggageByCategory, bundle);
             });
 
             setHasOptionsMenu(true);
-            handLuggage = (HandLuggage) bundle.getSerializable("handluggage");
+            handLuggage = (HandLuggage) bundle.getSerializable("handLuggage");
 
             btn_edit = view.findViewById(R.id.showBaggage_button_edit);
             btn_edit.setOnClickListener(v -> {
@@ -200,12 +200,7 @@ public class Fragment_ShowBaggageByItem extends BaseFragment implements Baggage_
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        String cancel = getString(R.string.text_cancel);
-        String haveBeenAdded = getString(R.string.text_haveBeenAdded);
-        String add = getString(R.string.text_add);
-        String title = getString(R.string.text_edit);
-
-        builder.setTitle(title);
+        builder.setTitle(getString(R.string.text_edit));
         View view = inflater.inflate(R.layout.alertdialog_suitcase, null);
         builder.setView(view);
 
@@ -230,8 +225,8 @@ public class Fragment_ShowBaggageByItem extends BaseFragment implements Baggage_
         depthET.setText(String.valueOf(suitcase.getDepth()));
 
 
-        builder.setNegativeButton(cancel, ((dialog, which) -> dialog.dismiss()));
-        builder.setPositiveButton(add, (dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setPositiveButton(getString(R.string.text_add), (dialog, which) -> {
 
             String name = nameET.getText().toString();
             String color = colorET.getText().toString();
@@ -246,9 +241,9 @@ public class Fragment_ShowBaggageByItem extends BaseFragment implements Baggage_
 
             Presented.updateSuitcase(suitcase, getContext());
             Presented.updateHandLuggage(handLuggage, getContext());
-            makeToast(getView().getContext(), haveBeenAdded);
+            makeToast(getView().getContext(), getString(R.string.text_handLuggageUpdated));
             Bundle obundle = new Bundle();
-            obundle.putSerializable("handluggage", handLuggage);
+            obundle.putSerializable("handLuggage", handLuggage);
             getNav().navigate(R.id.fragment_ShowBaggageByItem, obundle);
         });
         builder.show();

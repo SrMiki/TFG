@@ -48,21 +48,23 @@ public class Adapter_paraStartTrip extends RecyclerView.Adapter<Adapter_paraStar
     @Override
     public void onBindViewHolder(@NonNull Adapter_paraStartTrip.AdapterViewHolder holder, int position) {
         HandLuggage handLuggage = dataset.get(position);
+        if (handLuggage.getHandLuggageSize() != 0) {
+            
+            holder.elementNameTV.setText(handLuggage.handLuggageName);
 
-        holder.elementNameTV.setText(handLuggage.handLuggageName);
-
-        ArrayList<Baggage> baggageOfThisHandLuggage = Presented.getBaggageOfThisHandLuggage(handLuggage, holder.itemView.getContext());
-        int checked = 0;
-        for (Baggage baggage : baggageOfThisHandLuggage) {
-            if (baggage.isCheck()) {
-                checked++;
+            ArrayList<Baggage> baggageOfThisHandLuggage = Presented.getBaggageOfThisHandLuggage(handLuggage, holder.itemView.getContext());
+            int checked = 0;
+            for (Baggage baggage : baggageOfThisHandLuggage) {
+                if (baggage.isCheck()) {
+                    checked++;
+                }
             }
-        }
-        String s = checked + " / " + handLuggage.getHandLuggageSize();
-        holder.count.setText(s);
+            String s = checked + " / " + handLuggage.getHandLuggageSize();
+            holder.count.setText(s);
 
-        handLuggage.setHandLuggageCompleted(checked == handLuggage.getHandLuggageSize());
-        Presented.updateHandLuggage(handLuggage, holder.itemView.getContext());
+            handLuggage.setHandLuggageCompleted(checked == handLuggage.getHandLuggageSize());
+            Presented.updateHandLuggage(handLuggage, holder.itemView.getContext());
+        }
     }
 
     @Override

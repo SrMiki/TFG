@@ -41,4 +41,7 @@ public interface CategoryDAO {
 
     @Update
     void update(Category category);
+
+    @Query("SELECT * FROM categories WHERE categoryName IS :newCategory")
+    Category getCategoryByName(String newCategory);
 }

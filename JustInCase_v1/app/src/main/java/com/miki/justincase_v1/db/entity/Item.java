@@ -1,5 +1,7 @@
 package com.miki.justincase_v1.db.entity;
 
+import android.widget.ImageView;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -16,10 +18,18 @@ public class Item implements Serializable {
 
     private boolean selectedState;
 
-    public Item(String itemName) {
+    public int count;
+
+    private String itemPhotoURI;
+
+    public Item(String itemName, String itemPhotoURI) {
         this.itemName = itemName;
         selectedState = false;
+        count=1;
+        this.itemPhotoURI=itemPhotoURI;
     }
+
+
 
     public String getItemName() {
         return itemName;
@@ -29,7 +39,13 @@ public class Item implements Serializable {
         return itemID;
     }
 
+    public void setItemPhotoURI(String itemPhotoURI) {
+        this.itemPhotoURI = itemPhotoURI;
+    }
 
+    public String getItemPhotoURI() {
+        return itemPhotoURI;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -49,5 +65,12 @@ public class Item implements Serializable {
         this.selectedState = selectedState;
     }
 
+    public int getItemCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 }
 

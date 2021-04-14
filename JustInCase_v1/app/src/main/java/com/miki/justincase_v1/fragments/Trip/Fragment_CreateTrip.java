@@ -1,11 +1,13 @@
 package com.miki.justincase_v1.fragments.Trip;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -110,13 +112,13 @@ public class Fragment_CreateTrip extends BaseFragment {
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
         TextView textView = view.findViewById(R.id.alertdialog_textView);
-        textView.setText(getString(R.string.text_ask_newHandluggage));
+        textView.setText(getString(R.string.ask_addHandluggage));
 
         builder.setView(view);
 
         builder.setNegativeButton(getString(R.string.text_no), ((dialog, which) -> {
             dialog.dismiss();
-            getNav().navigate(R.id.fragment_ShowTrips);
+            getNav().navigate(R.id.action_fragment_CreateTrip_to_fragment_ShowTrips);
         }));
         builder.setPositiveButton(getString(R.string.text_yes), ((dialog, which) -> {
             Bundle bundle = new Bundle();
@@ -125,7 +127,7 @@ public class Fragment_CreateTrip extends BaseFragment {
             ArrayList<Trip> allTrips = Presented.getAllTrips(getContext());
             Trip trip = allTrips.get(allTrips.size() - 1);
             bundle.putSerializable("trip", trip);
-            getNav().navigate(R.id.fragment_Add_HandLuggage, bundle);
+            getNav().navigate(R.id.action_fragment_CreateTrip_to_fragment_Add_HandLuggage, bundle);
         }));
         builder.show();
     }

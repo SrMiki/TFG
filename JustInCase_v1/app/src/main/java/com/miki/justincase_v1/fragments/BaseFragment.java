@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.view.Gravity;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -23,6 +24,10 @@ public class BaseFragment extends Fragment {
 
     protected NavController getNav() {
         return Navigation.findNavController(getActivity(), R.id.fragment);
+    }
+
+    protected NavController getNav(View v) {
+        return Navigation.findNavController(v);
     }
 
     public void closeKeyBoard() {

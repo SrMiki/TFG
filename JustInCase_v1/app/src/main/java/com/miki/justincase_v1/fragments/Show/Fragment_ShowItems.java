@@ -1,8 +1,12 @@
 package com.miki.justincase_v1.fragments.Show;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,11 +14,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.view.PreviewView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,12 +31,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.adapters.Adapter_Item;
 import com.miki.justincase_v1.Swipers.Item_RecyclerItemTouchHelper;
+import com.miki.justincase_v1.adapters.Adapter_Item;
 import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
@@ -36,34 +48,43 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
     ArrayList<Item> dataset;
     RecyclerView recyclerView;
 
+    ImageView item_photo;
+
     FloatingActionButton floatingButton;
+    private String itemPhotoUri;
+
+    private ImageCapture imageCapture;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recyclerview_addbutton, container, false);
 
-
         floatingButton = view.findViewById(R.id.fragment_show_entity_btn_add);
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         dataset = Presented.selectAllItems(getContext());
+        if (!dataset.isEmpty()) {
+            LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
+            linearLayout.setVisibility(View.VISIBLE);
+        }
+
         setHasOptionsMenu(true);
 
-        floatingButton.setOnClickListener(v -> {
-            createNewItemDialog();
-        });
+        floatingButton.setOnClickListener(v -> createNewItemDialog());
 
         recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
         ItemTouchHelper.SimpleCallback simpleCallback = new Item_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new Adapter_Item(dataset, getActivity());
+        adapter = new Adapter_Item(dataset);
+        adapter.setActivity(getActivity());
         recyclerView.setAdapter(adapter);
 
         adapter.setListener((View v) -> {
             Item item = dataset.get(recyclerView.getChildAdapterPosition(v));
-            editItemDialog(v, item);
+//            editItemDialog(item);
             return true;
         });
 
@@ -71,96 +92,139 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
         return view;
     }
 
-    private void editItemDialog(View v, Item item) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_editItem));
-
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-        View view = inflater.inflate(R.layout.alertdialog_edittext, null);
-
-        EditText editText = view.findViewById(R.id.alertdialog_editText);
-        editText.setText(item.getItemName());
-
-        builder.setView(view);
-
-        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
-
-        builder.setPositiveButton(getString(R.string.text_edit), ((dialog, which) -> {
-            String itemName = editText.getText().toString();
-
-            if (itemName.isEmpty()) {
-                makeToast(v.getContext(), getString(R.string.warning_emptyName));
-            } else {
-                boolean update = Presented.updateItem(item, itemName, getContext());
-                if (update) {
-                    makeToast(v.getContext(), getString(R.string.text_haveBeenUpdated));
-                    getNav().navigate(R.id.fragment_ShowItems);
-                } else {
-                    makeToast(v.getContext(), getString(R.string.warning_updateItem));
-                }
-            }
-        }));
-        builder.show();
-    }
-
     private void createNewItemDialog() {
+        itemPhotoUri = "";
 
+        // --  Dialog -- //
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         builder.setTitle(getString(R.string.text_newItem));
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        View view = inflater.inflate(R.layout.alertdialog_edittext, null);
+        View view = inflater.inflate(R.layout.alertdialog_item, null);
         builder.setView(view);
 
-        EditText editText = view.findViewById(R.id.alertdialog_editText);
-        editText.setHint(getString(R.string.fragment_createItem_hint));
+        item_photo = view.findViewById(R.id.itemPhoto);
+        EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
+        editText.setHint(getString(R.string.text_hintItemName));
+
+        TextView addPhoto = view.findViewById(R.id.itemAlertdialog_addPhoto);
+
+        // --  Dialog -- //
+
+
         builder.setView(view);
-        editText.setFocusable(true);
-//        openKeyBoard();
 
         builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.text_add), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.text_add), (dialog, which) -> {
             String itemName = editText.getText().toString();
             if (itemName.isEmpty()) {
                 makeToast(getContext(), getString(R.string.warning_emptyName));
             } else {
-                boolean create = Presented.createItem(itemName, getContext());
-                if (!create) {
-                    makeToast(getContext(), getString(R.string.warning_createItem));
+                if (Presented.createItem(itemName, itemPhotoUri, getContext())) {
+                    makeToast(getContext(), getString(R.string.text_itemCreated));
+                    dialog.dismiss();
                     getNav().navigate(R.id.fragment_ShowItems);
                 } else {
-                    makeToast(getContext(), getString(R.string.text_itemCreated));
-                    anotherItemDialog();
-                    getNav().navigate(R.id.fragment_ShowItems);
+                    makeToast(getContext(), getString(R.string.warning_createItem));
                 }
             }
-        }));
-        builder.show();
+        });
+
+        AlertDialog show = builder.show();
+
+        //ItemPhoto!
+        addPhoto.setOnClickListener(v -> {
+            show.dismiss();
+            AddPhotoDialog();
+        });
+
     }
 
-    private void anotherItemDialog() {
+//    private void editItemDialog(Item item) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder.setTitle(getString(R.string.text_editItem));
+//
+//        LayoutInflater inflater = requireActivity().getLayoutInflater();
+//
+//        View view = inflater.inflate(R.layout.alertdialog_item, null);
+//
+//        EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
+//        editText.setText(item.getItemName());
+//
+//        currentPhotoPath = "";
+//        itemPhotoUri = item.getItemPhotoURI();
+//        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+//        item_photo.setImageBitmap(bitmap);
+//        TextView addPhoto = view.findViewById(R.id.itemAlertdialog_addPhoto);
+//        addPhoto.setText(R.string.text_changephoto);
+//
+//        addPhoto.setOnClickListener(v -> AddPhotoDialog());
+//
+//        builder.setView(view);
+//
+//        builder.setNegativeButton(getString(R.string.text_cancel), ((DialogInterface dialog, int which) -> dialog.dismiss()));
+//
+//        builder.setPositiveButton(getString(R.string.text_edit), ((dialog, which) -> {
+//            String itemName = editText.getText().toString();
+//            if (itemName.isEmpty()) {
+//                makeToast(getContext(), getString(R.string.warning_emptyName));
+//                dialog.dismiss();
+//            } else {
+//                boolean updateItem = Presented.updateItem(item, itemName.trim().toLowerCase(), getContext());
+//                if (updateItem) {
+//                    makeToast(getContext(), getString(R.string.text_itemUpdated));
+//                    getNav().navigate(R.id.fragment_ShowItems);
+//                } else {
+//                    makeToast(getContext(), getString(R.string.warning_updateItem));
+//                }
+//            }
+//        }));
+//        builder.show();
+//    }
+
+
+    private void AddPhotoDialog() {
+        // --  Dialog -- //
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_Item));
+        builder.setTitle(getString(R.string.text_item));
+
+        builder.setTitle(R.string.addPhotoDialogTitle);
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        View view = inflater.inflate(R.layout.alertdialog_textview, null);
-
-        TextView textView = view.findViewById(R.id.alertdialog_textView);
-        textView.setText(getString(R.string.text_ask_anotherItem));
+        View view = inflater.inflate(R.layout.alertdialog_photo, null);
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.text_no), ((dialog, which) -> dialog.dismiss()));
+        ImageView photo = view.findViewById(R.id.take_photo);
+        ImageView galery = view.findViewById(R.id.galery);
 
-        builder.setPositiveButton(getString(R.string.text_yes), ((dialog, which) -> {
-            createNewItemDialog();
-        }));
-        builder.show();
+        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
+
+        builder.setPositiveButton(getString(R.string.text_add), ((dialog, which) -> dialog.dismiss()));
+        AlertDialog show = builder.show();
+        // --  Dialog -- //
+
+        galery.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+//                mGetContent.launch("image/*");
+                startActivityForResult(intent.createChooser(intent, "selec"), 10);
+                show.dismiss();
+            }
+        });
+
+
+        photo.setOnClickListener(v -> {
+            show.dismiss();
+            getNav().navigate(R.id.cameraX);
+        });
     }
+
+
 
     @Override
     public void onSwipe(RecyclerView.ViewHolder viewHolder, int direction, int position) {
@@ -180,7 +244,6 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
 
         }
     }
-
 
     public void restoreDeletedElement(RecyclerView.ViewHolder viewHolder, String name, Item deletedItem, int deletedIndex) {
         String deleted = getString(R.string.text_hasBeenDeleted);
@@ -205,29 +268,18 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
         androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) menuItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            //true if the query has been handled by the listener, false to let the SearchView perform the default action.
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
 
-            //false if the SearchView should perform the default action of showing any suggestions if available, true if the action was handled by the listener.
             @Override
             public boolean onQueryTextChange(String newText) {
-//                floatingButton.setVisibility(View.GONE);
                 adapter.getFilter().filter(newText);
                 return false;
             }
         });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-//                floatingButton.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-
-
+        searchView.setOnCloseListener(() -> false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 }

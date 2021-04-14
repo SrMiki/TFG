@@ -51,12 +51,12 @@ public class Fragment_CountryList extends BaseFragment {
                 String s = dataset.get(recyclerView.getChildAdapterPosition(v));
                 trip.setDestination(s);
                 bundle.putSerializable("trip", trip );
-                getNav().navigate(R.id.fragment_Edit_Trip, bundle);
+                getNav().navigate(R.id.action_fragment_CountryList_to_fragment_Edit_Trip, bundle);
             } else {
 
                 Bundle obundle = new Bundle();
                 obundle.putSerializable("destination", dataset.get(recyclerView.getChildAdapterPosition(v)));
-                getNav().navigate(R.id.fragment_CreateTrip, obundle);
+                getNav().navigate(R.id.action_fragment_CountryList_to_fragment_CreateTrip, obundle);
             }
         });
 

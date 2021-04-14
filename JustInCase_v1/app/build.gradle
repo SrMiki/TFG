@@ -48,7 +48,7 @@ dependencies {
     //recyclerview
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     // For control over item selection of both touch and mouse driven selection
-    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc03"
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
 
     //Nav component
@@ -66,7 +66,27 @@ dependencies {
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
     // Jetpack Compose Integration
-    implementation "androidx.navigation:navigation-compose:1.0.0-alpha05"
+    implementation "androidx.navigation:navigation-compose:1.0.0-alpha09"
+
+
+    //Places Autocomplete
+    implementation 'com.google.android.libraries.places:places:2.4.0'
+
+    // CameraX core library using the camera2 implementation
+    def camerax_version = "1.0.0-rc03"
+    // The following line is optional, as the core library is included indirectly by camera-camera2
+    implementation "androidx.camera:camera-core:${camerax_version}"
+    implementation "androidx.camera:camera-camera2:${camerax_version}"
+    // If you want to additionally use the CameraX Lifecycle library
+    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
+    // If you want to additionally use the CameraX View class
+    implementation "androidx.camera:camera-view:1.0.0-alpha22"
+    // If you want to additionally use the CameraX Extensions library
+    implementation "androidx.camera:camera-extensions:1.0.0-alpha22"
+
+
+
+
 
 
 }

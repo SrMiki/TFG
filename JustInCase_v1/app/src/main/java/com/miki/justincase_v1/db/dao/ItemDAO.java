@@ -16,6 +16,10 @@ import java.util.List;
 
 @Dao
 public interface ItemDAO {
+
+    @Query("SELECT * FROM items WHERE itemName IS :itemName")
+    Item getItemByItemName(String itemName);
+
     @Query("SELECT * FROM items WHERE itemID IS :itemID")
     Item getItem(int itemID);
 
@@ -46,7 +50,7 @@ public interface ItemDAO {
 //    List<Item> theMethod(int categoryID, int handLuggageID);
 
     @Update
-    void updateItem(Item item);
+    void update(Item item);
 
     @Update
     void updateListOfItem(List<Item> arrayList);
@@ -64,6 +68,7 @@ public interface ItemDAO {
 
     @Delete
     void deleteAll(List<Item> itemList);
+
 
 
 }

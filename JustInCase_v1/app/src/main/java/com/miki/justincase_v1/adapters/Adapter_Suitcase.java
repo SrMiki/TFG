@@ -104,7 +104,7 @@ public class Adapter_Suitcase extends RecyclerView.Adapter<Adapter_Suitcase.Adap
         holder.Depth.setText(String.valueOf(suitcase.getDepth()));
 
         Context context = holder.itemView.getContext();
-        if (isSelected) {
+        if (suitcase.isSelectedState()) {
             holder.layout.setBackgroundColor(context.getResources().getColor(R.color.item_selected));
         } else {
             holder.layout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));

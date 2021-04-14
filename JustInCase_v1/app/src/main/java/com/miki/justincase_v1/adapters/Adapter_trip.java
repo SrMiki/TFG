@@ -203,7 +203,7 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
             NavController navController = Navigation.findNavController(activity, R.id.fragment);
 
             Bundle obundle = new Bundle();
-            obundle.putSerializable("handluggage", focusHandLuggage);
+            obundle.putSerializable("handLuggage", focusHandLuggage);
             SharedPreferences sp;
             sp = v.getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
@@ -221,17 +221,17 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
     private void isSelected(AdapterViewHolder holder, int position, Context context) {
         if (cardSelected == position) {
             if (!holder.selected) {
-                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.item_selected));
+//                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.item_selected));
                 holder.selected = true;
                 holder.nestedRecyclerview_LinearLayout.setVisibility(View.VISIBLE);
                 holder.optionLinearLayout.setVisibility(View.VISIBLE);
             } else { // LAST ITEM!
-                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
+//                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
                 holder.selected = false;
                 isSelected = false;
             }
         } else {
-            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
+//            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
             holder.selected = false;
         }
     }
@@ -251,6 +251,11 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
         if (listener != null) {
             listener.onClick(v);
         }
+    }
+
+    public void removeItem(int adapterPosition) {
+        dataset.remove(adapterPosition);
+        notifyItemRemoved(adapterPosition);
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {

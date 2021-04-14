@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,11 @@ public class Fragment_ShowCategories extends BaseFragment implements Category_Re
 
         dataset = Presented.selectAllCategories(getContext());
 
+        if(!dataset.isEmpty()){
+            LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
+            linearLayout.setVisibility(View.VISIBLE);
+        }
+
         setHasOptionsMenu(true);
 
         recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
@@ -56,17 +62,16 @@ public class Fragment_ShowCategories extends BaseFragment implements Category_Re
         ItemTouchHelper.SimpleCallback simpleCallback = new Category_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
 
-
         floatingButton = view.findViewById(R.id.fragment_show_entity_btn_add);
 
-        floatingButton.setOnClickListener(v -> newCategoryDialog(v));
+        floatingButton.setOnClickListener(v -> newCategoryDialog());
 
         adapter.setOnClickListener(v -> {
             int position = recyclerView.getChildAdapterPosition(v);
             focusCategory = dataset.get(position);
             Bundle bundle = new Bundle();
             bundle.putSerializable("category", focusCategory);
-            getNav().navigate(R.id.fragment_ShowCategoryContent, bundle);
+            getNav().navigate(R.id.action_fragment_ShowCategories_to_fragment_ShowCategoryContent, bundle);
         });
 
         adapter.setOnLongClickListener(v -> {
@@ -86,7 +91,7 @@ public class Fragment_ShowCategories extends BaseFragment implements Category_Re
 
         View view = inflater.inflate(R.layout.alertdialog_edittext, null);
 
-        EditText editText = view.findViewById(R.id.alertdialog_editText);
+        EditText editText = view.findViewById(R.id.alertdialog_viewEditText);
         editText.setText(focusCategory.getCategoryName());
 
         builder.setView(view);
@@ -100,7 +105,7 @@ public class Fragment_ShowCategories extends BaseFragment implements Category_Re
             } else {
                 boolean update = Presented.updateCategory(focusCategory, name, getContext());
                 if (update) {
-                    makeToast(v.getContext(), getString(R.string.text_haveBeenUpdated));
+                    makeToast(v.getContext(), getString(R.string.text_categoryUpdated));
                     getNav().navigate(R.id.fragment_ShowCategories);
                 } else {
                     makeToast(v.getContext(), getString(R.string.warning_updateCategory));
@@ -110,7 +115,7 @@ public class Fragment_ShowCategories extends BaseFragment implements Category_Re
         builder.show();
     }
 
-    private void newCategoryDialog(View v) {
+    private void newCategoryDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.text_newCategory));
 
@@ -119,20 +124,29 @@ public class Fragment_ShowCategories extends BaseFragment implements Category_Re
         View view = inflater.inflate(R.layout.alertdialog_edittext, null);
         builder.setView(view);
 
-        EditText editText = view.findViewById(R.id.alertdialog_editText);
+        EditText editText = view.findViewById(R.id.alertdialog_viewEditText);
         editText.setHint(getString(R.string.fragment_createCategory_hint));
         builder.setView(view);
 
         builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.text_add), ((dialog, which) -> {
-            String name = editText.getText().toString();
-            Presented.createCategory(name, getContext());
+        builder.setPositiveButton(getString(R.string.text_create), ((dialog, which) -> {
+            if (editText.getText().toString().isEmpty()) {
+                makeToast(getContext(), getString(R.string.warning_emptyName));
+                newCategoryDialog();
+            } else {
+                String name = editText.getText().toString();
+                boolean category = Presented.createCategory(name, getContext());
+                if (category) {
+                    makeToast(getContext(), getString(R.string.text_categoryCreated));
 
-            addItemsDialog();
+                    addItemsDialog();
 
-            makeToast(v.getContext(), getString(R.string.text_haveBeenAdded));
-            getNav().navigate(R.id.fragment_ShowCategories);
+                    getNav().navigate(R.id.fragment_ShowCategories);
+                } else {
+                    makeToast(getContext(), getString(R.string.error_ExistCategory));
+                }
+            }
         }));
         builder.show();
     }

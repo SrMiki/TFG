@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -56,8 +58,10 @@ public class Fragment_DoCheckListByItem extends BaseFragment {
             switchShowCategories.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 editor.putBoolean("showCategories", true);
                 editor.apply();
-                getNav().navigate(R.id.fragment_DoCheckListByCategory, bundle);
+                getNav().navigate(R.id.checklistByItem_to_checkListByCategory, bundle);
             });
+
+
 
 
 //            setHasOptionsMenu(true);
@@ -73,13 +77,27 @@ public class Fragment_DoCheckListByItem extends BaseFragment {
             adapter = new Adapter_ItemCheckList(dataset);
             recyclerView.setAdapter(adapter);
 
+            CheckBox checkBoxAll = view.findViewById(R.id.checkbox_checkAll);
+            checkBoxAll.setChecked(handLuggage.isHandLuggageCompleted());
+            checkBoxAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                Presented.checkAllBaggage(dataset, isChecked, getContext());
+                adapter.notifyDataSetChanged();
+            });
+
             actionButton = view.findViewById(R.id.fragment_checklist_btn_finish);
             actionButton.setOnClickListener(v -> {
                 Presented.checkBaggage(handLuggage, dataset, getContext());
                 Bundle obundle = new Bundle();
                 Trip trip = Presented.getTrip(handLuggage, getContext());
                 obundle.putSerializable("trip", trip);
-                getNav().navigate(R.id.fragment_CheckIn, obundle);
+
+                if (trip.isTravelling() == 1 || trip.isTravelling() == 4) {
+                    getNav().navigate(R.id.fragment_CheckOut, obundle);
+
+                } else {
+
+                    getNav().navigate(R.id.fragment_CheckIn, obundle);
+                }
 
             });
         }

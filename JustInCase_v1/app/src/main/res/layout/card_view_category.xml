@@ -32,7 +32,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/categoryCardView_Arrow"
+                android:id="@+id/itemCardView_arrow"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginEnd="15dp"

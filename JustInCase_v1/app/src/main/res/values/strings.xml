@@ -1,53 +1,73 @@
 <resources>
-    <!-- general -->
+    <!-- TODO general -->
     <string name="app_name">JustInCase_v1</string>
     <string name="main">Principal</string>
 
-    <!-- menu elements -->
-    <string name="ic_home">Inicio</string>
-    <string name="ic_Trips">Mis viajes</string>
-    <string name="ic_suitcase">Mis maletas</string>
-    <string name="ic_COVID">COVID</string>
-    <string name="ic_coche">Alquiler de coches</string>
-    <string name="ic_alojamiento">Alojamientos guardados</string>
-    <string name="ic_ofertas">Ofertas</string>
-    <string name="ic_items">Inventario</string>
-    <string name="ic_categories">Categorias</string>
+    <!-- TODO drawer menu -->
     <string name="open">open</string>
     <string name="close">close</string>
     <string name="drawer_header">cabecera</string>
     <string name="important_links">Enlaces útiles</string>
 
-    <!--- Fragments titles -->
+    <!-- TODO menu elements -->
+    <string name="ic_home">Inicio</string>
+    <string name="ic_Trips">Mis viajes</string>
+    <string name="ic_suitcase">Mis maletas</string>
+    <string name="ic_covid">COVID</string>
+    <string name="ic_coche">Alquiler de coches</string>
+    <string name="ic_alojamiento">Alojamientos guardados</string>
+    <string name="ic_ofertas">Ofertas</string>
+    <string name="ic_items">Inventario</string>
+    <string name="ic_categories">Categorias</string>
+
+    <!--- TODO Fragments titles -->
     <string name="title_mainFragment">Menu principal</string>
 
     <string name="title_showTrip">Mis viajes</string>
-    <string name="title_createTrip">Nuevo Viaje</string>
-    <string name="title_showHandLuggage">Mi Equipaje</string>
     <string name="title_showSuticase">Mis maletas</string>
+    <string name="title_showItem">Inventario</string>
+    <string name="title_showCategories">Mis Categorias</string>
+    <string name="title_showHandLuggage">Mi Equipaje</string>
     <string name="title_showBaggageByItem">Equipaje</string>
-    <string name="title_showItem">Items</string>
-    <string name="title_addBaggage">Agregar Maleta</string>
-    <string name="title_showCategories">Categorias</string>
+    <string name="title_showCategoryContent">Categoria</string>
+    <string name="title_showBaggageByCategory">Equipaje</string>
+    <string name="title_showFinishedTrip">Viajes realizados</string>
+    <string name="title_showCountry">Destinos</string>
+
+    <string name="title_createTrip">Nuevo Viaje</string>
     <string name="title_editTrip">Editar Viaje</string>
+
+    <string name="title_addBaggage">Agregar Maleta</string>
     <string name="title_addItemToCategory">Agregar Items</string>
     <string name="title_addItemToBaggage">Agregar Items</string>
+
     <string name="title_startTrip">Preparativos del viaje</string>
     <string name="title_checkList">hacer la maleta</string>
 
+    <string name="title_addCategoryToBaggage">Agregar Categoria</string>
+    <string name="title_DoCheckListByCategory">Hacer la maleta</string>
+    <string name="title_CheckOut">Check Out</string>
 
-    <!-- forms -->
+
+    <!-- TODO Suitcase -->
+    <string name="heigth">heigth</string>
+    <string name="width">width</string>
+    <string name="depth">depth</string>
+    <string name="x">x</string>
+    <string name="number_0">0</string>
+
+
+    <!-- TODO forms -->
     <string name="text_new">Nuevo</string>
     <string name="text_edit">Editar</string>
     <string name="text_delete">Eliminar</string>
 
-
-    <string name="text_Item">Item</string>
+    <string name="text_item">Item</string>
     <string name="text_category">Categoria</string>
     <string name="text_suitcase">Maleta</string>
 
 
-    <!-- texts -->
+    <!-- TODO texts -->
     <string name="text_Destino">Destino:</string>
     <string name="text_travelDate">Fecha de salida:</string>
     <string name="text_name">Nombre:</string>
@@ -60,124 +80,183 @@
     <string name="text_search">buscar</string>
     <string name="text_add">Agregar</string>
     <string name="text_addDirect">Agregar directamente</string>
+    <string name="text_returnDate">Fecha de regreso: </string>
 
 
+    <string name="text_SuitcaseColor">Color:</string>
+
+    <string name="text_suticaseWeight">Peso: </string>
+    <string name="text_suticaseDims">Dimensiones: </string>
+    <string name="text_baggageName">Maleta:</string>
+
+    <string name="text_trip">viaje</string>
+    <string name="text_no">no</string>
+    <string name="text_yes">si</string>
+
+
+    <!-- TODO toast created -->
+
+    <string name="text_suitcaseCreated">La maleta ha sido creada</string>
+    <string name="text_categoryCreated">La categoria ha sido creada</string>
+
+
+    <!-- TODO toast updated -->
+    <string name="error_ExistCategory">Ya existe una categoria con ese nombre</string>
+    <string name="text_handLuggageUpdated">La maleta ha sido actualizada</string>
+    <string name="text_categoryUpdated">La categoria ha sido actualizada</string>
+    <string name="text_itemUpdated">El item ha sido actualizado</string>
+    <string name="text_suitcaseUpdated">La maleta ha sido actualizada</string>
+
+
+    <!-- TODO hints -->
     <string name="text_hintInputName">Introduzca el nombre</string>
+    <string name="text_hintInputDestino">Introduzca el destino</string>
+    <string name="text_hintInputDate">Introduzca la fecha</string>
+    <string name="text_hintSuitcaseColor">rojo, azul, verde</string>
+    <string name="text_hintInputSuitcaseWeight">Introduzca el peso</string>
+    <string name="text_hintItemName">camisa, pantalón, pasaporte</string>
 
-    <!-- buttons -->
+    <!-- TODO ask -->
+
+    <string name="ask_addHandluggage">¿Quiere agregar maletas al viaje ahora?</string>
+    <string name="ask_anotherSuitcase">¿Quiere crear otra maleta?</string>
+    <string name="ask_addItemsToCategory">¿Quiere añadir items a esta categoria?</string>
+    <string name="ask_createNewItem">Parece que no tienes items disponibles, ¿quieres crear uno?</string>
+    <string name="ask_anotherItem">¿Quieres crear otro item?</string>
+    <string name="ask_deleteItemsToo">¿Quieres eliminar los items que pertenecen a esta categoría tambien?</string>
+    <string name="ask_deleteHandLuggage">¿Quiere eliminar esta maleta?</string>
+    <string name="ask_changeCategory">¿Quieres cambiar la categoría?</string>
+
+    <!-- TODO warning -->
+    <string name="warning_title">Atención</string>
+    <string name="warning_emptyName">Ha dejado el nombre en blanco</string>
+    <string name="text_warning">Aviso</string>
+
+    <string name="warning_startTrip">El viaje no tiene maletas, ¿seguro que quieres continuar?</string>
+    <string name="warning_deleteTrip">"¿Está seguro de querer eliminar este viaje?"</string>
+
+    <string name="warning_deleteSuitcase">¿Quiere eliminar esta maleta?</string>
+    <string name="warning_noSuitcase">Parece que no tienes maletas disponibles, ¿quieres crear una nueva?</string>
+
+    <string name="warning_updateCategory">Ya existe esa categoria</string>
+
+    <string name="warning_createTrip">Destino vacio o fechas vacios</string>
+
+    <string name="warning_deleteItem">¿Quiere eliminar este item?</string>
+    <string name="warning_deleteCategory">¿Quiere eliminar esta categoria?</string>
+    <string name="warning_createItem">el item ya existe</string>
+    <string name="warning_ItemRepeted">Item repetido</string>
+    <string name="warning_editHandLuggage">Esto eliminará el contenido de la maleta</string>
+    <string name="warning_updateItem">Ya existe este item</string>
+    <string name="warning_duplicatedSuitcase">Ya existe una maleta con ese nombre</string>
+
+
+    <!-- TODO buttons -->
     <string name="btn_next">siguiente</string>
     <string name="btn_back">volver</string>
     <string name="btn_delete">eliminar</string>
     <string name="btn_finish">terminar</string>
     <string name="btn_add">añadir</string>
     <string name="btn_edit">editar</string>
+    <string name="btn_newItem">Crear item</string>
 
-    <!-- Trip -->
+
     <string name="switchDates_text">Viaje solo de ida</string>
-    <string name="text_hintInputDestino">Introduzca el destino</string>
-    <string name="text_hintInputDate">Introduzca la fecha</string>
-    <string name="text_returnDate">Fecha de regreso: </string>
 
-    <!-- Suitcase -->
-    <string name="text_SuitcaseColor">Color:</string>
-    <string name="text_hintInputSuitcaseColor">rojo, azul, verde...</string>
-    <string name="text_suticaseWeight">Peso: </string>
-    <string name="text_hintInputSuitcaseWeight">Introduzca el peso</string>
-    <string name="text_suticaseDims">Dimensiones: </string>
 
-    <string name="heigth">heigth</string>
-    <string name="width">width</string>
-    <string name="depth">depth</string>
-    <string name="x">x</string>
-    <string name="number_0">0</string>
+    <!-- TODO error -->
+    <string name="error">Se ha producido un error</string>
 
-    <!-- Item -->
-
-    <string name="fragment_createItem_hint">camisa, pantalón, pasaporte</string>
-
-    <!-- Categories -->
-
-    <string name="text_baggageName">Maleta:</string>
 
     <string name="fragment_addBaggageContent">Añade items al EQUIPAJE</string>
 
     <string name="fragment_addCategoryContent">Añade items a la CATEGORIA</string>
 
-    <string name="text_haveBeenAdded">La maleta ha sido agregada</string>
-    <string name="tripDeletedQuestion">¿Seguro que quieres eliminar este viaje?</string>
+
     <string name="text_restoreWarning">Esta acción no puede deshacerse</string>
 
 
-    <string name="text_haveBeenUpdated">Item actualizado</string>
-    <string name="warning_fastClicking">No pulses tan rápido</string>
-    <string name="text_trip">viaje</string>
-    <string name="text_no">no</string>
-    <string name="text_yes">si</string>
-    <string name="warning_createTrip">Destino vacio o fechas vacios</string>
     <string name="text_doCheckIn">Hacer check-in</string>
     <string name="text_newTrip">Nuevo viaje</string>
-    <string name="text_warning">Aviso</string>
-    <string name="warning_startTrip">El viaje no tiene maletas, ¿seguro que quieres continuar?</string>
+
     <string name="showTrip_progressTrip">Viajes en proceso</string>
     <string name="showTrip_viajesPendientes">Viajes pendientes</string>
     <string name="showTrip_finishedTrip">Viajes realizados</string>
     <string name="text_finish">Terminar</string>
-    <string name="text_ask_newHandluggage">¿Quiere agregar maletas al viaje ahora?</string>
-    <string name="warning_noSuitcase">Parece que no tienes maletas disponibles, ¿quieres crear una nueva?</string>
-    <string name="text_ask_anotherSuitcase">¿Quiere crear otra maleta?</string>
 
-    <string name="error">Se ha producido un error</string>
-    <string name="warning_title">Atención</string>
-    <string name="warning_deleteTrip">"¿Está seguro de querer eliminar este viaje?"</string>
-    <string name="warning_deleteSuitcase">¿Quiere eliminar esta maleta?</string>
-    <string name="ask_addItemsToCategory">¿Quiere añadir items a esta categoria?</string>
-    <string name="ask_createNewItem">Parece que no tienes items disponibles, ¿quieres crear uno?</string>
-    <string name="text_ask_anotherItem">¿Quieres crear otro item?</string>
-    <string name="warning_deleteItem">¿Quiere eliminar este item?</string>
-    <string name="warning_deleteCategory">¿Quiere eliminar esta categoria?</string>
-    <string name="warning_createItem">el item ya existe</string>
-    <string name="title_country">Destinos</string>
-    <string name="title_showCategoryContent">Categoria</string>
+
     <string name="ic_settings">Ajustes</string>
     <string name="button_newTrip">Nuevo viaje</string>
 
-    <string name="title_ShowBaggageByCategory">Equipaje</string>
+
     <string name="text_newItem">Nuevo item</string>
     <string name="text_newCategory">Nueva categoria</string>
     <string name="fragment_createCategory_hint">ropa, electrónica</string>
     <string name="text_editItem">Editar Item</string>
     <string name="select_numberPicker">Indique la cantidad deseada</string>
     <string name="text_itemCount">Cantidad de Items</string>
-    <string name="title_addCategoryToBaggage">Agregar Categoria</string>
+
     <string name="text_newSuitcase">Nueva maleta</string>
     <string name="text_editCategory">Editar categoria</string>
-    <string name="warning_updateCategory">Ya existe esa categoria</string>
-    <string name="warning_emptyName">Ha dejado el campo vacio</string>
-    <string name="ask_deleteItemsToo">¿Quieres eliminar los items que pertenecen a esta categoría tambien?</string>
+
+
     <string name="text_addToCategory">Agregar directamente</string>
     <string name="text_create">Crear</string>
-    <string name="warningItemRepeted">Item repetido</string>
     <string name="text_hintInputSuitcaseName">grande, maletín, mochila</string>
     <string name="text_startTrip">Empezar viaje</string>
 
 
     <string name="switch_showCategories">Mostrar por categorias</string>
-    <string name="title_DoCheckListByCategory">Hacer la maleta</string>
-    <string name="title_CheckOut">Check Out</string>
+
     <string name="text_addCategoryContent">Seleccione los items que quiere agregar a la categoria</string>
-    <string name="ask_deleteHandLuggage">¿Quiere eliminar esta maleta?</string>
-    <string name="warning_editHandLuggage">Esto eliminará el contenido de la maleta</string>
+
     <string name="text_progressTrip">Viajes en proceso</string>
     <string name="text_NOprogressTrip">Aun no tiene viajes activos</string>
-    <string name="title_Fragment_ShowFinishedTrip">Viajes realizados</string>
+
     <string name="tripForm_days">Número de días:</string>
-    <string name="warning_updateItem">Ya existe este item</string>
     <string name="text_addBaggage">Seleccione los Item que quiere agregar a la maleta</string>
-    <string name="btn_newItem">Crear item</string>
-    <string name="text_suitcaseHaveBeenCreate">La maleta ha sido creada</string>
-    <string name="warning_duplicatedSuitcase">Ya existe una maleta con ese nombre</string>
+
+
     <string name="text_itemCreated">Item creado</string>
-    <string name="text_ask_changeCategory">¿Quieres cambiar la categoría?</string>
+
     <string name="text_doCheckOut">Deshacer maleta</string>
+    <string name="text_handLuggageCreated">Maleta agregada</string>
+    <string name="text_someHandLuggageCreated">Se han agregado las maletas</string>
+    <string name="text_swipe">Arrastra para eliminar</string>
+    <string name="text_swipe2">Mantén pulsado para editar</string>
+
+    <string name="welcome">¡Bienvenido a JustInCase!</string>
+    <string name="howToDeleted">Para eliminar, arrastra hacia a la izquierda</string>
+    <string name="howToEdit">Para editar, manten pulsado</string>
+    <string name="howToCreate">Para crear, pulsa el botón +</string>
+    <string name="btn_start">¡Empezar!</string>
+    <string name="checkbox_checkAll">seleccionar/deseleccionar todo</string>
+    <string name="text_photo">Agregar foto</string>
+    <string name="btn_newSuitcase">Crear maleta</string>
+    <string name="text_sort">Ordenar</string>
+    <string name="btn_doCheckOut">Hacer checout directamente</string>
+    <string name="btn_endCheckOut">Terminar</string>
+    <string name="Ishirt">camiseta</string>
+    <string name="tripForm_selectActivities">Actividades</string>
+    <string name="form_snow">Nieve</string>
+    <string name="form_beach">Playa</string>
+    <string name="form_work">Trabajo</string>
+    <string name="form_sport">Deporte</string>
+    <string name="toggle_camping">camping</string>
+    <string name="form_hiking">senderismo</string>
+    <string name="toggle_swiming">piscina</string>
+    <string name="form_diving">buceo</string>
+    <string name="tripForm_selectServices">Servicios</string>
+    <string name="toggle_washingMachine">Lavadora</string>
+    <string name="toggle_personalCare">Productos de Higiene</string>
+    <string name="toggle_pets">Mascotas</string>
+    <string name="toggle_baby">Bebes</string>
+    <string name="ask_forGalery">Selecione la aplicación</string>
+    <string name="addPhotoDialogTitle">Seleccione como quiere obtener la imagen</string>
+    <string name="text_changephoto">cambiar Foto</string>
+    <string name="photoCapure">Se ha guardado la foto</string>
+    <string name="warning_cameraPermissions">"Permisos de cámaras denegados "</string>
+    <string name="capture_button_alt">capturar</string>
+
 
 </resources>

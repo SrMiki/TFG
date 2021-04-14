@@ -37,10 +37,11 @@ public class Fragment_CheckOut extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_check_in_out_trip, container, false);
         LinearLayout linearLayout = view.findViewById(R.id.fragment_focusTrip_LayoutReturnDate);
 
-        button = view.findViewById(R.id.startTrip_button);
-
         Bundle bundle = getArguments();
         if (bundle != null) {
+
+            button = view.findViewById(R.id.startTrip_button);
+            button.setText(getString(R.string.text_doCheckOut));
 
             trip = (Trip) bundle.getSerializable("trip");
 
@@ -71,16 +72,23 @@ public class Fragment_CheckOut extends BaseFragment {
 
 
             if (allSelected(handLuggageArrayList)) {
-                button.setVisibility(View.VISIBLE);
+                button.setText(getString(R.string.btn_endCheckOut));
             } else {
-                button.setVisibility(View.GONE);
+                button.setText(getString(R.string.btn_doCheckOut));
             }
+
 
             setCheckTripStatus();
             button.setOnClickListener(v -> {
                 Presented.clearCheckHandLuggage(trip, getContext());
                 Presented.updateTrip(trip, getContext());
-                getNav().navigate(R.id.fragment_ShowTrips);
+
+                if (trip.isTravelling() == 4) {
+//                    Presented.saveTrip(trip, getContext());
+                    getNav().navigate(R.id.fragment_ShowFinishedTrip);
+                } else {
+                    getNav().navigate(R.id.mainFragment);
+                }
             });
 
 
@@ -105,8 +113,6 @@ public class Fragment_CheckOut extends BaseFragment {
             } else {
                 trip.setTravelling(4);
             }
-            button.setText(getString(R.string.text_doCheckOut));
-
         } else if (trip.isTravelling() == 3) {
             trip.setTravelling(4);
             button.setText(getString(R.string.text_finish));

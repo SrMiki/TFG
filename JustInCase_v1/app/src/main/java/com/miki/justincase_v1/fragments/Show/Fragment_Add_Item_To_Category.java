@@ -62,7 +62,9 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
             adapter = new Adapter_ItemSeleccionados(dataset);
             recyclerView.setAdapter(adapter);
 
+            floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Category_finish);
             floatingActionButton.setVisibility(View.GONE);
+
             adapter.setListener(v -> {
                 int position = recyclerView.getChildAdapterPosition(v);
                 Item item = dataset.get(position);
@@ -85,11 +87,11 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
 
             });
 
-            floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Category_finish);
+
             floatingActionButton.setOnClickListener(v -> {
                 Presented.addItemToThisCategory(arrayList, category, getContext());
                 Presented.removeItemSelectedState(arrayList, getContext());
-                getNav().navigate(R.id.fragment_ShowCategoryContent, bundle);
+                getNav().navigate(R.id.action_fragment_Add_Item_To_Category_to_fragment_ShowCategoryContent, bundle);
             });
 
         }
@@ -131,8 +133,8 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
         View view = inflater.inflate(R.layout.alertdialog_edittext, null);
         builder.setView(view);
 
-        EditText editText = view.findViewById(R.id.alertdialog_editText);
-        editText.setHint(getString(R.string.fragment_createItem_hint));
+        EditText editText = view.findViewById(R.id.alertdialog_viewEditText);
+        editText.setHint(getString(R.string.text_hintItemName));
         builder.setView(view);
 
         builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
@@ -140,11 +142,12 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
         builder.setPositiveButton(getString(R.string.text_create), ((dialog, which) -> {
             String itemName = editText.getText().toString();
             boolean create = Presented.createItem(itemName, getContext());
+            dataset = Presented.selectItemWhitNoCategory(getContext());
             if (create) {
-                getNav().navigate(R.id.fragment_Add_Item_To_Category, bundle);
+                adapter.notifyItemInserted(dataset.size()-1);
                 anotherItemDialog();
             } else {
-                makeToast(getContext(), getString(R.string.warningItemRepeted));
+                makeToast(getContext(), getString(R.string.warning_ItemRepeted));
                 dialog.dismiss();
                 createNewItemDialog();
             }
@@ -154,14 +157,14 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
 
     private void anotherItemDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_Item));
+        builder.setTitle(getString(R.string.text_item));
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
         TextView textView = view.findViewById(R.id.alertdialog_textView);
-        textView.setText(getString(R.string.text_ask_anotherItem));
+        textView.setText(getString(R.string.ask_anotherItem));
         builder.setView(view);
 
         builder.setNegativeButton(getString(R.string.text_no), ((dialog, which) -> dialog.dismiss()));

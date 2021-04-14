@@ -52,6 +52,7 @@ public class Trip implements Serializable {
     }
 
 
+
     public String getDestination() {
         return destination;
     }
@@ -72,16 +73,6 @@ public class Trip implements Serializable {
         return returnDate;
     }
 
-    /**
-     *
-     * @return
-     * 0 == planning + checking
-     * 1 == checkout
-     * 2 == checkin BACK*
-     * 3 == finshed (checout)
-     *
-     * 1 and 2 it's for "travel back"
-     */
     public int isTravelling() {
         return travelling;
     }

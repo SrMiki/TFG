@@ -42,20 +42,26 @@ public class Fragment_Add_Category_To_Baggage extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_item_to_baggage, container, false);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
 
             arrayList = new ArrayList<>();
-            handLuggage = (HandLuggage) bundle.getSerializable("handluggage");
+            handLuggage = (HandLuggage) bundle.getSerializable("handLuggage");
             dataset = Presented.selectCategoriesNOTFromThisBaggage(handLuggage, getContext());
 
             suitcaseNameTV = view.findViewById(R.id.suitcaseNameTV);
             suitcaseNameTV.setText(handLuggage.getHandLuggageName());
 
-            recyclerView = view.findViewById(R.id.fragment_Add_Item_To_Baggage_recyclerview);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new Adapter_AddCategoryToBaggage(dataset, getActivity(), handLuggage);
-            recyclerView.setAdapter(adapter);
+            if (dataset.isEmpty()) {
+//                noItemsDialog();
+            } else {
+
+
+                recyclerView = view.findViewById(R.id.fragment_Add_Item_To_Baggage_recyclerview);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                adapter = new Adapter_AddCategoryToBaggage(dataset, getActivity(), handLuggage);
+                recyclerView.setAdapter(adapter);
 
 //            adapter.setOnClickListener(v -> {
 //                int position = recyclerView.getChildAdapterPosition(v);
@@ -73,13 +79,14 @@ public class Fragment_Add_Category_To_Baggage extends BaseFragment {
 ////                }
 //            });
 
-            floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Baggage_finish);
-            floatingActionButton.setOnClickListener(v -> {
-                ArrayList<Item> itemArrayList = adapter.itemArrayList;
-                Presented.createBaggageByItems(itemArrayList, handLuggage, getContext());
-                getNav().navigate(R.id.fragment_ShowBaggageByCategory, bundle);
-            });
+                floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Baggage_finish);
+                floatingActionButton.setOnClickListener(v -> {
+                    ArrayList<Item> itemArrayList = adapter.itemArrayList;
+                    Presented.createBaggageByItems(itemArrayList, handLuggage, getContext());
+                    getNav().navigate(R.id.action_fragment_Add_Category_To_Baggage_to_fragment_ShowBaggageByCategory, bundle);
+                });
 
+            }
 
         }
         return view;

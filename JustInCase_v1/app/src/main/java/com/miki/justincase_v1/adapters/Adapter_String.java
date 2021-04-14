@@ -101,8 +101,8 @@ public class Adapter_String extends RecyclerView.Adapter<Adapter_String.AdapterV
 
         public AdapterViewHolder(View view) {
             super(view);
-            elementNameTV = view.findViewById(R.id.simpleCardView_name);
-            layout = view.findViewById(R.id.simpleCardView_layout);
+            elementNameTV = view.findViewById(R.id.entityCardView_name);
+            layout = view.findViewById(R.id.entityCardView_layout);
         }
     }
 }

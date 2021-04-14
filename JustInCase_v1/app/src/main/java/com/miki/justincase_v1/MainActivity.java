@@ -16,7 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.miki.justincase_v1.db.initDB;
+//import com.miki.justincase_v1.db.initDB;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     NavController navController;
@@ -70,9 +70,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.ic_COVID) {
-            initDB.initDB(getApplicationContext());
-        }
+//        if (item.getItemId() == R.id.ic_COVID) {
+//            initDB.initDB(getApplicationContext());
+//        }
         NavController navController = Navigation.findNavController(this, R.id.fragment);
         return NavigationUI.onNavDestinationSelected(item, navController)
                 || super.onOptionsItemSelected(item);

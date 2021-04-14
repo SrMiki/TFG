@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="baby_Items">
+        <item>biberón</item>
+        <item>pañales</item>
+        <item>talco</item>
+    </string-array>
+
+    <string-array name="beach_Items">
+        <item>palas</item>
+        <item>crema solar</item>
+        <item>traje de baño</item>
+        <item>sandalias</item>
+    </string-array>
+
+    <string-array name="camping_Items">
+        <item>tienda de campaña</item>
+        <item>cantimplora</item>
+        <item>saco de dormir</item>
+    </string-array>
+
+
+    <string-array name="hiking_Items">
+        <item>bastón</item>
+        <item>botas</item>
+        <item>cantimplora</item>
+        <item>gorra</item>
+        <item>gafas de sol</item>
+    </string-array>
+
+
+    <string-array name="hygiene_Items">
+        <item>gel</item>
+        <item>champu</item>
+        <item>jabón</item>
+    </string-array>
+
+    <string-array name="pets_Items">
+        <item>pienso</item>
+        <item>collar</item>
+        <item>transportín</item>
+    </string-array>
+
+    <string-array name="suggested_Items">
+        <item>camiseta</item>
+        <item>pantalón</item>
+        <item>ropa interior</item>
+        <item>zapatos</item>
+        <item>calcetines</item>
+    </string-array>
+
+    <string-array name="snow_Items">
+        <item>esqui</item>
+        <item>casco de esqui</item>
+        <item>botas de esqui</item>
+        <item>guantes de lana</item>
+        <item>gorro de lana</item>
+    </string-array>
+
+    <string-array name="sports_Items">
+        <item>toalla</item>
+        <item>chandal</item>
+        <item>calzado deportivo</item>
+    </string-array>
+
+    <string-array name="swiming_Items">
+        <item>toalla</item>
+        <item>bañador</item>
+        <item>gorra de piscina</item>
+        <item>zandalias</item>
+    </string-array>
+
+    <string-array name="work_Items">
+        <item>carpeta</item>
+    </string-array>
+
+</resources>

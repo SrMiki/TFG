@@ -36,26 +36,37 @@ public class MainFragment extends BaseFragment {
 
         dataset = Presented.selectAllTripsInProgress(getContext());
 
-
         recyclerView = view.findViewById(R.id.recyclerview_progressTrip);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        if (!dataset.isEmpty()) {
-            textView.setText(R.string.text_progressTrip);
-            adapter = new Adapter_Trip(getActivity(), dataset);
-            recyclerView.setAdapter(adapter);
-            adapter.setListener(v -> {
-                int position = recyclerView.getChildAdapterPosition(v);
-                Trip trip = dataset.get(position);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("trip", trip);
-                getNav().navigate(R.id.fragment_CheckOut, bundle);
-            });
+
+        textView.setText(R.string.text_progressTrip);
+        adapter = new Adapter_Trip(getActivity(), dataset);
+        recyclerView.setAdapter(adapter);
+        adapter.setListener(v -> {
+            int position = recyclerView.getChildAdapterPosition(v);
+            Trip trip = dataset.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("trip", trip);
+            getNav().navigate(R.id.fragment_CheckOut, bundle);
+        });
 
 
-        } else{
-            textView.setText(R.string.text_NOprogressTrip);
-        }
+        ArrayList<Trip> otroDataset = Presented.selectCheckInBACKtrip(getContext());
+
+        RecyclerView otroRecycler = view.findViewById(R.id.recyclerview_checkBackTrip);
+
+        otroRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        Adapter_Trip otroAdapter = new Adapter_Trip(getActivity(), otroDataset);
+        otroRecycler.setAdapter(otroAdapter);
+        otroAdapter.setListener(v -> {
+            int position = otroRecycler.getChildAdapterPosition(v);
+            Trip trip = otroDataset.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("trip", trip);
+            getNav().navigate(R.id.fragment_CheckIn, bundle);
+        });
+
         return view;
     }
 }

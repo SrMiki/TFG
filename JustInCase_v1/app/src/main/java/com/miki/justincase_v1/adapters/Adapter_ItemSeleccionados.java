@@ -83,8 +83,8 @@ public class Adapter_ItemSeleccionados extends RecyclerView.Adapter<Adapter_Item
 
         public AdapterViewHolder(View view) {
             super(view);
-            elementNameTV = view.findViewById(R.id.simpleCardView_name);
-            layout = view.findViewById(R.id.simpleCardView_layout);
+            elementNameTV = view.findViewById(R.id.entityCardView_name);
+            layout = view.findViewById(R.id.entityCardView_layout);
             color = view.getResources().getColor(R.color.design_default_color_on_primary);
             layout.setBackgroundColor(color);
             isSelected = false;

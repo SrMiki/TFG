@@ -34,6 +34,11 @@ public class CategoryContent {
     public int categoryCount;
 
     public int FKitemID; // item ID foreign key
+
+    public void setFKcategoryID(int FKcategoryID) {
+        this.FKcategoryID = FKcategoryID;
+    }
+
     public int FKcategoryID; // category ID foreign key
 
     public CategoryContent(int FKitemID, int FKcategoryID, String categoryContentName) {
@@ -42,6 +47,8 @@ public class CategoryContent {
         this.categoryContentName = categoryContentName;
         this.categoryCount = 0;
     }
+
+
 
     public int getFKitemID() {
         return FKitemID;

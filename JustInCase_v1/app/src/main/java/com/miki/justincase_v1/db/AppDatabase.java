@@ -21,7 +21,7 @@ import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.db.entity.Suitcase;
 import com.miki.justincase_v1.db.entity.Trip;
 
-@Database(entities = {Trip.class, Suitcase.class, Item.class, HandLuggage.class, Baggage.class, Category.class, CategoryContent.class}, version = 1 )
+@Database(entities = {Trip.class, Suitcase.class, Item.class, HandLuggage.class, Baggage.class, Category.class, CategoryContent.class}, version = 3 )
 public abstract class AppDatabase extends RoomDatabase {
 
     //singleton!

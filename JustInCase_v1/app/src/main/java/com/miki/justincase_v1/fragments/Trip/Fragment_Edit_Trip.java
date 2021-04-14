@@ -100,7 +100,7 @@ public class Fragment_Edit_Trip extends BaseFragment {
                 trip.setTrip(destination, travelDate, returnDate, travelTransport, returnTransport);
                 Presented.updateTrip(trip, getContext());
 
-                getNav().navigate(R.id.fragment_ShowTrips );
+                getNav().navigate(R.id.action_fragment_Edit_Trip_to_fragment_ShowTrips );
             });
         }
         return view;

@@ -27,6 +27,7 @@ public interface TripDAO {
     @Query("SELECT * FROM trips WHERE travelling IS 0 ORDER BY date(travelDate)")
     List<Trip> selectPlanningTrip();
 
+
     @Query("SELECT * FROM trips WHERE ((travelling IS 1) OR (travelling IS 3)) ORDER BY date(travelDate)")
     List<Trip> selectCheckOutTrip();
 

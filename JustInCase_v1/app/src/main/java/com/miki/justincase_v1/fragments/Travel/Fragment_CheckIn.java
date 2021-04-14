@@ -37,7 +37,7 @@ public class Fragment_CheckIn extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_check_in_out_trip, container, false);
-        LinearLayout linearLayout = view.findViewById(R.id.fragment_focusTrip_LayoutReturnDate);
+//        LinearLayout linearLayout = view.findViewById(R.id.fragment_focusTrip_LayoutReturnDate);
 
         button = view.findViewById(R.id.startTrip_button);
 
@@ -87,9 +87,9 @@ public class Fragment_CheckIn extends BaseFragment {
 
             setCheckTripStatus();
             button.setOnClickListener(v -> {
-//                Presented.clearCheckHandLuggage(trip, getContext());
+                Presented.clearCheckHandLuggage(trip, getContext());
                 Presented.updateTrip(trip, getContext());
-                getNav().navigate(R.id.fragment_ShowTrips);
+                getNav().navigate(R.id.mainFragment);
             });
 
 
@@ -113,17 +113,6 @@ public class Fragment_CheckIn extends BaseFragment {
         } else if(trip.isTravelling()==2) {
             trip.setTravelling(3);
         }
-
-//        } else if (!trip.returnDate.isEmpty() && trip.isTravelling() == 1) {
-//            trip.setTravelling(2);
-//            button.setText(getString(R.string.text_finish));
-//        } else if (!trip.returnDate.isEmpty() && trip.isTravelling() == 2) {
-//            trip.setTravelling(3);
-//            button.setText(getString(R.string.text_doCheckIn));
-//        } else {
-//            trip.setTravelling(4);
-//            button.setText(getString(R.string.text_finish));
-//        }
     }
 
     private void setTrip(View view) {

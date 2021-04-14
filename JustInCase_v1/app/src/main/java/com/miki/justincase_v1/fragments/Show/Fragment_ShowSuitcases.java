@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,12 +49,18 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recyclerview_addbutton, container, false);
 
-        floatingButton = view.findViewById(R.id.fragment_show_entity_btn_add);
         dataset = Presented.selectAllSuitcase(getContext());
+
+        if (!dataset.isEmpty()) {
+           LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
+            linearLayout.setVisibility(View.VISIBLE);
+        }
+
+        floatingButton = view.findViewById(R.id.fragment_show_entity_btn_add);
         setHasOptionsMenu(true);
 
         floatingButton.setOnClickListener(v -> {
-            createNewSuitcaseDialog(view, v);
+            createNewSuitcaseDialog();
         });
 
 
@@ -75,7 +82,7 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
         return view;
     }
 
-    private void createNewSuitcaseDialog(View vista, View v) {
+    private void createNewSuitcaseDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         builder.setTitle(getString(R.string.text_newSuitcase));
@@ -104,14 +111,19 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
             double width = Double.parseDouble(widthET.getText().toString());
             double depth = Double.parseDouble(depthET.getText().toString());
 
-            Suitcase suitcase = new Suitcase(name, color, weigth, heigth, width, depth);
-            boolean haveBeenAdded = Presented.createSuitcase(suitcase, getContext());
-            if (haveBeenAdded) {
-                makeToast(v.getContext(), getString(R.string.text_haveBeenAdded));
+            if (name.isEmpty()) {
+                makeToast(getContext(), getString(R.string.warning_emptyName));
+                createNewSuitcaseDialog();
             } else {
-                makeToast(v.getContext(), getString(R.string.error));
+                Suitcase suitcase = new Suitcase(name, color, weigth, heigth, width, depth);
+                boolean haveBeenAdded = Presented.createSuitcase(suitcase, getContext());
+                if (haveBeenAdded) {
+                    makeToast(getContext(), getString(R.string.text_suitcaseCreated));
+                } else {
+                    makeToast(getContext(), getString(R.string.error));
+                }
+                getNav().navigate(R.id.fragment_ShowSuitcases);
             }
-            getNav().navigate(R.id.fragment_ShowSuitcases);
         }));
         builder.show();
     }
@@ -160,7 +172,7 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
             suitcase.setSuticase(name, color, weigth, heigth, width, depth);
             boolean haveBeenUpdated = Presented.updateSuitcase(suitcase, getContext());
             if (haveBeenUpdated) {
-                makeToast(v.getContext(), getString(R.string.text_haveBeenUpdated));
+                makeToast(v.getContext(), getString(R.string.text_suitcaseUpdated));
             } else {
                 makeToast(v.getContext(), getString(R.string.error));
             }

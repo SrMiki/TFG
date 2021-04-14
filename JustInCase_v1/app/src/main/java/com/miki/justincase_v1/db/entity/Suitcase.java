@@ -110,4 +110,13 @@ public class Suitcase implements Serializable {
         this.width = width;
         this.depth = depth;
     }
+
+    @Override
+    public boolean equals(Object o){
+        Suitcase suitcase = (Suitcase) o;
+        if(suitcase.getName().isEmpty()){
+            return false;
+        }
+        return suitcase.getName().equals(this.getName());
+    }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -49,6 +50,13 @@ public class Fragment_ShowCategoryContent extends BaseFragment implements Item_R
             Category category = (Category) bundle.getSerializable("category");
             dataset = Presented.selectItemFromThisCategory(category, getContext());
 
+            if(!dataset.isEmpty()){
+                LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
+                linearLayout.setVisibility(View.VISIBLE);
+            }
+
+
+
             TextView textView = view.findViewById(R.id.showEntity_title);
             String title = getString(R.string.text_category) + ": " + category.getCategoryName();
             textView.setText(title);
@@ -59,7 +67,7 @@ public class Fragment_ShowCategoryContent extends BaseFragment implements Item_R
 
             recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new Adapter_Item(dataset, getActivity());
+            adapter = new Adapter_Item(dataset);
             recyclerView.setAdapter(adapter);
 
             ItemTouchHelper.SimpleCallback simpleCallback = new Item_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
@@ -103,7 +111,7 @@ public class Fragment_ShowCategoryContent extends BaseFragment implements Item_R
 
         View view = inflater.inflate(R.layout.alertdialog_edittext, null);
 
-        EditText editText = view.findViewById(R.id.alertdialog_editText);
+        EditText editText = view.findViewById(R.id.alertdialog_viewEditText);
         editText.setText(focusItem.getItemName());
 
         builder.setView(view);
@@ -114,7 +122,7 @@ public class Fragment_ShowCategoryContent extends BaseFragment implements Item_R
             String itemName = editText.getText().toString();
             boolean update = Presented.updateItem(focusItem, itemName, getContext());
             if (update) {
-                makeToast(v.getContext(), getString(R.string.text_haveBeenUpdated));
+                makeToast(v.getContext(), getString(R.string.text_itemUpdated));
                 getNav().navigate(R.id.fragment_ShowCategoryContent, bundle );
             } else {
                 makeToast(v.getContext(), getString(R.string.warning_updateItem));

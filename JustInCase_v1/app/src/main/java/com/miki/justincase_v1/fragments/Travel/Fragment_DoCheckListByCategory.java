@@ -57,7 +57,7 @@ public class Fragment_DoCheckListByCategory extends BaseFragment {
             switchShowCategories.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 editor.putBoolean("showCategories", false);
                 editor.apply();
-                getNav().navigate(R.id.fragment_DoCheckListByItem, bundle);
+                getNav().navigate(R.id.checklistByCategory_to_checkListByItem, bundle);
             });
 
 //            setHasOptionsMenu(true);
@@ -80,7 +80,15 @@ public class Fragment_DoCheckListByCategory extends BaseFragment {
                 Bundle obundle = new Bundle();
                 Trip trip = Presented.getTrip(handLuggage, getContext());
                 obundle.putSerializable("trip", trip);
-                getNav().navigate(R.id.fragment_CheckIn, obundle);
+
+                if (trip.isTravelling() == 1 || trip.isTravelling() == 4) {
+                    getNav().navigate(R.id.fragment_CheckOut, obundle);
+
+                } else {
+
+                    getNav().navigate(R.id.fragment_CheckIn, obundle);
+                }
+
             });
         }
         return view;

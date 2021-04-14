@@ -47,12 +47,15 @@ public class Fragment_Add_item_to_Baggage extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_add_item_to_baggage, container, false);
         suitcaseNameTV = view.findViewById(R.id.suitcaseNameTV);
 
+        floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Baggage_finish);
+        floatingActionButton.setVisibility(View.GONE);
+
 
         bundle = getArguments();
         if (bundle != null) {
             arrayList = new ArrayList<>();
 
-            handLuggage = (HandLuggage) bundle.getSerializable("handluggage");
+            handLuggage = (HandLuggage) bundle.getSerializable("handLuggage");
             suitcaseNameTV.setText(handLuggage.getHandLuggageName());
 
             dataset = Presented.selectItemNOTFromThisBaggage(handLuggage, getContext());
@@ -85,16 +88,20 @@ public class Fragment_Add_item_to_Baggage extends BaseFragment {
                     }
                     Presented.updateItemState(item, getContext());
                     adapter.notifyItemChanged(position);
+                    if(arrayList.isEmpty()){
+                        floatingActionButton.setVisibility(View.GONE);
+                    } else {
+                        floatingActionButton.setVisibility(View.VISIBLE);
+                    }
                 });
 
-                floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Baggage_finish);
                 floatingActionButton.setOnClickListener(v -> {
                     Presented.createBaggageByItems(arrayList, handLuggage, getContext());
                     Presented.removeItemSelectedState(arrayList, getContext());
 
 //                    Bundle obundle = new Bundle();
 //                    obundle.putSerializable("handluggage", handLuggage);
-                    getNav().navigate(R.id.fragment_ShowBaggageByItem, bundle);
+                    getNav().navigate(R.id.action_fragment_Add_item_to_Baggage_to_fragment_ShowBaggageByItem, bundle);
 
                 });
             }
@@ -138,8 +145,8 @@ public class Fragment_Add_item_to_Baggage extends BaseFragment {
         View view = inflater.inflate(R.layout.alertdialog_edittext, null);
         builder.setView(view);
 
-        EditText editText = view.findViewById(R.id.alertdialog_editText);
-        editText.setHint(getString(R.string.fragment_createItem_hint));
+        EditText editText = view.findViewById(R.id.alertdialog_viewEditText);
+        editText.setHint(getString(R.string.text_hintItemName));
         builder.setView(view);
 
         builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> {
@@ -154,7 +161,7 @@ public class Fragment_Add_item_to_Baggage extends BaseFragment {
                 getNav().navigate(R.id.fragment_Add_item_to_Baggage, bundle);
                 anotherItemDialog();
             } else {
-                makeToast(getContext(), getString(R.string.warningItemRepeted));
+                makeToast(getContext(), getString(R.string.warning_ItemRepeted));
                 dialog.dismiss();
                 createNewItemDialog();
             }
@@ -164,14 +171,14 @@ public class Fragment_Add_item_to_Baggage extends BaseFragment {
 
     private void anotherItemDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_Item));
+        builder.setTitle(getString(R.string.text_item));
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
         TextView textView = view.findViewById(R.id.alertdialog_textView);
-        textView.setText(getString(R.string.text_ask_anotherItem));
+        textView.setText(getString(R.string.ask_anotherItem));
         builder.setView(view);
 
         builder.setNegativeButton(getString(R.string.text_no), ((dialog, which) -> dialog.dismiss()));
