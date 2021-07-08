@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="baby_Items">
-        <item>biberón</item>
-        <item>pañales</item>
-        <item>talco</item>
-    </string-array>
-
     <string-array name="beach_Items">
         <item>palas</item>
         <item>crema solar</item>
@@ -14,33 +8,6 @@
         <item>sandalias</item>
     </string-array>
 
-    <string-array name="camping_Items">
-        <item>tienda de campaña</item>
-        <item>cantimplora</item>
-        <item>saco de dormir</item>
-    </string-array>
-
-
-    <string-array name="hiking_Items">
-        <item>bastón</item>
-        <item>botas</item>
-        <item>cantimplora</item>
-        <item>gorra</item>
-        <item>gafas de sol</item>
-    </string-array>
-
-
-    <string-array name="hygiene_Items">
-        <item>gel</item>
-        <item>champu</item>
-        <item>jabón</item>
-    </string-array>
-
-    <string-array name="pets_Items">
-        <item>pienso</item>
-        <item>collar</item>
-        <item>transportín</item>
-    </string-array>
 
     <string-array name="suggested_Items">
         <item>camiseta</item>
@@ -64,15 +31,35 @@
         <item>calzado deportivo</item>
     </string-array>
 
-    <string-array name="swiming_Items">
-        <item>toalla</item>
-        <item>bañador</item>
-        <item>gorra de piscina</item>
-        <item>zandalias</item>
+    <string-array name="hiking_Items">
+        <item>botas de caminar</item>
+        <item>bastón de senderismo</item>
+        <item>brújula</item>
     </string-array>
 
-    <string-array name="work_Items">
-        <item>carpeta</item>
+    <string-array name="camping_Items">
+        <item>tienda</item>
+        <item>saco de dormir</item>
+    </string-array>
+
+    <string-array name="sailing_Items">
+        <item>crema solar</item>
+    </string-array>
+
+    <string-array name="pool_Items">
+        <item>toalla</item>
+        <item>gafas de piscina</item>
+    </string-array>
+
+    <string-array name="photografy_Items">
+        <item>cámara de fotos</item>
+        <item>trípode</item>
+    </string-array>
+
+    <string-array name="personal_care">
+        <item>gel de baño</item>
+        <item>champú</item>
+        <item>colonia</item>
     </string-array>
 
 </resources>

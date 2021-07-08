@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_Trip;
 import com.miki.justincase_v1.db.entity.Trip;
@@ -34,7 +34,7 @@ public class MainFragment extends BaseFragment {
 
         textView = view.findViewById(R.id.mainFragmnet_text);
 
-        dataset = Presented.selectAllTripsInProgress(getContext());
+        dataset = Presenter.selectAllTripsInProgress(getContext());
 
         recyclerView = view.findViewById(R.id.recyclerview_progressTrip);
 
@@ -52,7 +52,7 @@ public class MainFragment extends BaseFragment {
         });
 
 
-        ArrayList<Trip> otroDataset = Presented.selectCheckInBACKtrip(getContext());
+        ArrayList<Trip> otroDataset = Presenter.selectCheckInBACKtrip(getContext());
 
         RecyclerView otroRecycler = view.findViewById(R.id.recyclerview_checkBackTrip);
 

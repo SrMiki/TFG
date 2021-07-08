@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_Suitcase;
 import com.miki.justincase_v1.db.entity.Suitcase;
@@ -57,7 +57,7 @@ public class Fragment_AddHandLuggage extends BaseFragment {
             arrayList = new ArrayList<>();
             trip = (Trip) bundle.getSerializable("trip");
 
-            dataset = Presented.selectSuitcaseNOTFromThisTrip(trip, getContext());
+            dataset = Presenter.selectSuitcaseNOTFromThisTrip(trip, getContext());
 
             if (dataset.isEmpty()) {
                 warningDialog(view);
@@ -67,8 +67,9 @@ public class Fragment_AddHandLuggage extends BaseFragment {
         }
 
         floatingActionButton.setOnClickListener(v -> {
-            Presented.addSomeSuitcaseToThisTrip(arrayList, trip, getContext());
-            Presented.removeSuitcaseSelectedState(arrayList, getContext());
+//            setHandLuggageOwnerDialog();
+            Presenter.addSomeSuitcaseToThisTrip(arrayList, trip, getContext());
+            Presenter.removeSuitcaseSelectedState(arrayList, getContext());
             if (arrayList.size() == 1) {
                 makeToast(getContext(), getString(R.string.text_handLuggageCreated));
             } else {
@@ -81,8 +82,9 @@ public class Fragment_AddHandLuggage extends BaseFragment {
         return view;
     }
 
+
     private void setRecyclerView(View view) {
-        Presented.removeSuitcaseSelectedState(dataset, getContext());
+        Presenter.removeSuitcaseSelectedState(dataset, getContext());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new Adapter_Suitcase(dataset);
@@ -98,7 +100,7 @@ public class Fragment_AddHandLuggage extends BaseFragment {
                 arrayList.remove(suitcase);
                 suitcase.setSelectedState(false);
             }
-            Presented.updateSuitcaseState(suitcase, getContext());
+            Presenter.updateSuitcaseState(suitcase, getContext());
             adapter.notifyItemChanged(position);
 
             if (arrayList.isEmpty()) {
@@ -109,12 +111,18 @@ public class Fragment_AddHandLuggage extends BaseFragment {
         });
     }
 
+    private void setHandLuggageOwnerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+
+    }
+
     private void warningDialog(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        String yes = getString(R.string.text_yes);
-        String no = getString(R.string.text_no);
-        String text = getString(R.string.warning_noSuitcase);
+        String yes = getString(R.string.dialog_yes);
+        String no = getString(R.string.dialog_no);
+        String text = getString(R.string.dialog_warning_noSuitcase);
 
         EditText editText = new EditText(getContext());
         editText.setText(text);
@@ -150,23 +158,23 @@ public class Fragment_AddHandLuggage extends BaseFragment {
         EditText widthET = view.findViewById(R.id.card_view_suitcase_width);
         EditText depthET = view.findViewById(R.id.card_view_suitcase_depth);
 
-        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> {
             dialog.dismiss();
         }));
 
         builder.setPositiveButton(getString(R.string.text_create), ((dialog, which) -> {
             if ((nameET.getText()).toString().isEmpty()) {
-                makeToast(getContext(), getString(R.string.warning_emptyName));
+                makeToast(getContext(), getString(R.string.toast_emptyName));
             } else {
                 Suitcase suitcase = createSuitcase(nameET, colorET, weigthET, heigthET, widthET, depthET);
-                boolean haveBeenAdded = Presented.createSuitcase(suitcase, getContext());
+                boolean haveBeenAdded = Presenter.createSuitcase(suitcase, getContext());
                 if (haveBeenAdded) {
-                    makeToast(getContext(), getString(R.string.text_suitcaseCreated));
+                    makeToast(getContext(), getString(R.string.toast_suitcaseCreated));
                     dialog.dismiss();
-                    dataset = Presented.selectSuitcaseNOTFromThisTrip(trip, getContext());
+                    dataset = Presenter.selectSuitcaseNOTFromThisTrip(trip, getContext());
                     setRecyclerView(getView());
                 } else {
-                    makeToast(getContext(), getString(R.string.warning_duplicatedSuitcase));
+                    makeToast(getContext(), getString(R.string.toast_warning_duplicatedSuitcase));
                     createNewSuitcaseDialog();
                 }
             }

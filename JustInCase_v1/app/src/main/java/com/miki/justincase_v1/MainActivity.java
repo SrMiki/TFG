@@ -1,7 +1,11 @@
 package com.miki.justincase_v1;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ToggleButton;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -60,6 +64,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    // Menu icons are inflated just as they were with actionbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.fragment);
@@ -70,9 +82,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.ic_COVID) {
-//            initDB.initDB(getApplicationContext());
-//        }
         NavController navController = Navigation.findNavController(this, R.id.fragment);
         return NavigationUI.onNavDestinationSelected(item, navController)
                 || super.onOptionsItemSelected(item);
@@ -83,6 +92,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         onOptionsItemSelected(item);
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    public void changeToogleButtonBackground(View view) {
+        Context context = view.getContext();
+        ToggleButton toggleButton = (ToggleButton) view;
+
+        if (toggleButton.isChecked()) {
+            toggleButton.setBackgroundColor(context.getResources().getColor(R.color.quantum_grey50));
+        } else {
+            toggleButton.setBackgroundColor(0);
+        }
     }
 
 }

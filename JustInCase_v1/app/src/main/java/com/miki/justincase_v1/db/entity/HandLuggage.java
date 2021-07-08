@@ -40,16 +40,21 @@ public class HandLuggage implements Serializable {
     @ColumnInfo(name = "handLuggageSize")
     public int handLuggageSize;
 
+    @ColumnInfo(name = "owners")
+    public String owners;
+
     public int FKtripID; //trip ID foreign key
     public int FKsuitcaseID; //suitcase ID foreign key
 
-    public HandLuggage(int FKtripID, int FKsuitcaseID, String handLuggageName) {
+    public HandLuggage(int FKtripID, int FKsuitcaseID, String handLuggageName, String owners) {
         this.FKtripID = FKtripID;
         this.FKsuitcaseID = FKsuitcaseID;
         this.handLuggageName = handLuggageName;
+        this.owners = owners;
         handLuggageCompleted = false;
         handLuggageSize = 0;
     }
+
     public boolean isHandLuggageCompleted() {
         return handLuggageCompleted;
     }
@@ -58,13 +63,15 @@ public class HandLuggage implements Serializable {
         this.handLuggageCompleted = handLuggageCompleted;
     }
 
-    public void increaseSize(){
+    public void increaseSize() {
         handLuggageSize++;
     }
-    public void decreaseSize(){
-        handLuggageSize--;
-    }
 
+    public void decreaseSize() {
+        if (handLuggageSize > 0) {
+            handLuggageSize--;
+        }
+    }
 
     public int getHandLuggageSize() {
         return handLuggageSize;
@@ -93,4 +100,12 @@ public class HandLuggage implements Serializable {
     public void setHandLuggage(String suitcaseName) {
         this.handLuggageName = suitcaseName;
     }
+
+    public String getOwners(){
+        return this.owners;
+    }
+    public void setOwners(String owners){
+        this.owners = owners;
+    }
+
 }

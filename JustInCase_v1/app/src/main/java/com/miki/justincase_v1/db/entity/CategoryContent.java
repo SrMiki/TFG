@@ -49,7 +49,6 @@ public class CategoryContent {
     }
 
 
-
     public int getFKitemID() {
         return FKitemID;
     }
@@ -69,6 +68,13 @@ public class CategoryContent {
     public void decreaseThisItem() {
         if (categoryCount > 0) {
             categoryCount--;
+        }
+    }
+
+    public void setCategorySize(int newCount) {
+        if (newCount >= 0) {
+            categoryCount = newCount;
+
         }
     }
 }

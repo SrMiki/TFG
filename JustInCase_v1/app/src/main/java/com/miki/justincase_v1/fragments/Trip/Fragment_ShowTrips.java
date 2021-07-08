@@ -17,7 +17,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_HandLuggage;
 import com.miki.justincase_v1.adapters.Adapter_Trip;
@@ -56,7 +56,7 @@ public class Fragment_ShowTrips extends BaseFragment {
             getNav().navigate(R.id.fragment_ShowFinishedTrip);
         });
 
-        dataset = Presented.selectAllTripsNP(getContext());
+        dataset = Presenter.selectAllTripsNP(getContext());
         setRecyclerview(view);
         setButton(view);
 
@@ -77,17 +77,17 @@ public class Fragment_ShowTrips extends BaseFragment {
         bundle.putSerializable("trip", focusTrip);
         if (!adapter.isSelected()) {
 
-            button.setText(getString(R.string.text_doCheckIn));
+            button.setText(getString(R.string.btn_doCheckIn));
             button.setBackgroundColor(getContext().getResources().getColor(R.color.secundary_400));
             button.setOnClickListener(vs -> {
-                if (Presented.getHandLuggage(focusTrip, getContext()).size() != 0) {
+                if (Presenter.getHandLuggage(focusTrip, getContext()).size() != 0) {
                     getNav().navigate(R.id.fragment_CheckIn, bundle);
                 } else {
-                    AlertDialog.Builder builder = makeNewAlertDialog(getString(R.string.text_warning));
+                    AlertDialog.Builder builder = makeNewAlertDialog(getString(R.string.dialog_warning));
                     TextView textView = new TextView(getContext());
-                    textView.setText(getString(R.string.warning_startTrip));
+                    textView.setText(getString(R.string.dialog_warning_startTrip));
                     builder.setView(textView);
-                    builder.setPositiveButton(getString(R.string.text_confirm), ((dialog, which) -> {
+                    builder.setPositiveButton(getString(R.string.dialog_confirm), ((dialog, which) -> {
                         getNav().navigate(R.id.fragment_CheckIn, bundle);
                     }));
                     builder.show();
@@ -105,7 +105,7 @@ public class Fragment_ShowTrips extends BaseFragment {
 
     private void setButton(View view) {
         button = view.findViewById(R.id.fragment_show_trip_button);
-        button.setText(getString(R.string.text_newTrip));
+        button.setText(getString(R.string.btn_newTrip));
         button.setBackgroundColor(getContext().getResources().getColor(R.color.primary_700));
         button.setOnClickListener(vs -> getNav().navigate(R.id.fragment_CreateTrip));
     }

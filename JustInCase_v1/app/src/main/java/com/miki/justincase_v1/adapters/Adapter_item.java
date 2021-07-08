@@ -1,10 +1,11 @@
 package com.miki.justincase_v1.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,33 +19,65 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.miki.justincase_v1.Presented;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.db.entity.Item;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewHolder> implements View.OnLongClickListener, Filterable {
+public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewHolder>
+        implements View.OnLongClickListener, Filterable {
 
     private View.OnLongClickListener listener;
+
     List<Item> dataset;
+    List<Bitmap> photoDataset;
 
     List<Item> referencesDataset; //for search
-    private Activity activity;
+    private final Activity activity;
 
-    public void setActivity(Activity activity) {
+    public Adapter_Item(List<Item> dataset, Activity activity) {
+        this.dataset = dataset;
         this.activity = activity;
+
+        referencesDataset = new ArrayList<>(dataset);
+        photoDataset = new ArrayList<>();
+
+        initPhotoDataset(dataset);
     }
 
-    public Adapter_Item(List<Item> dataset) {
-        this.dataset = dataset;
-        referencesDataset = new ArrayList<>(dataset);
+    /**
+     * Load the photo of all item localy
+     * to reduce memory access
+     *
+     * @param dataset
+     */
+    private void initPhotoDataset(List<Item> dataset) {
+        for (Item item : dataset) {
+            if (!item.getItemPhotoURI().isEmpty()) {
+                try {
+                    if (Build.VERSION.SDK_INT < 28) { //pre-Android 9
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), Uri.parse(item.getItemPhotoURI()));
+                        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 25, 25, true);
+                        photoDataset.add(resizedBitmap);
+                    } else { // post-Android 9
+                        ImageDecoder.Source source = ImageDecoder.createSource(activity.getContentResolver(), Uri.parse(item.getItemPhotoURI()));
+                        //"This method may take several seconds to complete, so it should only be called from a worker thread - API Android"
+                        Bitmap bitmap;
+                        bitmap = ImageDecoder.decodeBitmap(source, (decoder, info, src) -> decoder.setTargetSampleSize(4));
+                        photoDataset.add(bitmap);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Bitmap bitmap;
+                bitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.ic_photo, null);
+                photoDataset.add(bitmap);
+            }
+        }
     }
 
     @Override
@@ -107,36 +140,17 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
         Item item = dataset.get(position);
         holder.elementNameTV.setText(item.getItemName());
 
-        String itemPhotoURI = item.getItemPhotoURI();
-        if (!itemPhotoURI.isEmpty() && activity!=null) {
-
-            Bitmap bitmap;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), Uri.parse(itemPhotoURI));
-                Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 50 /*Ancho*/, 50 /*Alto*/, false /* filter*/);
-                ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
-                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytearrayoutputstream);
-
-                holder.itemViewPhoto.setVisibility(View.VISIBLE);
-                holder.itemViewPhoto.setImageBitmap(resizedBitmap);
-                holder.elementCategoryTV.setText(itemPhotoURI);
-                holder.elementCategoryTV.setVisibility(View.VISIBLE);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-//        Category categoryOfThisItem = Presented.getCategoryOfThisItem(item, holder.itemView.getContext());
-//        if (categoryOfThisItem != null) {
-//            holder.elementCategoryTV.setText(categoryOfThisItem.categoryName);
+        holder.itemViewPhoto.setImageBitmap(photoDataset.get(position));
+//        if (!item.getItemPhotoURI().equals("")) {
+//        } else {
+//            holder.itemViewPhoto.setImageResource(R.drawable.ic_photo);
 //        }
-
     }
 
     @Override
     public int getItemCount() {
         return dataset == null ? 0 : dataset.size();
     }
-
 
     public void removeItem(int position) {
         dataset.remove(position);
@@ -149,10 +163,9 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-
         TextView elementNameTV, elementCategoryTV;
-        public LinearLayout layout;
         ImageView itemViewPhoto;
+        public LinearLayout layout;
 
         public AdapterViewHolder(View view) {
             super(view);
@@ -161,6 +174,7 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
             layout = view.findViewById(R.id.itemCardView_layout);
             itemViewPhoto = view.findViewById(R.id.itemViewPhoto);
         }
-
     }
+
+
 }

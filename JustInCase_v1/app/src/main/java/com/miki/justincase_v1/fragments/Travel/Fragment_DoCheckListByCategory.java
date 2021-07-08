@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.adapters.Adapter_CategoryCheckList;
+import com.miki.justincase_v1.adapters.othersAdapters.Adapter_Check_Category;
 import com.miki.justincase_v1.db.entity.Baggage;
 import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.db.entity.HandLuggage;
@@ -28,7 +28,7 @@ public class Fragment_DoCheckListByCategory extends BaseFragment {
 
 
     RecyclerView recyclerView;
-    Adapter_CategoryCheckList adapter;
+    Adapter_Check_Category adapter;
 
     HandLuggage handLuggage;
 
@@ -67,18 +67,18 @@ public class Fragment_DoCheckListByCategory extends BaseFragment {
 
             recyclerView = view.findViewById(R.id.fragment_checklist_recyclerview);
 
-            ArrayList<Baggage> itemsFromThisBaggage = Presented.getBaggageOfThisHandLuggage(handLuggage, getContext());
-            dataset = Presented.selectAllCategoriesOfThisHandLuggage(handLuggage, getContext());
+            ArrayList<Baggage> itemsFromThisBaggage = Presenter.getBaggageOfThisHandLuggage(handLuggage, getContext());
+            dataset = Presenter.selectAllCategoriesOfThisHandLuggage(handLuggage, getContext());
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new Adapter_CategoryCheckList(dataset, handLuggage);
+            adapter = new Adapter_Check_Category(dataset, handLuggage);
             recyclerView.setAdapter(adapter);
 
             actionButton = view.findViewById(R.id.fragment_checklist_btn_finish);
             actionButton.setOnClickListener(v -> {
 //                Presented.checkBaggage(handLuggage, dataset, getContext());
                 Bundle obundle = new Bundle();
-                Trip trip = Presented.getTrip(handLuggage, getContext());
+                Trip trip = Presenter.getTrip(handLuggage, getContext());
                 obundle.putSerializable("trip", trip);
 
                 if (trip.isTravelling() == 1 || trip.isTravelling() == 4) {

@@ -107,7 +107,7 @@ public class CameraX extends BaseFragment {
         // --  Dialog -- //
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setTitle(getString(R.string.text_newItem));
+        builder.setTitle(getString(R.string.dialog_title_newItem));
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
@@ -118,7 +118,7 @@ public class CameraX extends BaseFragment {
         item_photo.setImageURI(saveUri);
 
         EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
-        editText.setHint(getString(R.string.text_hintItemName));
+        editText.setHint(getString(R.string.hint_itemName));
 
 //        TextView addPhoto = view.findViewById(R.id.itemAlertdialog_addPhoto);
 
@@ -127,19 +127,19 @@ public class CameraX extends BaseFragment {
 
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.text_add), (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_add), (dialog, which) -> {
             String itemName = editText.getText().toString();
             if (itemName.isEmpty()) {
-                makeToast(getContext(), getString(R.string.warning_emptyName));
+                makeToast(getContext(), getString(R.string.toast_emptyName));
             } else {
-                if (Presented.createItem(itemName, itemPhotoUri, getContext())) {
-                    makeToast(getContext(), getString(R.string.text_itemCreated) + "\n" + itemPhotoUri);
+                if (Presenter.createItem(itemName, itemPhotoUri, getContext())) {
+                    makeToast(getContext(), getString(R.string.toast_itemCreated) + "\n" + itemPhotoUri);
                     dialog.dismiss();
                     getNav().navigate(R.id.fragment_ShowItems);
                 } else {
-                    makeToast(getContext(), getString(R.string.warning_createItem));
+                    makeToast(getContext(), getString(R.string.toast_error_createItem));
                 }
             }
         });

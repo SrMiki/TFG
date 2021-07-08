@@ -1,7 +1,5 @@
 package com.miki.justincase_v1.db.entity;
 
-import android.widget.ImageView;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -28,8 +26,6 @@ public class Item implements Serializable {
         count=1;
         this.itemPhotoURI=itemPhotoURI;
     }
-
-
 
     public String getItemName() {
         return itemName;

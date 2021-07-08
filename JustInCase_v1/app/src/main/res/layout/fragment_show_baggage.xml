@@ -32,25 +32,14 @@
             android:text="@string/text_suitcase"
             android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/showBaggage_button_edit"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:backgroundTint="@color/white"
-            android:drawableRight="@drawable/ic_edit"
-            android:drawableTint="@color/grey" />
 
         <Button
-            android:id="@+id/showBaggage_button_delete"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:id="@+id/btn_generateBaggage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            android:drawableRight="@drawable/ic_delete"
-            android:drawableTint="@color/grey" />
+            android:text="Hazme la maleta"
+            android:textColor="@color/black" />
 
 
     </LinearLayout>
@@ -66,14 +55,6 @@
             android:text="@string/switch_showCategories"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-        <Button
-            android:id="@+id/btn_generateBaggage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:text="Hazme la maleta"
-            android:textColor="@color/grey" />
     </LinearLayout>
 
     <include layout="@layout/recyclerview_addbutton" />

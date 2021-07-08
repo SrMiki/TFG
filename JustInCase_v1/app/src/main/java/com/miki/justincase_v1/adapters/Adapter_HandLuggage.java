@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.db.entity.HandLuggage;
 import com.miki.justincase_v1.db.entity.Suitcase;
@@ -21,17 +21,6 @@ public class Adapter_HandLuggage extends RecyclerView.Adapter<Adapter_HandLuggag
 
     private View.OnClickListener listener;
     ArrayList<HandLuggage> dataset;
-    HandLuggage focusHandLuggage;
-    int selected = -1;
-
-    public void setSelected(int selected){
-        this.selected = selected;
-        notifyDataSetChanged();
-    }
-
-    public HandLuggage getFocusHandLuggage(){
-        return this.focusHandLuggage;
-    }
 
     public Adapter_HandLuggage(ArrayList<HandLuggage> dataset) {
         this.dataset = dataset;
@@ -59,14 +48,9 @@ public class Adapter_HandLuggage extends RecyclerView.Adapter<Adapter_HandLuggag
 
     @Override
     public void onBindViewHolder(@NonNull Adapter_HandLuggage.AdapterViewHolder holder, int position) {
-
         HandLuggage handLuggage = dataset.get(position);
-        Suitcase suitcase = Presented.getSuitcase(handLuggage, holder.itemView.getContext());
+        Suitcase suitcase = Presenter.getSuitcase(handLuggage, holder.itemView.getContext());
         holder.elementNameTV.setText(suitcase.getName());
-
-        if(position==selected){
-            focusHandLuggage= handLuggage;
-        }
     }
 
     @Override
@@ -74,8 +58,7 @@ public class Adapter_HandLuggage extends RecyclerView.Adapter<Adapter_HandLuggag
         return dataset == null ? 0 : dataset.size();
     }
 
-    public class AdapterViewHolder extends RecyclerView.ViewHolder {
-
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         TextView elementNameTV;
         public LinearLayout layout;
 

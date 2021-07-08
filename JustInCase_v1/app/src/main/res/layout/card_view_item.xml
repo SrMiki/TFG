@@ -45,12 +45,11 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:src="@drawable/ic_galery"
+            android:src="@drawable/ic_photo"
             android:id="@+id/itemViewPhoto"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:contentDescription="@string/text_item"
-            android:visibility="gone"/>
+            android:contentDescription="@string/text_item" />
 
         <TextView
             android:id="@+id/itemCardView_name"

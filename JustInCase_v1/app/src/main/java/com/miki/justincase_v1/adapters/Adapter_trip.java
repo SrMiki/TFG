@@ -20,10 +20,12 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.db.entity.HandLuggage;
 import com.miki.justincase_v1.db.entity.Trip;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,8 +35,8 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
 
     View.OnClickListener listener;
 
-    private List<Trip> referencesDataset;
-    private ArrayList<Trip> dataset;
+    private final List<Trip> referencesDataset;
+    private final ArrayList<Trip> dataset;
 
     private boolean isSelected = false;
     private int cardSelected = -1;
@@ -60,10 +62,11 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
         isSelected = newState;
     }
 
-    public Adapter_Trip(Activity activity, ArrayList<Trip> myDataset) {
-        dataset = myDataset;
-        referencesDataset = new ArrayList<>(dataset);
+    public Adapter_Trip(Activity activity, ArrayList<Trip> dataset) {
         this.activity = activity;
+        this.dataset = dataset;
+
+        referencesDataset = new ArrayList<>(dataset);
     }
 
     @Override
@@ -108,6 +111,7 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
         return e.getDestination().toLowerCase().startsWith(constraint.toString().toLowerCase());
     }
 
+    @NotNull
     @Override
     public AdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -116,20 +120,14 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
         return new AdapterViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(AdapterViewHolder holder, int position) {
-        // Get the element from the dataset
+    public void onBindViewHolder(@NotNull AdapterViewHolder holder, int position) {
         Trip trip = dataset.get(position);
         setOptionsButtons(holder, trip);
 
         String destination = trip.getDestination();
-        String travelDate = trip.getTravelDate();
-        String returnDate = trip.getReturnDate();
+        String travelDate = trip.getTravelDate() + " - " + trip.getReturnDate();
 
-        if (!returnDate.isEmpty()) {
-            travelDate += " - " + returnDate;
-        }
         holder.tripName_TextView.setText(destination);
         holder.tripDate_TextView.setText(travelDate);
 
@@ -153,18 +151,18 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
 
         holder.deleteTrip.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-            builder.setTitle(v.getResources().getString(R.string.warning_title));
+            builder.setTitle(v.getResources().getString(R.string.dialog_title_warning));
 
             LayoutInflater inflater = activity.getLayoutInflater();
             View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
             TextView textView = view.findViewById(R.id.alertdialog_textView);
-            textView.setText(v.getResources().getString(R.string.warning_deleteTrip));
+            textView.setText(v.getResources().getString(R.string.dialog_warning_deleteTrip));
             builder.setView(view);
 
-            builder.setNegativeButton(v.getResources().getString(R.string.text_no), ((dialog, which) -> dialog.dismiss()));
-            builder.setPositiveButton(v.getResources().getString(R.string.text_yes), ((dialog, which) -> {
-                Presented.deleteTrip(trip, holder.itemView.getContext());
+            builder.setNegativeButton(v.getResources().getString(R.string.dialog_no), ((dialog, which) -> dialog.dismiss()));
+            builder.setPositiveButton(v.getResources().getString(R.string.dialog_yes), ((dialog, which) -> {
+                Presenter.deleteTrip(trip, holder.itemView.getContext());
                 navController.navigate(R.id.fragment_ShowTrips);
             }));
             builder.show();
@@ -186,7 +184,7 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
         ArrayList<HandLuggage> childDataset;
         Adapter_HandLuggage adapter_handLuggage;
 
-        childDataset = Presented.getHandLuggage(trip, holder.itemView.getContext());
+        childDataset = Presenter.getHandLuggage(trip, holder.itemView.getContext());
 
         linearLayoutManager.setInitialPrefetchItemCount(childDataset.size());
 
@@ -208,11 +206,7 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
             sp = v.getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
             boolean showCategoires = sp.getBoolean("showCategories", false);
-            if (showCategoires) {
-                navController.navigate(R.id.fragment_ShowBaggageByCategory, obundle);
-            } else {
-                navController.navigate(R.id.fragment_ShowBaggageByItem, obundle);
-            }
+            navController.navigate(R.id.fragment_ShowBaggage, obundle);
         });
 
     }

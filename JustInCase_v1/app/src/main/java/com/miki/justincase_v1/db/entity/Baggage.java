@@ -38,8 +38,6 @@ public class Baggage implements Serializable {
     @ColumnInfo(name = "check")
     public boolean check;
 
-
-
     public int FKitemID;
     public int FKHandLuggageID;
 
@@ -73,5 +71,6 @@ public class Baggage implements Serializable {
     public boolean isCheck() {
         return check;
     }
+
 
 }

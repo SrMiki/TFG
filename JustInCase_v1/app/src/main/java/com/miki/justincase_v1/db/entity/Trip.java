@@ -30,28 +30,31 @@ public class Trip implements Serializable {
     @ColumnInfo(name = "returnTransport")
     public String returnTransport;
 
-
     @ColumnInfo(name = "travelling")
     public int travelling;
 
-    public Trip(@NonNull String destination, @NonNull String travelDate, String returnDate, String travelTransport, String returnTransport) {
+    @ColumnInfo(name = "members")
+    public String members;
+
+
+    public Trip(@NonNull String destination, @NonNull String travelDate, String returnDate, String travelTransport, String returnTransport, String members) {
         this.destination = destination;
         this.travelDate = travelDate;
         this.returnDate = returnDate;
         this.travelTransport = travelTransport;
         this.returnTransport = returnTransport;
+        this.members = members;
         travelling = 0;
     }
 
-    public void setTrip(String destination, String travelDate, String returnDate, String travelTransport, String returnTransport) {
+    public void setTrip(String destination, String travelDate, String returnDate, String travelTransport, String returnTransport, String members) {
         this.destination = destination;
         this.travelDate = travelDate;
         this.returnDate = returnDate;
         this.travelTransport = travelTransport;
         this.returnTransport = returnTransport;
+        this.members = this.members;
     }
-
-
 
     public String getDestination() {
         return destination;
@@ -79,6 +82,13 @@ public class Trip implements Serializable {
 
     public void setTravelling(int travelling) {
         this.travelling = travelling;
+    }
+
+    public String getMembers(){
+        return this.members;
+    }
+    public void setMembers(String members){
+        this.members = members;
     }
 
 

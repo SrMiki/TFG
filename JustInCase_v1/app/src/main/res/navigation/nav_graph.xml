@@ -6,7 +6,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.miki.justincase_v1.fragments.Show.MainFragment"
-        android:label="@string/ic_home" >
+        android:label="@string/menu_home" >
         <action
             android:id="@+id/action_mainFragment_to_fragment_ShowSuitcases"
             app:destination="@id/fragment_ShowSuitcases" />
@@ -22,14 +22,17 @@
         <action
             android:id="@+id/action_mainFragment_to_fragment_CheckOut"
             app:destination="@id/fragment_CheckOut" />
+        <action
+            android:id="@+id/action_mainFragment_to_fragment_ShowTemplates"
+            app:destination="@id/fragment_ShowTemplates" />
     </fragment>
     <fragment
         android:id="@+id/fragment_ShowTrips"
         android:name="com.miki.justincase_v1.fragments.Trip.Fragment_ShowTrips"
-        android:label="@string/ic_Trips" >
+        android:label="@string/menu_trips" >
         <action
             android:id="@+id/action_fragment_ShowTrips_to_fragment_ShowBaggageByItem"
-            app:destination="@id/fragment_ShowBaggageByItem" />
+            app:destination="@id/fragment_ShowBaggage" />
         <action
             android:id="@+id/action_fragment_ShowTrips_to_fragment_CheckIn"
             app:destination="@id/fragment_CheckIn" />
@@ -37,15 +40,19 @@
     <fragment
         android:id="@+id/fragment_ShowItems"
         android:name="com.miki.justincase_v1.fragments.Show.Fragment_ShowItems"
-        android:label="@string/ic_items" />
+        android:label="@string/menu_inventory" >
+        <action
+            android:id="@+id/action_fragment_ShowItems_to_cameraX"
+            app:destination="@id/cameraX" />
+    </fragment>
     <fragment
         android:id="@+id/fragment_ShowSuitcases"
         android:name="com.miki.justincase_v1.fragments.Show.Fragment_ShowSuitcases"
-        android:label="@string/ic_suitcase" />
+        android:label="@string/menu_suitcase" />
     <fragment
         android:id="@+id/fragment_ShowCategories"
         android:name="com.miki.justincase_v1.fragments.Show.Fragment_ShowCategories"
-        android:label="@string/ic_categories">
+        android:label="@string/menu_categories">
         <action
             android:id="@+id/action_fragment_ShowCategories_to_fragment_Add_Item_To_Category"
             app:destination="@id/fragment_Add_Item_To_Category" />
@@ -78,19 +85,19 @@
     <fragment
         android:id="@+id/fragment_Add_HandLuggage"
         android:name="com.miki.justincase_v1.fragments.Trip.Fragment_AddHandLuggage"
-        android:label="@string/title_addBaggage">
+        android:label="@string/title_addHandLuggage">
         <action
             android:id="@+id/action_fragment_Add_HandLuggage_to_fragment_ShowTrips"
             app:destination="@id/fragment_ShowTrips"
             app:popUpTo="@id/fragment_ShowTrips" />
     </fragment>
     <fragment
-        android:id="@+id/fragment_Add_item_to_Baggage"
-        android:name="com.miki.justincase_v1.fragments.Baggage.Fragment_Add_item_to_Baggage"
-        android:label="@string/title_addItemToBaggage">
+        android:id="@+id/fragment_Add_Baggage"
+        android:name="com.miki.justincase_v1.fragments.TripHandLuggage.Fragment_Add_Baggage_To_HandLuggage"
+        android:label="@string/title_addBaggage">
         <action
             android:id="@+id/action_fragment_Add_item_to_Baggage_to_fragment_ShowBaggageByItem"
-            app:destination="@id/fragment_ShowBaggageByItem"
+            app:destination="@id/fragment_ShowBaggage"
             app:popUpTo="@id/fragment_ShowTrips" />
     </fragment>
     <fragment
@@ -101,15 +108,6 @@
             android:id="@+id/action_fragment_Add_Item_To_Category_to_fragment_ShowCategoryContent"
             app:destination="@id/fragment_ShowCategoryContent"
             app:popUpTo="@id/fragment_ShowCategories" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_Add_Category_To_Baggage"
-        android:name="com.miki.justincase_v1.fragments.Baggage.Fragment_Add_Category_To_Baggage"
-        android:label="@string/title_addCategoryToBaggage">
-        <action
-            android:id="@+id/action_fragment_Add_Category_To_Baggage_to_fragment_ShowBaggageByCategory"
-            app:destination="@id/fragment_ShowBaggageByCategory"
-            app:popUpTo="@id/fragment_ShowTrips" />
     </fragment>
     <fragment
         android:id="@+id/fragment_CheckIn"
@@ -159,31 +157,22 @@
             app:popUpTo="@id/fragment_ShowTrips" />
     </fragment>
     <fragment
-        android:id="@+id/algoritm"
-        android:name="com.miki.justincase_v1.fragments.Trip.Algoritm"
-        android:label="Algoritm" >
+        android:id="@+id/suitcase_generator"
+        android:name="com.miki.justincase_v1.fragments.Trip.Fragment_SuitcaseGenerator"
+        android:label="@string/title_suitcaseGenerator" >
         <action
             android:id="@+id/action_algoritm_to_fragment_ShowBaggageByItem"
-            app:destination="@id/fragment_ShowBaggageByItem"
+            app:destination="@id/fragment_ShowBaggage"
             app:popUpTo="@id/fragment_ShowTrips" />
     </fragment>
 
     <fragment
-        android:id="@+id/fragment_ShowBaggageByCategory"
-        android:name="com.miki.justincase_v1.fragments.Baggage.Fragment_ShowBaggageByCategory"
-        android:label="@string/title_showBaggageByCategory">
-        <action
-            android:id="@+id/action_fragment_ShowBaggageByCategory_to_fragment_ShowBaggageByItem"
-            app:destination="@id/fragment_ShowBaggageByItem"
-            app:popUpTo="@id/fragment_ShowTrips" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_ShowBaggageByItem"
-        android:name="com.miki.justincase_v1.fragments.Baggage.Fragment_ShowBaggageByItem"
+        android:id="@+id/fragment_ShowBaggage"
+        android:name="com.miki.justincase_v1.fragments.TripHandLuggage.Fragment_ShowHandLuggage"
         android:label="@string/title_showBaggageByItem">
         <action
-            android:id="@+id/action_fragment_ShowBaggageByItem_to_fragment_ShowBaggageByCategory"
-            app:destination="@id/fragment_ShowBaggageByCategory"
+            android:id="@+id/action_fragment_ShowBaggage_self"
+            app:destination="@id/fragment_ShowBaggage"
             app:popUpTo="@id/fragment_ShowTrips" />
     </fragment>
     <fragment
@@ -208,4 +197,39 @@
         android:id="@+id/cameraX"
         android:name="com.miki.justincase_v1.CameraX"
         android:label="CameraX" />
+    <fragment
+        android:id="@+id/fragment_ShowTemplates"
+        android:name="com.miki.justincase_v1.fragments.Templates.Fragment_ShowTemplates"
+        android:label="Fragment_ShowTemplates" >
+        <action
+            android:id="@+id/action_fragment_ShowTemplates_to_fragment_ShowTemplateElements"
+            app:destination="@id/fragment_ShowTemplateElements" />
+        <action
+            android:id="@+id/action_fragment_ShowTemplates_to_fragment_Add_Item_To_Template"
+            app:destination="@id/fragment_Add_Item_To_Template" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_ShowTemplateElements"
+        android:name="com.miki.justincase_v1.fragments.Templates.Fragment_ShowTemplateElements"
+        android:label="Fragment_ShowTemplateElements" >
+        <action
+            android:id="@+id/action_fragment_ShowTemplateElements_to_fragment_Add_Item_To_Template"
+            app:destination="@id/fragment_Add_Item_To_Template" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Add_Item_To_Template"
+        android:name="com.miki.justincase_v1.fragments.Templates.Fragment_Add_Item_To_Template"
+        android:label="Fragment_Add_Item_To_Template" >
+        <action
+            android:id="@+id/action_fragment_Add_Item_To_Template_to_fragment_ShowTemplateElements"
+            app:destination="@id/fragment_ShowTemplateElements"
+            app:popUpTo="@id/fragment_ShowTemplates"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Use_Templates_For_HandLuggage"
+        android:name="com.miki.justincase_v1.fragments.TripHandLuggage.Fragment_Use_Templates_For_HandLuggage"
+        android:label="Fragment_Use_Templates_For_HandLuggage" />
+
 </navigation>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            layout="@layout/trip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tripForm_days"
+
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/algoritm_days"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tripForm_selectActivities"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ToggleButton
+                    android:id="@+id/toggle_snow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_category_snow"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+                    android:textOff="@string/form_snow"
+                    android:textOn="@string/form_snow" />
+
+
+                <ToggleButton
+                    android:id="@+id/toggle_beach"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_category_beach"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+                    android:textOff="@string/form_beach"
+                    android:textOn="@string/form_beach" />
+
+                <ToggleButton
+                    android:id="@+id/toggle_hiking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_category_hiking"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+                    android:textOff="@string/form_hiking"
+                    android:textOn="@string/form_hiking" />
+
+                <ToggleButton
+                    android:id="@+id/toggle_sport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_category_fitness"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+                    android:textOff="@string/form_sport"
+                    android:textOn="@string/form_sport" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ToggleButton
+                    android:id="@+id/toggle_sailing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_category_sailing"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+                    android:textOff="@string/form_sailing"
+                    android:textOn="@string/form_sailing" />
+
+
+                <ToggleButton
+                    android:id="@+id/toggle_pool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_category_pool"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+                    android:textOff="@string/form_pool"
+                    android:textOn="@string/form_pool" />
+
+                <ToggleButton
+                    android:id="@+id/toggle_photografy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_category_camera"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+                    android:textOff="@string/form_photografy"
+                    android:textOn="@string/form_photografy" />
+
+                <ToggleButton
+                    android:id="@+id/toggle_camping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_category_terrain"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+                    android:textOff="@string/form_camping"
+                    android:textOn="@string/form_camping" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tripForm_selectServices"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ToggleButton
+                    android:id="@+id/toggle_washingMachine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_services_dry_cleaning"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+
+                    android:textOff="@string/toggle_washingMachine"
+                    android:textOn="@string/toggle_washingMachine" />
+
+
+                <ToggleButton
+                    android:id="@+id/toggle_personalCare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_services_clean_hands"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+                    android:textOff="@string/toggle_personalCare"
+                    android:textOn="@string/toggle_personalCare" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tripForm_selectOthers"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ToggleButton
+                    android:id="@+id/toggle_pets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_others_pets"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+                    android:textOff="@string/toggle_pets"
+                    android:textOn="@string/toggle_pets" />
+
+
+                <ToggleButton
+                    android:id="@+id/toggle_baby"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:drawableTop="@drawable/ic_others_child"
+                    android:onClick="changeToogleButtonBackground"
+                    android:textAllCaps="false"
+                    android:textOff="@string/toggle_baby"
+                    android:textOn="@string/toggle_baby" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tripForm_selectCategories"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/myCategory_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fragment_algoritm_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_check" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

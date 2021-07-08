@@ -12,7 +12,7 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
@@ -97,8 +97,8 @@ public class Fragment_Edit_Trip extends BaseFragment {
                 if(!destination.equals(trip.getDestination())){
                     closeKeyBoard();
                 }
-                trip.setTrip(destination, travelDate, returnDate, travelTransport, returnTransport);
-                Presented.updateTrip(trip, getContext());
+                trip.setTrip(destination, travelDate, returnDate, travelTransport, returnTransport, "");
+                Presenter.updateTrip(trip, getContext());
 
                 getNav().navigate(R.id.action_fragment_Edit_Trip_to_fragment_ShowTrips );
             });

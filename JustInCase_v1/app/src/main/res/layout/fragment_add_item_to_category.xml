@@ -7,7 +7,7 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/Category_name"
+        android:id="@+id/Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -18,7 +18,7 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:focusable="false"

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="15dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="15dp"
     android:orientation="vertical">
 
 
@@ -25,7 +26,8 @@
             android:id="@+id/fragment_createTrip_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/switchDates_text" />
+            android:text="@string/trip_switchDates"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     </LinearLayout>
 
@@ -38,7 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/text_Destino"
+            android:text="@string/trip_destination"
             android:textSize="20sp" />
 
         <EditText
@@ -46,11 +48,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:clickable="true"
+
             android:ems="10"
-            android:focusable="false"
-            android:hint="@string/text_hintInputDestino"
+
+            android:hint="@string/hint_inputDestination"
             android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/fragment_createTrip_btn_country"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:drawableBottom="@drawable/ic_language">
+
+        </Button>
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -62,7 +75,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="@string/text_travelDate"
+            android:text="@string/trip_travelDate"
             android:textSize="20sp" />
 
         <EditText
@@ -73,7 +86,7 @@
             android:clickable="true"
             android:ems="10"
             android:focusable="false"
-            android:hint="@string/text_hintInputDate"
+            android:hint="@string/hint_InputDate"
             android:inputType="date"
             android:maxLines="1" />
 
@@ -90,7 +103,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="@string/text_returnDate"
+            android:text="@string/trip_returnDate"
             android:textSize="20sp" />
 
         <EditText
@@ -98,15 +111,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:clickable="true"
             android:ems="10"
             android:focusable="false"
             android:inputType="date"
             android:maxLines="1" />
     </LinearLayout>
-
-    <!-- TODO campo returnDate, travelTrip returnTravel
-        -->
 
     <Button
         android:id="@+id/fragment_createTrip_btn_add"

@@ -1,11 +1,14 @@
 package com.miki.justincase_v1.fragments.Show;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ImageDecoder;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,25 +25,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.camera.core.ImageCapture;
-import androidx.camera.view.PreviewView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.Swipers.Item_RecyclerItemTouchHelper;
 import com.miki.justincase_v1.adapters.Adapter_Item;
 import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
@@ -53,7 +52,7 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
     FloatingActionButton floatingButton;
     private String itemPhotoUri;
 
-    private ImageCapture imageCapture;
+    private ImageCapture itemPhoto;
 
     @Nullable
     @Override
@@ -63,7 +62,7 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
         floatingButton = view.findViewById(R.id.fragment_show_entity_btn_add);
 //        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        dataset = Presented.selectAllItems(getContext());
+        dataset = Presenter.selectAllItems(getContext());
         if (!dataset.isEmpty()) {
             LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
             linearLayout.setVisibility(View.VISIBLE);
@@ -78,13 +77,12 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new Adapter_Item(dataset);
-        adapter.setActivity(getActivity());
+        adapter = new Adapter_Item(dataset, getActivity());
         recyclerView.setAdapter(adapter);
 
         adapter.setListener((View v) -> {
             Item item = dataset.get(recyclerView.getChildAdapterPosition(v));
-//            editItemDialog(item);
+            editItemDialog(item);
             return true;
         });
 
@@ -98,7 +96,7 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
         // --  Dialog -- //
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setTitle(getString(R.string.text_newItem));
+        builder.setTitle(getString(R.string.dialog_title_newItem));
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
@@ -107,7 +105,7 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
 
         item_photo = view.findViewById(R.id.itemPhoto);
         EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
-        editText.setHint(getString(R.string.text_hintItemName));
+        editText.setHint(getString(R.string.hint_itemName));
 
         TextView addPhoto = view.findViewById(R.id.itemAlertdialog_addPhoto);
 
@@ -116,19 +114,19 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
 
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.text_add), (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_add), (dialog, which) -> {
             String itemName = editText.getText().toString();
             if (itemName.isEmpty()) {
-                makeToast(getContext(), getString(R.string.warning_emptyName));
+                makeToast(getContext(), getString(R.string.toast_emptyName));
             } else {
-                if (Presented.createItem(itemName, itemPhotoUri, getContext())) {
-                    makeToast(getContext(), getString(R.string.text_itemCreated));
+                if (Presenter.createItem(itemName, itemPhotoUri, getContext())) {
+                    makeToast(getContext(), getString(R.string.toast_itemCreated));
                     dialog.dismiss();
                     getNav().navigate(R.id.fragment_ShowItems);
                 } else {
-                    makeToast(getContext(), getString(R.string.warning_createItem));
+                    makeToast(getContext(), getString(R.string.toast_error_createItem));
                 }
             }
         });
@@ -143,47 +141,65 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
 
     }
 
-//    private void editItemDialog(Item item) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//        builder.setTitle(getString(R.string.text_editItem));
-//
-//        LayoutInflater inflater = requireActivity().getLayoutInflater();
-//
-//        View view = inflater.inflate(R.layout.alertdialog_item, null);
-//
-//        EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
-//        editText.setText(item.getItemName());
-//
-//        currentPhotoPath = "";
-//        itemPhotoUri = item.getItemPhotoURI();
-//        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
-//        item_photo.setImageBitmap(bitmap);
-//        TextView addPhoto = view.findViewById(R.id.itemAlertdialog_addPhoto);
-//        addPhoto.setText(R.string.text_changephoto);
-//
-//        addPhoto.setOnClickListener(v -> AddPhotoDialog());
-//
-//        builder.setView(view);
-//
-//        builder.setNegativeButton(getString(R.string.text_cancel), ((DialogInterface dialog, int which) -> dialog.dismiss()));
-//
-//        builder.setPositiveButton(getString(R.string.text_edit), ((dialog, which) -> {
-//            String itemName = editText.getText().toString();
-//            if (itemName.isEmpty()) {
-//                makeToast(getContext(), getString(R.string.warning_emptyName));
-//                dialog.dismiss();
-//            } else {
-//                boolean updateItem = Presented.updateItem(item, itemName.trim().toLowerCase(), getContext());
-//                if (updateItem) {
-//                    makeToast(getContext(), getString(R.string.text_itemUpdated));
-//                    getNav().navigate(R.id.fragment_ShowItems);
-//                } else {
-//                    makeToast(getContext(), getString(R.string.warning_updateItem));
-//                }
-//            }
-//        }));
-//        builder.show();
-//    }
+    private void editItemDialog(Item item) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(getString(R.string.text_editItem));
+
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.alertdialog_item, null);
+
+        EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
+        editText.setText(item.getItemName());
+
+        ImageView itemPhoto = view.findViewById(R.id.itemPhoto);
+        if (!item.getItemPhotoURI().isEmpty()) {
+            Bitmap bitmap;
+            try {
+                if (Build.VERSION.SDK_INT < 28) { //Android 9
+                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.parse(item.getItemPhotoURI()));
+                    int alto = 25;
+                    int ancho = 25;
+                    Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, ancho, alto, true);
+                    itemPhoto.setImageBitmap(resizedBitmap);
+                } else {
+                    ImageDecoder.Source source = ImageDecoder.createSource(this.getActivity().getContentResolver(), Uri.parse(item.getItemPhotoURI()));
+                    bitmap = ImageDecoder.decodeBitmap(source);
+                    itemPhoto.setImageBitmap(bitmap);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            itemPhoto.setImageResource(R.drawable.ic_photo);
+        }
+
+        TextView addPhoto = view.findViewById(R.id.itemAlertdialog_addPhoto);
+        addPhoto.setText(R.string.text_changephoto);
+
+        addPhoto.setOnClickListener(v -> AddPhotoDialog());
+
+        builder.setView(view);
+
+        builder.setNegativeButton(getString(R.string.dialog_cancel), ((DialogInterface dialog, int which) -> dialog.dismiss()));
+
+        builder.setPositiveButton(getString(R.string.text_edit), ((dialog, which) -> {
+            String itemName = editText.getText().toString();
+            if (itemName.isEmpty()) {
+                makeToast(getContext(), getString(R.string.toast_emptyName));
+                dialog.dismiss();
+            } else {
+                boolean updateItem = Presenter.updateItem(item, itemName.trim().toLowerCase(), getContext());
+                if (updateItem) {
+                    makeToast(getContext(), getString(R.string.toast_itemUpdated));
+                    getNav().navigate(R.id.fragment_ShowItems);
+                } else {
+                    makeToast(getContext(), getString(R.string.toast_warning_updateItem));
+                }
+            }
+        }));
+        builder.show();
+    }
 
 
     private void AddPhotoDialog() {
@@ -201,9 +217,9 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
         ImageView photo = view.findViewById(R.id.take_photo);
         ImageView galery = view.findViewById(R.id.galery);
 
-        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.text_add), ((dialog, which) -> dialog.dismiss()));
+        builder.setPositiveButton(getString(R.string.dialog_add), ((dialog, which) -> dialog.dismiss()));
         AlertDialog show = builder.show();
         // --  Dialog -- //
 
@@ -225,7 +241,6 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
     }
 
 
-
     @Override
     public void onSwipe(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof Adapter_Item.AdapterViewHolder) {
@@ -239,21 +254,21 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
             restoreDeletedElement(viewHolder, name, deletedItem, deletedIndex);
             //Note: if the item it's deleted and then restore, only restore in item. You must
             //yo add again in Baggages and Categorys.
-            Presented.deleteItem(deletedItem, getContext());
+            Presenter.deleteItem(deletedItem, getContext());
             getNav().navigate(R.id.fragment_ShowItems);
 
         }
     }
 
     public void restoreDeletedElement(RecyclerView.ViewHolder viewHolder, String name, Item deletedItem, int deletedIndex) {
-        String deleted = getString(R.string.text_hasBeenDeleted);
-        String restore = getString(R.string.text_restore);
+        String deleted = getString(R.string.toast_hasBeenDeleted);
+        String restore = getString(R.string.snackbar_restore);
         Snackbar snackbar = Snackbar.make(((Adapter_Item.AdapterViewHolder) viewHolder).layout,
                 name + " " + deleted,
                 Snackbar.LENGTH_LONG);
         snackbar.setAction(restore, v -> {
             adapter.restoreItem(deletedItem, deletedIndex);
-            Presented.createItem(deletedItem.getItemName(), getContext());
+            Presenter.createItem(deletedItem.getItemName(), getContext());
             getNav().navigate(R.id.fragment_ShowItems);
         });
 

@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_Item;
 import com.miki.justincase_v1.adapters.Adapter_Suitcase;
@@ -49,7 +49,7 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recyclerview_addbutton, container, false);
 
-        dataset = Presented.selectAllSuitcase(getContext());
+        dataset = Presenter.selectAllSuitcase(getContext());
 
         if (!dataset.isEmpty()) {
            LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
@@ -99,10 +99,10 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
         EditText widthET = view.findViewById(R.id.card_view_suitcase_width);
         EditText depthET = view.findViewById(R.id.card_view_suitcase_depth);
 
-        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> {
             dialog.dismiss();
         }));
-        builder.setPositiveButton(getString(R.string.text_add), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_add), ((dialog, which) -> {
             String name = nameET.getText().toString();
             String color = colorET.getText().toString();
             double weigth = Double.parseDouble(weigthET.getText().toString());
@@ -112,15 +112,15 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
             double depth = Double.parseDouble(depthET.getText().toString());
 
             if (name.isEmpty()) {
-                makeToast(getContext(), getString(R.string.warning_emptyName));
+                makeToast(getContext(), getString(R.string.toast_emptyName));
                 createNewSuitcaseDialog();
             } else {
                 Suitcase suitcase = new Suitcase(name, color, weigth, heigth, width, depth);
-                boolean haveBeenAdded = Presented.createSuitcase(suitcase, getContext());
+                boolean haveBeenAdded = Presenter.createSuitcase(suitcase, getContext());
                 if (haveBeenAdded) {
-                    makeToast(getContext(), getString(R.string.text_suitcaseCreated));
+                    makeToast(getContext(), getString(R.string.toast_suitcaseCreated));
                 } else {
-                    makeToast(getContext(), getString(R.string.error));
+                    makeToast(getContext(), getString(R.string.toast_error));
                 }
                 getNav().navigate(R.id.fragment_ShowSuitcases);
             }
@@ -132,8 +132,8 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        String cancel = getString(R.string.text_cancel);
-        String add = getString(R.string.text_add);
+        String cancel = getString(R.string.dialog_cancel);
+        String add = getString(R.string.dialog_add);
         String title = getString(R.string.text_edit);
 
         builder.setTitle(title);
@@ -170,11 +170,11 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
             double width = Double.parseDouble(widthET.getText().toString());
             double depth = Double.parseDouble(depthET.getText().toString());
             suitcase.setSuticase(name, color, weigth, heigth, width, depth);
-            boolean haveBeenUpdated = Presented.updateSuitcase(suitcase, getContext());
+            boolean haveBeenUpdated = Presenter.updateSuitcase(suitcase, getContext());
             if (haveBeenUpdated) {
-                makeToast(v.getContext(), getString(R.string.text_suitcaseUpdated));
+                makeToast(v.getContext(), getString(R.string.toast_suitcaseUpdated));
             } else {
-                makeToast(v.getContext(), getString(R.string.error));
+                makeToast(v.getContext(), getString(R.string.toast_error));
             }
             getNav().navigate(R.id.fragment_ShowSuitcases);
         }));
@@ -189,28 +189,28 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
             Suitcase suitcase = dataset.get(deletedIndex);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            String title = getString(R.string.warning_title);
+            String title = getString(R.string.dialog_title_warning);
             builder.setTitle(title);
 
             builder.setCancelable(true);
 
 
-            String text = getString(R.string.warning_deleteSuitcase);
+            String text = getString(R.string.dialog_warning_deleteSuitcase);
             TextView textView = new TextView(getContext());
             textView.setText(text);
 
             builder.setView(textView);
-            builder.setNegativeButton(getString(R.string.text_no), ((dialog, which) -> {
+            builder.setNegativeButton(getString(R.string.dialog_no), ((dialog, which) -> {
                 dialog.dismiss();
                 getNav().navigate(R.id.fragment_ShowSuitcases);
             }));
-            builder.setPositiveButton(getString(R.string.text_yes), ((dialog, which) -> {
+            builder.setPositiveButton(getString(R.string.dialog_yes), ((dialog, which) -> {
                 adapter.removeItem(viewHolder.getAdapterPosition());
 
 //            restoreDeletedElement(viewHolder, name, suitcase, deletedIndex);
                 //Note: if the item it's deleted and then restore, only restore in item. You must
                 //yo add again in Baggages and Categorys.
-                Presented.deleteSuitcase(suitcase, getContext());
+                Presenter.deleteSuitcase(suitcase, getContext());
                 getNav().navigate(R.id.fragment_ShowSuitcases);
             }));
             builder.show();
@@ -220,8 +220,8 @@ public class Fragment_ShowSuitcases extends BaseFragment implements Item_Recycle
 
 
     public void restoreDeletedElement(RecyclerView.ViewHolder viewHolder, String name, Suitcase deletedItem, int deletedIndex) {
-        String deleted = getString(R.string.text_hasBeenDeleted);
-        String restore = getString(R.string.text_restore);
+        String deleted = getString(R.string.toast_hasBeenDeleted);
+        String restore = getString(R.string.snackbar_restore);
         Snackbar snackbar = Snackbar.make(((Adapter_Item.AdapterViewHolder) viewHolder).layout,
                 name + " " + deleted,
                 Snackbar.LENGTH_LONG);

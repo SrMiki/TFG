@@ -11,9 +11,9 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.adapters.Adapter_paraStartTrip;
+import com.miki.justincase_v1.adapters.othersAdapters.Adapter_CheckList_Suitcase;
 import com.miki.justincase_v1.db.entity.HandLuggage;
 import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
@@ -24,7 +24,7 @@ public class Fragment_CheckOut extends BaseFragment {
 
     TextView tripDestinationTV, tripTravelDateTV, returnDateTV;
 
-    Adapter_paraStartTrip adapter;
+    Adapter_CheckList_Suitcase adapter;
     ArrayList<HandLuggage> dataset;
     RecyclerView recyclerView;
 
@@ -45,7 +45,7 @@ public class Fragment_CheckOut extends BaseFragment {
 
             trip = (Trip) bundle.getSerializable("trip");
 
-            dataset = Presented.getHandLuggage(trip, getContext());
+            dataset = Presenter.getHandLuggage(trip, getContext());
 
 //            setTrip(view);
 
@@ -57,7 +57,7 @@ public class Fragment_CheckOut extends BaseFragment {
 
             recyclerView = view.findViewById(R.id.startTrip_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new Adapter_paraStartTrip(dataset);
+            adapter = new Adapter_CheckList_Suitcase(dataset);
             recyclerView.setAdapter(adapter);
 
             adapter.setListener(v -> {
@@ -68,7 +68,7 @@ public class Fragment_CheckOut extends BaseFragment {
             });
 
 
-            ArrayList<HandLuggage> handLuggageArrayList = Presented.getHandLuggage(trip, getContext());
+            ArrayList<HandLuggage> handLuggageArrayList = Presenter.getHandLuggage(trip, getContext());
 
 
             if (allSelected(handLuggageArrayList)) {
@@ -80,8 +80,8 @@ public class Fragment_CheckOut extends BaseFragment {
 
             setCheckTripStatus();
             button.setOnClickListener(v -> {
-                Presented.clearCheckHandLuggage(trip, getContext());
-                Presented.updateTrip(trip, getContext());
+                Presenter.clearCheckHandLuggage(trip, getContext());
+                Presenter.updateTrip(trip, getContext());
 
                 if (trip.isTravelling() == 4) {
 //                    Presented.saveTrip(trip, getContext());
@@ -115,7 +115,7 @@ public class Fragment_CheckOut extends BaseFragment {
             }
         } else if (trip.isTravelling() == 3) {
             trip.setTravelling(4);
-            button.setText(getString(R.string.text_finish));
+            button.setText(getString(R.string.btn_finish));
         }
     }
 

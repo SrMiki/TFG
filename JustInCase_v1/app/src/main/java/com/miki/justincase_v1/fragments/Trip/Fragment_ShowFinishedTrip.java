@@ -1,6 +1,5 @@
 package com.miki.justincase_v1.fragments.Trip;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,15 +17,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.Swipers.Item_RecyclerItemTouchHelper;
 import com.miki.justincase_v1.Swipers.Trip_RecyclerItemTouchHelper;
-import com.miki.justincase_v1.adapters.Adapter_HandLuggage;
-import com.miki.justincase_v1.adapters.Adapter_Item;
 import com.miki.justincase_v1.adapters.Adapter_Trip;
-import com.miki.justincase_v1.db.entity.HandLuggage;
-import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
@@ -60,7 +53,7 @@ public class Fragment_ShowFinishedTrip extends BaseFragment implements Trip_Recy
         button = view.findViewById(R.id.fragment_show_trip_button);
         button.setVisibility(View.GONE);
 
-        dataset = Presented.selectAllTripsFinished(getContext());
+        dataset = Presenter.selectAllTripsFinished(getContext());
         if (dataset.size() != 0) {
             recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -105,7 +98,7 @@ public class Fragment_ShowFinishedTrip extends BaseFragment implements Trip_Recy
 
             adapter.removeItem(viewHolder.getAdapterPosition());
 
-            Presented.deleteTrip(deletedItem, getContext());
+            Presenter.deleteTrip(deletedItem, getContext());
             getNav().navigate(R.id.fragment_ShowFinishedTrip);
         }
     }

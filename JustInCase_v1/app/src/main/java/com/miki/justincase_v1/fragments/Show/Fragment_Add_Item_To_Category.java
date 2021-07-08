@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.adapters.Adapter_ItemSeleccionados;
+import com.miki.justincase_v1.adapters.othersAdapters.Adapter_list_of_Items_to_select;
 import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.fragments.BaseFragment;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class Fragment_Add_Item_To_Category extends BaseFragment {
 
-    Adapter_ItemSeleccionados adapter;
+    Adapter_list_of_Items_to_select adapter;
     RecyclerView recyclerView;
     ArrayList<Item> dataset;
 
@@ -48,18 +48,18 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
 
             category = (Category) bundle.getSerializable("category");
 
-            title = view.findViewById(R.id.Category_name);
+            title = view.findViewById(R.id.Name);
             title.setText(category.getCategoryName());
 
-            dataset = Presented.selectItemWhitNoCategory(getContext());
+            dataset = Presenter.selectItemWhitNoCategory(getContext());
             if (dataset.isEmpty()) {
                 noItemsDialog();
             }
-            Presented.removeItemSelectedState(dataset, getContext());
+            Presenter.removeItemSelectedState(dataset, getContext());
 
             recyclerView = view.findViewById(R.id.fragment_Add_Item_To_Category_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new Adapter_ItemSeleccionados(dataset);
+            adapter = new Adapter_list_of_Items_to_select(dataset);
             recyclerView.setAdapter(adapter);
 
             floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Category_finish);
@@ -76,7 +76,7 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
                     arrayList.remove(item);
                     item.setSelectedState(false);
                 }
-                Presented.updateItemState(item, getContext());
+                Presenter.updateItemState(item, getContext());
 
                 adapter.notifyItemChanged(position);
                 if (arrayList.isEmpty()) {
@@ -89,8 +89,8 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
 
 
             floatingActionButton.setOnClickListener(v -> {
-                Presented.addItemToThisCategory(arrayList, category, getContext());
-                Presented.removeItemSelectedState(arrayList, getContext());
+                Presenter.addItemToThisCategory(arrayList, category, getContext());
+                Presenter.removeItemSelectedState(arrayList, getContext());
                 getNav().navigate(R.id.action_fragment_Add_Item_To_Category_to_fragment_ShowCategoryContent, bundle);
             });
 
@@ -100,23 +100,23 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
 
     private void noItemsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_warning));
+        builder.setTitle(getString(R.string.dialog_warning));
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
         TextView textView = view.findViewById(R.id.alertdialog_textView);
-        textView.setText(getString(R.string.ask_createNewItem));
+        textView.setText(getString(R.string.dialog_ask_createNewItem));
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.text_no), ((dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.dialog_no), ((dialog, which) -> {
             dialog.dismiss();
             getNav().navigate(R.id.fragment_ShowCategories);
         }));
 
 
-        builder.setPositiveButton(getString(R.string.text_yes), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_yes), ((dialog, which) -> {
             createNewItemDialog();
         }));
         builder.show();
@@ -126,7 +126,7 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setTitle(getString(R.string.text_newItem));
+        builder.setTitle(getString(R.string.dialog_title_newItem));
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
@@ -134,20 +134,20 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
         builder.setView(view);
 
         EditText editText = view.findViewById(R.id.alertdialog_viewEditText);
-        editText.setHint(getString(R.string.text_hintItemName));
+        editText.setHint(getString(R.string.hint_itemName));
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
 
         builder.setPositiveButton(getString(R.string.text_create), ((dialog, which) -> {
             String itemName = editText.getText().toString();
-            boolean create = Presented.createItem(itemName, getContext());
-            dataset = Presented.selectItemWhitNoCategory(getContext());
+            boolean create = Presenter.createItem(itemName, getContext());
+            dataset = Presenter.selectItemWhitNoCategory(getContext());
             if (create) {
                 adapter.notifyItemInserted(dataset.size()-1);
                 anotherItemDialog();
             } else {
-                makeToast(getContext(), getString(R.string.warning_ItemRepeted));
+                makeToast(getContext(), getString(R.string.toast_error_createItem));
                 dialog.dismiss();
                 createNewItemDialog();
             }
@@ -164,12 +164,12 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
         TextView textView = view.findViewById(R.id.alertdialog_textView);
-        textView.setText(getString(R.string.ask_anotherItem));
+        textView.setText(getString(R.string.dialog_ask_anotherItem));
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.text_no), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_no), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.text_yes), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_yes), ((dialog, which) -> {
             createNewItemDialog();
         }));
         builder.show();

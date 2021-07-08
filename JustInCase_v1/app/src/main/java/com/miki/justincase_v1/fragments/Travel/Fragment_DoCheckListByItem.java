@@ -4,20 +4,23 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.adapters.Adapter_ItemCheckList;
+import com.miki.justincase_v1.adapters.othersAdapters.Adapter_Check_Items;
 import com.miki.justincase_v1.db.entity.Baggage;
 import com.miki.justincase_v1.db.entity.HandLuggage;
 import com.miki.justincase_v1.db.entity.Trip;
@@ -28,7 +31,7 @@ import java.util.ArrayList;
 public class Fragment_DoCheckListByItem extends BaseFragment {
 
     RecyclerView recyclerView;
-    Adapter_ItemCheckList adapter;
+    Adapter_Check_Items adapter;
 
     HandLuggage handLuggage;
 
@@ -61,34 +64,32 @@ public class Fragment_DoCheckListByItem extends BaseFragment {
                 getNav().navigate(R.id.checklistByItem_to_checkListByCategory, bundle);
             });
 
+            setHasOptionsMenu(true);
 
-
-
-//            setHasOptionsMenu(true);
             handLuggage = (HandLuggage) bundle.getSerializable("handluggage");
             suitcaseNameTV.setText(handLuggage.getHandLuggageName());
 
-            dataset = Presented.getBaggageOfThisHandLuggage(handLuggage, getContext());
+            dataset = Presenter.getBaggageOfThisHandLuggage(handLuggage, getContext());
 
             recyclerView = view.findViewById(R.id.fragment_checklist_recyclerview);
 
             //Esto sería los items que tiene la maleta!
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new Adapter_ItemCheckList(dataset);
+            adapter = new Adapter_Check_Items(dataset);
             recyclerView.setAdapter(adapter);
 
             CheckBox checkBoxAll = view.findViewById(R.id.checkbox_checkAll);
             checkBoxAll.setChecked(handLuggage.isHandLuggageCompleted());
             checkBoxAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                Presented.checkAllBaggage(dataset, isChecked, getContext());
+                Presenter.checkAllBaggage(dataset, isChecked, getContext());
                 adapter.notifyDataSetChanged();
             });
 
             actionButton = view.findViewById(R.id.fragment_checklist_btn_finish);
             actionButton.setOnClickListener(v -> {
-                Presented.checkBaggage(handLuggage, dataset, getContext());
+                Presenter.checkBaggage(handLuggage, dataset, getContext());
                 Bundle obundle = new Bundle();
-                Trip trip = Presented.getTrip(handLuggage, getContext());
+                Trip trip = Presenter.getTrip(handLuggage, getContext());
                 obundle.putSerializable("trip", trip);
 
                 if (trip.isTravelling() == 1 || trip.isTravelling() == 4) {
@@ -102,5 +103,18 @@ public class Fragment_DoCheckListByItem extends BaseFragment {
             });
         }
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.share_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+
+        menuItem.setOnMenuItemClickListener(item -> {
+            makeToast(getContext(), "Holiwi");
+            return true;
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

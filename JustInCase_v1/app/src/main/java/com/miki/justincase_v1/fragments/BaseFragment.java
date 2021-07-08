@@ -111,7 +111,7 @@ public class BaseFragment extends Fragment {
     public AlertDialog.Builder makeNewAlertDialog(String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
         builder.setTitle(title);
         builder.setCancelable(true);
         return builder;

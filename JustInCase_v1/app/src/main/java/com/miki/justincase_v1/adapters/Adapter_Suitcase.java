@@ -22,13 +22,16 @@ import java.util.List;
 public class Adapter_Suitcase extends RecyclerView.Adapter<Adapter_Suitcase.AdapterViewHolder> implements View.OnClickListener, Filterable {
 
     private View.OnClickListener listener;
+
     List<Suitcase> dataset;
     List<Suitcase> referencesDataset; //for search
+
     boolean isSelected;
 
     public Adapter_Suitcase(List<Suitcase> dataset) {
         this.dataset = dataset;
         referencesDataset = new ArrayList<>(dataset);
+
         isSelected = false;
     }
 
@@ -127,8 +130,7 @@ public class Adapter_Suitcase extends RecyclerView.Adapter<Adapter_Suitcase.Adap
         notifyItemInserted(position);
     }
 
-    public class AdapterViewHolder extends RecyclerView.ViewHolder {
-
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         TextView elementNameTV, colorTV, WeigthTV, HeighTV, WidthTV, Depth;
         public LinearLayout layout;
 

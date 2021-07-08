@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.adapters.Adapter_String;
+import com.miki.justincase_v1.adapters.othersAdapters.Adapter_CountryList;
 import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 public class Fragment_CountryList extends BaseFragment {
 
-    Adapter_String adapter;
+    Adapter_CountryList adapter;
     ArrayList<String> dataset;
     RecyclerView recyclerView;
 
@@ -40,7 +40,7 @@ public class Fragment_CountryList extends BaseFragment {
 
         recyclerView = view.findViewById(R.id.country_list_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new Adapter_String(dataset);
+        adapter = new Adapter_CountryList(dataset);
         recyclerView.setAdapter(adapter);
 
         adapter.setListener(v -> {

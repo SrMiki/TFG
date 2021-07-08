@@ -7,48 +7,53 @@
             <item
                 android:id="@+id/mainFragment"
                 android:icon="@drawable/ic_home"
-                android:title="@string/ic_home">
+                android:title="@string/menu_home">
             </item>
             <item
                 android:id="@+id/fragment_ShowTrips"
                 android:icon="@drawable/ic_language"
-                android:title="@string/ic_Trips">
+                android:title="@string/menu_trips">
             </item>
             <item
                 android:id="@+id/fragment_ShowSuitcases"
                 android:icon="@drawable/ic_card_travel"
-                android:title="@string/ic_suitcase">
+                android:title="@string/menu_suitcase">
             </item>
             <item
                 android:id="@+id/fragment_ShowItems"
                 android:icon="@drawable/ic_article"
-                android:title="@string/ic_items">
+                android:title="@string/menu_inventory">
             </item>
             <item
                 android:id="@+id/fragment_ShowCategories"
                 android:icon="@drawable/ic_category_24"
-                android:title="@string/ic_categories">
+                android:title="@string/menu_categories">
+            </item>
+            <item
+                android:id="@+id/fragment_ShowTemplates"
+                android:icon="@drawable/ic_templates"
+                android:title="@string/menu_template">
             </item>
 
         </menu>
 
     </item>
-    <item  android:title="@string/important_links">
+    <item  android:title="@string/menu_links">
         <menu>
             <item
                 android:id="@+id/ic_ofertas"
                 android:icon="@drawable/ic_monetization"
-                android:title="@string/ic_ofertas">
+                android:title="@string/menu_ofertas">
             </item>
             <item
                 android:id="@+id/ic_coche"
                 android:icon="@drawable/ic_car"
-                android:title="@string/ic_coche">
+                android:title="@string/menu_coche">
             </item>
             <item
                 android:id="@+id/ic_COVID"
                 android:icon="@drawable/ic_masks"
-                android:title="@string/ic_covid">
+                android:title="@string/menu_covid">
             </item>
         </menu>
 

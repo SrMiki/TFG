@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.miki.justincase_v1.Presented;
+import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_Item;
 import com.miki.justincase_v1.Swipers.Item_RecyclerItemTouchHelper;
@@ -48,7 +48,7 @@ public class Fragment_ShowCategoryContent extends BaseFragment implements Item_R
         if (bundle != null) {
 
             Category category = (Category) bundle.getSerializable("category");
-            dataset = Presented.selectItemFromThisCategory(category, getContext());
+            dataset = Presenter.selectItemFromThisCategory(category, getContext());
 
             if(!dataset.isEmpty()){
                 LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
@@ -67,7 +67,7 @@ public class Fragment_ShowCategoryContent extends BaseFragment implements Item_R
 
             recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new Adapter_Item(dataset);
+            adapter = new Adapter_Item(dataset, getActivity());
             recyclerView.setAdapter(adapter);
 
             ItemTouchHelper.SimpleCallback simpleCallback = new Item_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
@@ -97,7 +97,7 @@ public class Fragment_ShowCategoryContent extends BaseFragment implements Item_R
 //            restoreDeletedElement(viewHolder, name, deletedItem, deletedIndex);
             //Note: if the item it's deleted and then restore, only restore in item. You must
             //yo add again in Baggages and Categorys.
-            Presented.removeItemFromThisCategory(deletedItem, getContext());
+            Presenter.removeItemFromThisCategory(deletedItem, getContext());
             getNav().navigate(R.id.fragment_ShowCategoryContent, bundle);
 
         }
@@ -116,16 +116,16 @@ public class Fragment_ShowCategoryContent extends BaseFragment implements Item_R
 
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
 
         builder.setPositiveButton(getString(R.string.text_edit), ((dialog, which) -> {
             String itemName = editText.getText().toString();
-            boolean update = Presented.updateItem(focusItem, itemName, getContext());
+            boolean update = Presenter.updateItem(focusItem, itemName, getContext());
             if (update) {
-                makeToast(v.getContext(), getString(R.string.text_itemUpdated));
+                makeToast(v.getContext(), getString(R.string.toast_itemUpdated));
                 getNav().navigate(R.id.fragment_ShowCategoryContent, bundle );
             } else {
-                makeToast(v.getContext(), getString(R.string.warning_updateItem));
+                makeToast(v.getContext(), getString(R.string.toast_warning_updateItem));
             }
         }));
         builder.show();

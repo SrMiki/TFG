@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/action_edit"
+        android:icon="@drawable/ic_edit"
+        android:title="@string/text_edit"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/text_delete"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_import"
+        android:icon="@drawable/ic_share"
+        android:title="@string/toolbar_import"
+        android:visible="true"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_template"
+        android:icon="@drawable/ic_templates"
+        android:title="@string/menu_template"
+        app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share"
+        android:title="@string/toolbar_share"
+        android:visible="true"
+        app:showAsAction="never" />
+
+</menu>
