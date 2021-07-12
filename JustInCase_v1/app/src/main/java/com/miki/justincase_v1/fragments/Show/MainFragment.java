@@ -48,22 +48,6 @@ public class MainFragment extends BaseFragment {
             Trip trip = dataset.get(position);
             Bundle bundle = new Bundle();
             bundle.putSerializable("trip", trip);
-            getNav().navigate(R.id.fragment_CheckOut, bundle);
-        });
-
-
-        ArrayList<Trip> otroDataset = Presenter.selectCheckInBACKtrip(getContext());
-
-        RecyclerView otroRecycler = view.findViewById(R.id.recyclerview_checkBackTrip);
-
-        otroRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        Adapter_Trip otroAdapter = new Adapter_Trip(getActivity(), otroDataset);
-        otroRecycler.setAdapter(otroAdapter);
-        otroAdapter.setListener(v -> {
-            int position = otroRecycler.getChildAdapterPosition(v);
-            Trip trip = otroDataset.get(position);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("trip", trip);
             getNav().navigate(R.id.fragment_CheckIn, bundle);
         });
 

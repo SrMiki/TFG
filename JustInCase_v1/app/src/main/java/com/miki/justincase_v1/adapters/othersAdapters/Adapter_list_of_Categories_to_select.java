@@ -143,7 +143,7 @@ public class Adapter_list_of_Categories_to_select extends RecyclerView.Adapter<A
     private void setChildRecyclerview(@NonNull Adapter_list_of_Categories_to_select.AdapterViewHolder holder, Category focusCategory) {
         ArrayList<Item> childDataset;
 
-        holder.childRecyclerview = holder.itemView.findViewById(R.id.categoryCardView_nestedRecyclerView);
+        holder.childRecyclerview = holder.itemView.findViewById(R.id.card_view_category_nestedRecyclerView);
 
         childDataset = Presenter.selectItemFromThisCategoryButNotInThisBaggage(handluggage, focusCategory, holder.itemView.getContext());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
@@ -202,9 +202,9 @@ public class Adapter_list_of_Categories_to_select extends RecyclerView.Adapter<A
 
         public AdapterViewHolder(View view) {
             super(view);
-            elementNameTV = view.findViewById(R.id.categoryCardView_name);
-            layout = view.findViewById(R.id.categoryCardView_layout);
-            childRecyclerview = view.findViewById(R.id.categoryCardView_nestedRecyclerView);
+            elementNameTV = view.findViewById(R.id.card_view_category_name);
+            layout = view.findViewById(R.id.card_view_category_layout);
+            childRecyclerview = view.findViewById(R.id.card_view_category_nestedRecyclerView);
         }
     }
 }

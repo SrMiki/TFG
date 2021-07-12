@@ -2,6 +2,7 @@ package com.miki.justincase_v1.fragments.TripHandLuggage;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,8 +12,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -36,13 +42,17 @@ import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     Bundle bundle;
     Switch switchShowCategories;
 
-    TextView suitcaseName;
+    int selectedPos = -1;
+
+    TextView suitcaseName, suticaseOwner;
+    LinearLayout suitcaseOwnerLayout;
 
     FloatingActionButton actionButton;
     Button btn_generateBaggage;
@@ -63,7 +73,7 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_show_baggage, container, false);
+        View view = inflater.inflate(R.layout.fragment_show_handluggage, container, false);
         super.onCreate(savedInstanceState);
         bundle = getArguments();
         if (bundle != null) {
@@ -73,6 +83,16 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
 
             suitcaseName = view.findViewById(R.id.suitcaseNameTV);
             suitcaseName.setText(handLuggage.getHandLuggageName());
+
+            suticaseOwner = view.findViewById(R.id.fragment_showBaggage_owner);
+            suitcaseOwnerLayout = view.findViewById(R.id.fragment_showBaggage_ownerLayout);
+
+            if (!handLuggage.getOwners().isEmpty()) {
+                suitcaseOwnerLayout.setVisibility(View.VISIBLE);
+
+                suticaseOwner.setText(handLuggage.getOwners());
+                suticaseOwner.setOnClickListener(v -> changeSuitcaseOwner());
+            }
 
             recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -102,26 +122,65 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
                     editor.apply();
                     getNav().navigate(R.id.action_fragment_ShowBaggage_self, bundle);
                 });
-                showByCategory(view);
+                showByCategory();
             } else {
                 switchShowCategories.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     editor.putBoolean("showCategories", true);
                     editor.apply();
                     getNav().navigate(R.id.action_fragment_ShowBaggage_self, bundle);
                 });
-                showByItem(view);
+                showByItem();
             }
 
             actionButton = view.findViewById(R.id.fragment_show_entity_btn_add);
-            actionButton.setOnClickListener(v -> {
-                getNav().navigate(R.id.fragment_Add_Baggage, bundle);
-            });
+            actionButton.setOnClickListener(v -> getNav().navigate(R.id.fragment_Add_Baggage, bundle));
 
         }
         return view;
     }
 
-    private void showByItem(View view) {
+    private void changeSuitcaseOwner() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.alertdialog_members, null);
+
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_members);
+        dialogTitle.setText(getString(R.string.dialog_title_editSuitcaseOwner));
+
+
+        Trip trip = Presenter.getTrip(handLuggage, getContext());
+        String[] owners = trip.getMembers().split(", ");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_list_item_1, owners);
+
+        ListView listView = view.findViewById(R.id.dialog_members_listView);
+        listView.setAdapter(adapter);
+
+        builder.setView(view);
+
+
+        listView.setOnItemClickListener((parent, v, position, id) -> {
+            if (selectedPos == position) {
+                selectedPos = -1;
+                v.setBackgroundColor(getResources().getColor(R.color.white));
+            } else {
+                selectedPos = position;
+                v.setBackgroundColor(getResources().getColor(R.color.item_selected));
+                handLuggage.setOwners(adapter.getItem(position));
+            }
+        });
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((DialogInterface dialog, int which) -> dialog.dismiss()));
+
+        builder.setPositiveButton(getString(R.string.dialog_button_confirm), (dialog, which) -> {
+            dialog.dismiss();
+            Presenter.updateHandLuggage(handLuggage, getContext());
+            getNav().navigate(R.id.action_fragment_ShowBaggage_self, bundle);
+        });
+        builder.show();
+    }
+
+    private void showByItem() {
         dataset = Presenter.getBaggageOfThisHandLuggage(handLuggage, getContext());
 
         ItemTouchHelper.SimpleCallback simpleCallback = new Baggage_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
@@ -133,11 +192,11 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
         adapter.setListener(v -> {
             int position = recyclerView.getChildAdapterPosition(v);
             focusBaggage = dataset.get(position);
-            changeItemCount(v);
+            changeItemCount();
         });
     }
 
-    private void showByCategory(View view) {
+    private void showByCategory() {
         datasetCategory = Presenter.selectAllCategoriesOfThisHandLuggage(handLuggage, getContext());
 
         if (!datasetCategory.isEmpty()) {
@@ -149,19 +208,21 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
 
     private void deleteHandLuggageDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        builder.setTitle(getString(R.string.dialog_warning));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
+
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
+
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_textview);
+        dialogTitle.setText(getString(R.string.dialog_title_warning));
+
         builder.setView(view);
 
-        TextView textView = view.findViewById(R.id.alertdialog_textView);
+        TextView textView = view.findViewById(R.id.dialog_message_textview);
         textView.setText(getString(R.string.dialog_ask_deleteHandLuggage));
 
-        builder.setNegativeButton(getString(R.string.dialog_no), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.dialog_yes), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> {
             Presenter.deleteHandluggage(handLuggage, getContext());
             getNav().navigate(R.id.fragment_ShowTrips, bundle);
         }));
@@ -169,13 +230,15 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
 
     }
 
-    private void changeItemCount(View v) {
+    private void changeItemCount() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        builder.setTitle(getString(R.string.text_itemCount));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
+
         View view = inflater.inflate(R.layout.alertdialog_count, null);
+
+        TextView dialogTitle = view.findViewById(R.id.alertdialog_title_count);
+        dialogTitle.setText(getString(R.string.dialog_text_itemCount));
+
         builder.setView(view);
 
         numberPicker = view.findViewById(R.id.numberPicker);
@@ -183,12 +246,12 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
         numberPicker.setMaxValue(99);
         numberPicker.setValue(focusBaggage.getBaggageCount());
 
-        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
 
         builder.setPositiveButton(getString(R.string.text_edit), ((dialog, which) -> {
             Presenter.updateBaggage(focusBaggage, numberPicker.getValue(), getContext());
 //            makeToast(v.getContext(), getString(R.string.text_haveBeenUpdated));
-            getNav().navigate(R.id.fragment_ShowBaggage, bundle);
+            getNav().navigate(R.id.action_fragment_ShowBaggage_self, bundle);
         }));
         builder.show();
     }
@@ -198,8 +261,11 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        builder.setTitle(getString(R.string.text_edit));
         View view = inflater.inflate(R.layout.alertdialog_suitcase, null);
+
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_suitcase);
+        dialogTitle.setText(getString(R.string.dialog_title_editSuitcase));
+
         builder.setView(view);
 
         EditText nameET = view.findViewById(R.id.activity_createSuitcase_input_suitcaseName);
@@ -223,8 +289,13 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
         depthET.setText(String.valueOf(suitcase.getDepth()));
 
 
-        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
-        builder.setPositiveButton(getString(R.string.dialog_add), (dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setPositiveButton(getString(R.string.dialog_button_confirm), (dialog, which) -> {
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
 
             String name = nameET.getText().toString();
             String color = colorET.getText().toString();
@@ -239,7 +310,7 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
 
             Presenter.updateSuitcase(suitcase, getContext());
             Presenter.updateHandLuggage(handLuggage, getContext());
-            makeToast(getView().getContext(), getString(R.string.toast_suitcaseUpdated));
+            makeToast(getContext(), getString(R.string.toast_updated_suitcase));
             Bundle obundle = new Bundle();
             obundle.putSerializable("handLuggage", handLuggage);
             getNav().navigate(R.id.fragment_ShowBaggage, obundle);
@@ -250,7 +321,7 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
     private void importHandLuggageDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setTitle(getString(R.string.DialogTitle_importHandLuggage));
+        builder.setTitle(getString(R.string.dialog_title_importHandLuggage));
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.alertdialog_photo, null);
@@ -314,14 +385,17 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
             case R.id.action_delete:
                 deleteHandLuggageDialog();
                 return true;
-            case R.id.action_import:
-                importHandLuggageDialog();
-                return true;
+//            case R.id.action_import:
+//                importHandLuggageDialog();
+//                return true;
             case R.id.action_share:
                 shareHandLuggageDialog();
                 return true;
             case R.id.action_template:
                 getNav().navigate(R.id.fragment_Use_Templates_For_HandLuggage, bundle);
+                return true;
+            case R.id.action_owner:
+                changeSuitcaseOwner();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -36,6 +36,11 @@ public class Presenter {
         return (ArrayList<Category>) db.categoryDAO().getAll();
     }
 
+    public static ArrayList<Template> getAllTemplate(Context context) {
+        db = AppDatabase.getInstance(context);
+        return (ArrayList<Template>) db.templateDAO().getAll();
+    }
+
     public static ArrayList<Baggage> getBaggageOfThisHandLuggage(HandLuggage handLuggage, Context context) {
         db = AppDatabase.getInstance(context);
         return (ArrayList<Baggage>) db.baggageDAO().selectBaggageOfThisHandLuggage(handLuggage.handLuggageID);
@@ -61,11 +66,6 @@ public class Presenter {
     public static ArrayList<Trip> selectAllTripsInProgress(Context context) {
         db = AppDatabase.getInstance(context);
         return (ArrayList<Trip>) db.tripDao().selectCheckOutTrip();
-    }
-
-    public static ArrayList<Trip> selectCheckInBACKtrip(Context context) {
-        db = AppDatabase.getInstance(context);
-        return (ArrayList<Trip>) db.tripDao().selectCheckInBACKtrip();
     }
 
     public static ArrayList<Trip> selectAllTripsFinished(Context context) {
@@ -220,14 +220,27 @@ public class Presenter {
     public static boolean createBaggageByItems(ArrayList<Item> itemArrayList, HandLuggage handLuggage, Context context) {
         db = AppDatabase.getInstance(context);
         ArrayList<Baggage> baggageArrayList = new ArrayList<>();
+        ArrayList<Baggage> baggages = (ArrayList<Baggage>) db.baggageDAO().selectBaggageOfThisHandLuggage(handLuggage.handLuggageID);
         for (Item item : itemArrayList) {
             Baggage baggage = new Baggage(item.itemID, handLuggage.handLuggageID, item.getItemName());
-            baggageArrayList.add(baggage);
-            handLuggage.increaseSize();
+            if (!contains(baggages, baggage)) {
+                baggageArrayList.add(baggage);
+                handLuggage.increaseSize();
+            }
         }
         db.handLuggageDAO().update(handLuggage);
         db.baggageDAO().insertAll(baggageArrayList);
         return true;
+    }
+
+    private static boolean contains(ArrayList<Baggage> baggages, Baggage baggage) {
+        for (Baggage a :
+                baggages) {
+            if (a.getFKitemID() == baggage.getFKitemID()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 //    public static boolean createBaggageByCategory(ArrayList<Category> categoryArrayList, HandLuggage handLuggage, Context context) {
@@ -289,6 +302,7 @@ public class Presenter {
         return true;
     }
 
+
     public static void updateItem(Item item, int count, Context context) {
         db = AppDatabase.getInstance(context);
         item.setCount(count);
@@ -327,7 +341,6 @@ public class Presenter {
         db.templateDAO().update(template);
         return true;
     }
-
 
 
     // TODO --- DELETE ---
@@ -399,13 +412,11 @@ public class Presenter {
     }
 
 
-
     public static void removeItemFromThisTemplate(Item deletedItem, Context context) {
         db = AppDatabase.getInstance(context);
         TemplateElement templateElement = db.templateElementDAO().getTemplateElementByItemID(deletedItem.itemID);
         db.templateElementDAO().delete(templateElement);
     }
-
 
 
     // TODO --
@@ -645,7 +656,6 @@ public class Presenter {
     }
 
 
-
     public static void addItemToThisTemplate(ArrayList<Item> arrayList, Template template, Context context) {
         db = AppDatabase.getInstance(context);
 
@@ -653,5 +663,10 @@ public class Presenter {
             TemplateElement templateElement = new TemplateElement(item.getItemID(), template.getTemplateID(), item.getItemName());
             db.templateElementDAO().insert(templateElement);
         }
+    }
+
+    public static Item getItemByItemName(Context context, String itemName) {
+        db = AppDatabase.getInstance(context);
+        return db.itemDAO().getItemByItemName(itemName);
     }
 }

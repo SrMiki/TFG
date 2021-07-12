@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,9 +49,9 @@ public class Fragment_AddHandLuggage extends BaseFragment {
         floatingActionButton.setVisibility(View.GONE);
 
         btn_newSuitcase = view.findViewById(R.id.addHandluggage_btn_newSuitcase);
-        btn_newSuitcase.setOnClickListener(v -> {
-            createNewSuitcaseDialog();
-        });
+        btn_newSuitcase.setOnClickListener(v -> createNewSuitcaseDialog());
+
+        recyclerView = view.findViewById(R.id.fragment_addBaggage_recyclerview);
 
         bundle = getArguments();
         if (bundle != null) {
@@ -60,30 +61,27 @@ public class Fragment_AddHandLuggage extends BaseFragment {
             dataset = Presenter.selectSuitcaseNOTFromThisTrip(trip, getContext());
 
             if (dataset.isEmpty()) {
-                warningDialog(view);
+                warningDialog();
+            } else {
+                setRecyclerView();
             }
-            recyclerView = view.findViewById(R.id.fragment_addBaggage_recyclerview);
-            setRecyclerView(view);
         }
 
         floatingActionButton.setOnClickListener(v -> {
-//            setHandLuggageOwnerDialog();
             Presenter.addSomeSuitcaseToThisTrip(arrayList, trip, getContext());
             Presenter.removeSuitcaseSelectedState(arrayList, getContext());
             if (arrayList.size() == 1) {
-                makeToast(getContext(), getString(R.string.text_handLuggageCreated));
+                makeToast(getContext(), getString(R.string.toast_created_handLuggage));
             } else {
-                makeToast(getContext(), getString(R.string.text_someHandLuggageCreated));
+                makeToast(getContext(), getString(R.string.toast_created_someHandLuggage));
             }
             bundle.putSerializable("trip", trip);
             getNav().navigate(R.id.action_fragment_Add_HandLuggage_to_fragment_ShowTrips, bundle);
         });
-
         return view;
     }
 
-
-    private void setRecyclerView(View view) {
+    private void setRecyclerView() {
         Presenter.removeSuitcaseSelectedState(dataset, getContext());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -111,43 +109,34 @@ public class Fragment_AddHandLuggage extends BaseFragment {
         });
     }
 
-    private void setHandLuggageOwnerDialog() {
+    private void warningDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
 
+        View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
-    }
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_textview);
+        dialogTitle.setText(getString(R.string.dialog_title_warning));
 
-    private void warningDialog(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        TextView textView = view.findViewById(R.id.dialog_message_textview);
+        textView.setText(getString(R.string.dialog_warning_noSuitcase));
 
-        String yes = getString(R.string.dialog_yes);
-        String no = getString(R.string.dialog_no);
-        String text = getString(R.string.dialog_warning_noSuitcase);
+        builder.setView(view);
 
-        EditText editText = new EditText(getContext());
-        editText.setText(text);
-        builder.setView(editText);
+        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> getNav().navigate(R.id.fragment_ShowTrips)));
+        builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> createNewSuitcaseDialog()));
 
-        builder.setNegativeButton(no, ((dialog, which) -> {
-            dialog.dismiss();
-            getNav().navigate(R.id.fragment_ShowTrips);
-        }));
-        builder.setPositiveButton(yes, ((dialog, which) -> {
-            dialog.dismiss();
-            createNewSuitcaseDialog();
-
-        }));
         builder.show();
-
-
     }
 
     private void createNewSuitcaseDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_newSuitcase));
         LayoutInflater inflater = requireActivity().getLayoutInflater();
+
         View view = inflater.inflate(R.layout.alertdialog_suitcase, null);
-        builder.setView(view);
+
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_suitcase);
+        dialogTitle.setText(getString(R.string.dialog_title_newSuitcase));
 
         EditText nameET = view.findViewById(R.id.activity_createSuitcase_input_suitcaseName);
         EditText colorET = view.findViewById(R.id.activity_createSuitcase_input_suitcaseNameColor);
@@ -158,29 +147,31 @@ public class Fragment_AddHandLuggage extends BaseFragment {
         EditText widthET = view.findViewById(R.id.card_view_suitcase_width);
         EditText depthET = view.findViewById(R.id.card_view_suitcase_depth);
 
-        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> {
-            dialog.dismiss();
-        }));
+        builder.setView(view);
 
-        builder.setPositiveButton(getString(R.string.text_create), ((dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
+
+        builder.setPositiveButton(getString(R.string.dialog_button_create), (dialog, which) -> {
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
             if ((nameET.getText()).toString().isEmpty()) {
-                makeToast(getContext(), getString(R.string.toast_emptyName));
+                makeToast(getContext(), getString(R.string.toast_warning_emptyName));
             } else {
                 Suitcase suitcase = createSuitcase(nameET, colorET, weigthET, heigthET, widthET, depthET);
-                boolean haveBeenAdded = Presenter.createSuitcase(suitcase, getContext());
-                if (haveBeenAdded) {
-                    makeToast(getContext(), getString(R.string.toast_suitcaseCreated));
+                if (!Presenter.createSuitcase(suitcase, getContext())) {
+                    makeToast(getContext(), getString(R.string.toast_warning_suitcase));
+                } else {
+                    makeToast(getContext(), getString(R.string.toast_created_suitcase));
                     dialog.dismiss();
                     dataset = Presenter.selectSuitcaseNOTFromThisTrip(trip, getContext());
-                    setRecyclerView(getView());
-                } else {
-                    makeToast(getContext(), getString(R.string.toast_warning_duplicatedSuitcase));
-                    createNewSuitcaseDialog();
+                    setRecyclerView();
                 }
             }
 
-        }));
-        builder.show();
+        });
     }
 
     @NotNull

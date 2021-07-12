@@ -13,7 +13,7 @@
         android:background="@android:color/holo_red_light">
 
         <ImageView
-            android:id="@+id/itemCardView_imageView"
+            android:id="@+id/card_view_item_imageView"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:layout_alignParentEnd="true"
@@ -22,12 +22,12 @@
             app:srcCompat="@drawable/ic_delete" />
 
         <TextView
-            android:id="@+id/itemCardView_text"
+            android:id="@+id/card_view_item_deletedText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
-            android:layout_toStartOf="@id/itemCardView_imageView"
+            android:layout_toStartOf="@id/card_view_item_imageView"
             android:text="@string/text_delete"
             android:textColor="@color/white"
             android:textSize="15sp" />
@@ -36,7 +36,7 @@
 
 
     <LinearLayout
-        android:id="@+id/itemCardView_layout"
+        android:id="@+id/card_view_item_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
@@ -46,13 +46,14 @@
 
         <ImageView
             android:src="@drawable/ic_photo"
-            android:id="@+id/itemViewPhoto"
+            android:id="@+id/card_view_item_itemPhoto"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:padding="10dp"
             android:contentDescription="@string/text_item" />
 
         <TextView
-            android:id="@+id/itemCardView_name"
+            android:id="@+id/card_view_item_itemName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -63,7 +64,7 @@
 
 
         <TextView
-            android:id="@+id/itemCardView_Category"
+            android:id="@+id/card_view_item_ItemCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -79,7 +80,7 @@
             android:gravity="end">
 
             <ImageView
-                android:id="@+id/itemCardView_arrow"
+                android:id="@+id/card_view_item_arrow"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 app:srcCompat="@drawable/ic_keyboard_arrow_left" />

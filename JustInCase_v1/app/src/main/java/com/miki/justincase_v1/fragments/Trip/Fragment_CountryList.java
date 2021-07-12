@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.adapters.othersAdapters.Adapter_CountryList;
+import com.miki.justincase_v1.adapters.othersAdapters.Adapter_StringList;
 import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 public class Fragment_CountryList extends BaseFragment {
 
-    Adapter_CountryList adapter;
+    Adapter_StringList adapter;
     ArrayList<String> dataset;
     RecyclerView recyclerView;
 
@@ -40,7 +40,7 @@ public class Fragment_CountryList extends BaseFragment {
 
         recyclerView = view.findViewById(R.id.country_list_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new Adapter_CountryList(dataset);
+        adapter = new Adapter_StringList(dataset);
         recyclerView.setAdapter(adapter);
 
         adapter.setListener(v -> {
@@ -51,7 +51,7 @@ public class Fragment_CountryList extends BaseFragment {
                 String s = dataset.get(recyclerView.getChildAdapterPosition(v));
                 trip.setDestination(s);
                 bundle.putSerializable("trip", trip );
-                getNav().navigate(R.id.action_fragment_CountryList_to_fragment_Edit_Trip, bundle);
+                getNav().navigate(R.id.action_fragment_CountryList_to_fragment_CreateTrip, bundle);
             } else {
 
                 Bundle obundle = new Bundle();
@@ -59,9 +59,7 @@ public class Fragment_CountryList extends BaseFragment {
                 getNav().navigate(R.id.action_fragment_CountryList_to_fragment_CreateTrip, obundle);
             }
         });
-
         return view;
-
     }
 
     @Override

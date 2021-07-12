@@ -6,7 +6,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.miki.justincase_v1.fragments.Show.MainFragment"
-        android:label="@string/menu_home" >
+        android:label="@string/menu_home">
         <action
             android:id="@+id/action_mainFragment_to_fragment_ShowSuitcases"
             app:destination="@id/fragment_ShowSuitcases" />
@@ -20,16 +20,13 @@
             android:id="@+id/action_mainFragment_to_fragment_ShowCategories"
             app:destination="@id/fragment_ShowCategories" />
         <action
-            android:id="@+id/action_mainFragment_to_fragment_CheckOut"
-            app:destination="@id/fragment_CheckOut" />
-        <action
             android:id="@+id/action_mainFragment_to_fragment_ShowTemplates"
             app:destination="@id/fragment_ShowTemplates" />
     </fragment>
     <fragment
         android:id="@+id/fragment_ShowTrips"
         android:name="com.miki.justincase_v1.fragments.Trip.Fragment_ShowTrips"
-        android:label="@string/menu_trips" >
+        android:label="@string/menu_trips">
         <action
             android:id="@+id/action_fragment_ShowTrips_to_fragment_ShowBaggageByItem"
             app:destination="@id/fragment_ShowBaggage" />
@@ -40,7 +37,7 @@
     <fragment
         android:id="@+id/fragment_ShowItems"
         android:name="com.miki.justincase_v1.fragments.Show.Fragment_ShowItems"
-        android:label="@string/menu_inventory" >
+        android:label="@string/menu_inventory">
         <action
             android:id="@+id/action_fragment_ShowItems_to_cameraX"
             app:destination="@id/cameraX" />
@@ -56,9 +53,6 @@
         <action
             android:id="@+id/action_fragment_ShowCategories_to_fragment_Add_Item_To_Category"
             app:destination="@id/fragment_Add_Item_To_Category" />
-        <action
-            android:id="@+id/action_fragment_ShowCategories_to_fragment_ShowCategoryContent"
-            app:destination="@id/fragment_ShowCategoryContent" />
     </fragment>
     <fragment
         android:id="@+id/fragment_CreateTrip"
@@ -71,15 +65,6 @@
         <action
             android:id="@+id/action_fragment_CreateTrip_to_fragment_Add_HandLuggage"
             app:destination="@id/fragment_Add_HandLuggage"
-            app:popUpTo="@id/fragment_ShowTrips" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_Edit_Trip"
-        android:name="com.miki.justincase_v1.fragments.Trip.Fragment_Edit_Trip"
-        android:label="@string/title_editTrip">
-        <action
-            android:id="@+id/action_fragment_Edit_Trip_to_fragment_ShowTrips"
-            app:destination="@id/fragment_ShowTrips"
             app:popUpTo="@id/fragment_ShowTrips" />
     </fragment>
     <fragment
@@ -105,17 +90,18 @@
         android:name="com.miki.justincase_v1.fragments.Show.Fragment_Add_Item_To_Category"
         android:label="@string/title_addItemToCategory">
         <action
-            android:id="@+id/action_fragment_Add_Item_To_Category_to_fragment_ShowCategoryContent"
-            app:destination="@id/fragment_ShowCategoryContent"
-            app:popUpTo="@id/fragment_ShowCategories" />
+            android:id="@+id/action_fragment_Add_Item_To_Category_to_fragment_ShowCategories"
+            app:destination="@id/fragment_ShowCategories"
+            app:popUpTo="@id/fragment_ShowCategories"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/fragment_CheckIn"
         android:name="com.miki.justincase_v1.fragments.Travel.Fragment_CheckIn"
-        android:label="@string/title_startTrip" >
+        android:label="@string/title_startTrip">
         <action
             android:id="@+id/action_fragment_CheckIn_to_fragment_DoCheckListByItem"
-            app:destination="@id/fragment_DoCheckListByItem" />
+            app:destination="@id/fragment_DoCheckList" />
     </fragment>
     <fragment
         android:id="@+id/fragment_CountryList"
@@ -125,27 +111,6 @@
             android:id="@+id/action_fragment_CountryList_to_fragment_CreateTrip"
             app:destination="@id/fragment_CreateTrip"
             app:popUpTo="@id/fragment_ShowTrips" />
-        <action
-            android:id="@+id/action_fragment_CountryList_to_fragment_Edit_Trip"
-            app:destination="@id/fragment_Edit_Trip"
-            app:popUpTo="@id/fragment_Edit_Trip" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_ShowCategoryContent"
-        android:name="com.miki.justincase_v1.fragments.Show.Fragment_ShowCategoryContent"
-        android:label="@string/title_showCategoryContent">
-        <action
-            android:id="@+id/action_fragment_ShowCategoryContent_to_fragment_ShowCategories"
-            app:destination="@id/fragment_ShowCategories"
-            app:popUpTo="@id/fragment_ShowCategories" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_CheckOut"
-        android:name="com.miki.justincase_v1.fragments.Travel.Fragment_CheckOut"
-        android:label="@string/title_CheckOut" >
-        <action
-            android:id="@+id/action_fragment_CheckOut_to_fragment_DoCheckListByItem"
-            app:destination="@id/fragment_DoCheckListByItem" />
     </fragment>
     <fragment
         android:id="@+id/fragment_ShowFinishedTrip"
@@ -159,7 +124,7 @@
     <fragment
         android:id="@+id/suitcase_generator"
         android:name="com.miki.justincase_v1.fragments.Trip.Fragment_SuitcaseGenerator"
-        android:label="@string/title_suitcaseGenerator" >
+        android:label="@string/title_suitcaseGenerator">
         <action
             android:id="@+id/action_algoritm_to_fragment_ShowBaggageByItem"
             app:destination="@id/fragment_ShowBaggage"
@@ -176,31 +141,26 @@
             app:popUpTo="@id/fragment_ShowTrips" />
     </fragment>
     <fragment
-        android:id="@+id/fragment_DoCheckListByCategory"
-        android:name="com.miki.justincase_v1.fragments.Travel.Fragment_DoCheckListByCategory"
+        android:id="@+id/fragment_DoCheckList"
+        android:name="com.miki.justincase_v1.fragments.Travel.Fragment_DoCheckList"
         android:label="@string/title_checkList">
         <action
-            android:id="@+id/checklistByCategory_to_checkListByItem"
-            app:destination="@id/fragment_DoCheckListByItem"
-            app:popUpTo="@id/fragment_DoCheckListByItem" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_DoCheckListByItem"
-        android:name="com.miki.justincase_v1.fragments.Travel.Fragment_DoCheckListByItem"
-        android:label="@string/title_checkList">
+            android:id="@+id/action_fragment_DoCheckListByItem_self"
+            app:destination="@id/fragment_DoCheckList"
+            app:popUpTo="@id/fragment_ShowTrips" />
         <action
-            android:id="@+id/checklistByItem_to_checkListByCategory"
-            app:destination="@id/fragment_DoCheckListByCategory"
-            app:popUpTo="@id/fragment_DoCheckListByCategory" />
+            android:id="@+id/action_fragment_DoCheckList_to_fragment_CheckIn"
+            app:destination="@id/fragment_CheckIn"
+            app:popUpTo="@id/fragment_ShowTrips" />
     </fragment>
     <fragment
         android:id="@+id/cameraX"
-        android:name="com.miki.justincase_v1.CameraX"
+        android:name="com.miki.justincase_v1.fragments.Show.CameraX"
         android:label="CameraX" />
     <fragment
         android:id="@+id/fragment_ShowTemplates"
-        android:name="com.miki.justincase_v1.fragments.Templates.Fragment_ShowTemplates"
-        android:label="Fragment_ShowTemplates" >
+        android:name="com.miki.justincase_v1.fragments.Show.Fragment_ShowTemplates"
+        android:label="@string/title_template">
         <action
             android:id="@+id/action_fragment_ShowTemplates_to_fragment_ShowTemplateElements"
             app:destination="@id/fragment_ShowTemplateElements" />
@@ -211,7 +171,7 @@
     <fragment
         android:id="@+id/fragment_ShowTemplateElements"
         android:name="com.miki.justincase_v1.fragments.Templates.Fragment_ShowTemplateElements"
-        android:label="Fragment_ShowTemplateElements" >
+        android:label="@string/title_templateElement">
         <action
             android:id="@+id/action_fragment_ShowTemplateElements_to_fragment_Add_Item_To_Template"
             app:destination="@id/fragment_Add_Item_To_Template" />
@@ -219,17 +179,22 @@
     <fragment
         android:id="@+id/fragment_Add_Item_To_Template"
         android:name="com.miki.justincase_v1.fragments.Templates.Fragment_Add_Item_To_Template"
-        android:label="Fragment_Add_Item_To_Template" >
+        android:label="@string/title_add_element_to_Template">
         <action
             android:id="@+id/action_fragment_Add_Item_To_Template_to_fragment_ShowTemplateElements"
             app:destination="@id/fragment_ShowTemplateElements"
             app:popUpTo="@id/fragment_ShowTemplates"
-            app:popUpToInclusive="true"
-            />
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/fragment_Use_Templates_For_HandLuggage"
         android:name="com.miki.justincase_v1.fragments.TripHandLuggage.Fragment_Use_Templates_For_HandLuggage"
-        android:label="Fragment_Use_Templates_For_HandLuggage" />
+        android:label="@string/title_add_template_to_handluggage">
+        <action
+            android:id="@+id/action_fragment_Use_Templates_For_HandLuggage_to_fragment_ShowBaggage"
+            app:destination="@id/fragment_ShowBaggage"
+            app:popUpTo="@id/fragment_ShowTrips"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.miki.justincase_v1">
 
     <uses-feature
@@ -8,12 +9,11 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- Adding android.hardware.camera.any makes sure that the device has a camera.
      Specifying ".any" means that it can be a front camera or a back camera. -->
-    <!--
+
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
--->
-    <!-- El permiso de escritura permite de manera implícita la lectura -->
+        android:maxSdkVersion="18"
+        tools:ignore="ScopedStorage" />
 
     <application
         android:allowBackup="true"

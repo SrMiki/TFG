@@ -28,22 +28,21 @@
     <string name="title_showBaggageByCategory">Equipaje</string>
     <string name="title_showFinishedTrip">Viajes realizados</string>
     <string name="title_showCountry">Destinos</string>
+    <string name="title_template">Mis plantillas</string>
 
-    <string name="title_createTrip">Nuevo Viaje</string>
+    <string name="title_createTrip">Viaje</string>
     <string name="title_editTrip">Editar Viaje</string>
 
     <string name="title_addHandLuggage">Agregar Maleta</string>
     <string name="title_addItemToCategory">Agregar Items</string>
     <string name="title_addBaggage">Agregar Items</string>
+    <string name="title_addCategoryToBaggage">Agregar Categoria</string>
 
     <string name="title_startTrip">Preparativos del viaje</string>
     <string name="title_checkList">hacer la maleta</string>
-
-    <string name="title_addCategoryToBaggage">Agregar Categoria</string>
     <string name="title_CheckOut">Check Out</string>
 
     <string name="title_suitcaseGenerator">Generar maleta</string>
-
 
     <!-- TODO   Suitcase .............................................................. -->
     <string name="suticase_heigth">heigth</string>
@@ -58,38 +57,44 @@
     <!-- TODO   texts .............................................................. -->
     <string name="text_edit">Editar</string>
     <string name="text_delete">Eliminar</string>
-    <string name="text_item">Item</string>
-    <string name="text_category">Categoria</string>
-    <string name="text_suitcase">Maleta</string>
     <string name="text_name">Nombre:</string>
     <string name="text_search">buscar</string>
 
+    <string name="text_item">Item</string>
+    <string name="text_category">Categoria</string>
+    <string name="text_suitcase">Maleta</string>
+
     <!-- TODO   TRIP .............................................................. -->
-    <string name="trip_destination">Destino:</string>
-    <string name="trip_travelDate">Fecha de salida:</string>
-    <string name="trip_returnDate">Fecha de regreso: </string>
+    <string name="trip_destination">Destino</string>
+    <string name="trip_travelDate">Fecha ida</string>
+    <string name="trip_returnDate">Fecha vuelta</string>
     <string name="trip_trip">viaje</string>
     <string name="trip_switchDates">Viaje solo de ida</string>
 
     <!-- TODO   TOAST .............................................................. -->
-    <string name="toast_suitcaseCreated">La maleta ha sido creada</string>
-    <string name="toast_categoryCreated">La categoria ha sido creada</string>
+    <string name="toast_created_suitcase">La maleta ha sido creada</string>
+    <string name="toast_created_category">La categoria ha sido creada</string>
+    <string name="toast_created_template">plantilla creada</string>
+    <string name="toast_created_handLuggage">Maleta agregada</string>
+    <string name="toast_created_someHandLuggage">Se han agregado las maletas</string>
+    <string name="toast_created_item">Item creado</string>
 
-    <string name="toast_categoryUpdated">La categoria ha sido actualizada</string>
-    <string name="toast_itemUpdated">El item ha sido actualizado</string>
-    <string name="toast_suitcaseUpdated">La maleta ha sido actualizada</string>
+    <string name="toast_updated_category">La categoria ha sido actualizada</string>
+    <string name="toast_updated_item">El item ha sido actualizado</string>
+    <string name="toast_updated_suitcase">La maleta ha sido actualizada</string>
 
-    <string name="toast_hasBeenDeleted">Ha sido eleminado</string>
+    <string name="toast_deleted">Ha sido eleminado</string>
 
-    <string name="toast_errorExistCategory">Ya existe una categoria con ese nombre</string>
-    <string name="toast_emptyName">Ha dejado el nombre en blanco</string>
-    <string name="toast_updateCategory">Ya existe esa categoria</string>
+    <string name="toast_warning_emptyName">Ha dejado el nombre en blanco</string>
+
+    <string name="toast_warning_category">Ya existe esa categoria</string>
+    <string name="toast_warning_item">El item ya existe</string>
+    <string name="toast_warning_template">Ya existe una plantilla con ese nombre</string>
+    <string name="toast_warning_suitcase">Ya existe una maleta con ese nombre</string>
+    <string name="toast_warning_cameraPermissions">"Permisos de cámaras denegados "</string>
+
+
     <string name="toast_error">Se ha producido un error</string>
-
-    <string name="toast_error_createItem">el item ya existe</string>
-    <string name="toast_error_TemplateExisted">Ya existe una plantilla con ese nombre</string>
-    <string name="toast_warning_updateItem">Ya existe este item</string>
-    <string name="toast_warning_duplicatedSuitcase">Ya existe una maleta con ese nombre</string>
 
     <string name="snackbar_restore">deshacer</string>
 
@@ -97,15 +102,32 @@
     <string name="dialog_warning">Aviso</string>
 
     <string name="dialog_title_warning">Atención</string>
+
     <string name="dialog_title_newItem">Nuevo item</string>
     <string name="dialog_title_newCategory">Nueva categoria</string>
+    <string name="dialog_title_newTemplate">Nueva Plantilla</string>
+    <string name="dialog_title_newSuitcase">Nueva maleta</string>
 
-    <string name="dialog_confirm">confirmar</string>
-    <string name="dialog_cancel">Cancelar</string>
-    <string name="dialog_add">Agregar</string>
-    <string name="dialog_no">no</string>
-    <string name="dialog_yes">si</string>
+    <string name="dialog_title_editItem">Editar Item</string>
+    <string name="dialog_title_editCategory">Editar categoria</string>
 
+
+    <string name="text_addCategoryContent">Seleccione los items que quiere agregar</string>
+
+
+    <string name="dialog_title_importHandLuggage">Importar Maleta</string>
+    <string name="dialog_title_shareHandLuggage">Compartir maleta</string>
+
+    <string name="dialog_button_confirm">confirmar</string>
+    <string name="dialog_button_cancel">Cancelar</string>
+    <string name="dialog_button_add">Agregar</string>
+    <string name="dialog_button_create">Crear</string>
+    <string name="dialog_button_no">no</string>
+    <string name="dialog_button_yes">si</string>
+
+    <string name="dialog_text_itemCount">Cantidad de Items</string>
+
+    <string name="dialog_ask_shareHandLuggage">¿Cómo quiere compartir la maleta?</string>
     <string name="dialog_ask_addHandluggage">¿Quiere agregar maletas al viaje ahora?</string>
     <string name="dialog_ask_addItemsToCategory">¿Quiere añadir items a esta categoria?</string>
     <string name="dialog_ask_createNewItem">Parece que no tienes items disponibles, ¿quieres crear uno?</string>
@@ -127,7 +149,7 @@
     <string name="hint_itemName">camisa, pantalón, pasaporte</string>
     <string name="hint_InputSuitcaseName">grande, maletín, mochila</string>
     <string name="hint_createCategory">ropa, electrónica</string>
-
+    <string name="fragment_createTemplate_hint">Plantilla 1, Plantilla 2</string>
 
     <!-- TODO buttons -->
     <string name="btn_finish">terminar</string>
@@ -141,20 +163,14 @@
     <string name="showTrip_finishedTrip">Viajes realizados</string>
 
 
-    <string name="text_editItem">Editar Item</string>
-    <string name="select_numberPicker">Indique la cantidad deseada</string>
-    <string name="text_itemCount">Cantidad de Items</string>
-
-    <string name="text_newSuitcase">Nueva maleta</string>
-    <string name="text_editCategory">Editar categoria</string>
 
 
-    <string name="text_create">Crear</string>
+
 
 
     <string name="switch_showCategories">Mostrar por categorias</string>
 
-    <string name="text_addCategoryContent">Seleccione los items que quiere agregar a la categoria</string>
+
 
     <string name="text_progressTrip">Viajes en proceso</string>
 
@@ -162,7 +178,7 @@
     <string name="text_addBaggage">Seleccione los Item que quiere agregar a la maleta</string>
 
 
-    <string name="toast_itemCreated">Item creado</string>
+
 
 
     <!-- TODO   suticaseGeneratorForm -->
@@ -176,11 +192,12 @@
     <string name="form_sport">Deporte</string>
     <string name="form_photografy">fotografia</string>
     <string name="form_sailing">navegar</string>
+    <string name="form_selectOthers">Otros</string>
+    <string name="form_selectCategories">Tus categorias</string>
 
 
     <string name="text_doCheckOut">Deshacer maleta</string>
-    <string name="text_handLuggageCreated">Maleta agregada</string>
-    <string name="text_someHandLuggageCreated">Se han agregado las maletas</string>
+
     <string name="text_swipe">Arrastra para eliminar</string>
     <string name="text_swipe2">Mantén pulsado para editar</string>
 
@@ -200,23 +217,43 @@
     <string name="addPhotoDialogTitle">Seleccione como quiere obtener la imagen</string>
     <string name="text_changephoto">cambiar Foto</string>
     <string name="photoCapure">Se ha guardado la foto</string>
-    <string name="warning_cameraPermissions">"Permisos de cámaras denegados "</string>
+
     <string name="capture_button_alt">capturar</string>
 
-    <string name="tripForm_selectOthers">Otros</string>
-    <string name="tripForm_selectCategories">Tus categorias</string>
-
-    <string name="text_newTemplate">Nueva Plantilla</string>
-    <string name="fragment_createTemplate_hint">Plantilla 1, Plantilla 2</string>
-    <string name="text_templateCreated">plantilla creada</string>
 
 
-    <string name="DialogTitle_importHandLuggage">Importar Maleta</string>
 
 
-    <string name="DialogTitle_shareHandLuggage">Compartir maleta</string>
-    <string name="DialogMessage_shareHandLuggage">¿Cómo quiere compartir la maleta?</string>
+
+
     <string name="DialogText_shareHandLuggage">texto</string>
+    <string name="dialog_title_editSuitcase">Editar maleta</string>
+    <string name="dialog_title_createSuitcase">Nueva maleta</string>
+    <string name="dialog_title_addCategoryContent">Agregar items</string>
+    <string name="dialog_title_deleteCategory">Eliminar categoria</string>
+    <string name="dialog_title_addHandLuggageDialog">Agregar maletas</string>
+    <string name="trip_transport">transporte</string>
+    <string name="trip_groupTrip">Número de integrantes</string>
+    <string name="number_1">1</string>
+    <string name="dialog_title_editMemberName">Editar integrante</string>
+    <string name="toast_updated_memberName">integrante renombrado</string>
+    <string name="text_member">Integrante</string>
+    <string name="dialog_title_editTripMember">Editar Integrante</string>
+    <string name="dialog_title_editTripDestination">Editar destino</string>
+    <string name="trip_members">Integrantes</string>
+    <string name="text_owner">Dueño</string>
+    <string name="dialog_title_editSuitcaseOwner">Cambiar dueño</string>
+    <string name="toolbar_owner">cambiar dueño</string>
+    <string name="dialog_title_editTemplate">Editar plantilla</string>
+    <string name="dialog_title_photo">Obtener imagen</string>
+    <string name="dialog_warning_deleteCategory">¿Quiere eliminar esta categoría?</string>
+    <string name="title_templateElement">Plantilla</string>
+    <string name="title_add_element_to_Template">Agregar elementos</string>
+    <string name="title_add_template_to_handluggage">Asignar plantilla</string>
+    <string name="dialog_ask_addItemsToTemplate">¿Quiere agregar elementos a esta plantilla ahora?</string>
+    <string name="dialog_button_late">mejor luego</string>
+    <string name="text_template">Plantilla</string>
+    <string name="toast_updated_template">La plantilla ha sido actualizada</string>
 
 
 </resources>

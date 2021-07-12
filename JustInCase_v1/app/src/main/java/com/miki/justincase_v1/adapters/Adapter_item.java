@@ -1,6 +1,7 @@
 package com.miki.justincase_v1.adapters;
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.miki.justincase_v1.R;
@@ -51,12 +53,10 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
     /**
      * Load the photo of all item localy
      * to reduce memory access
-     *
-     * @param dataset
      */
     private void initPhotoDataset(List<Item> dataset) {
         for (Item item : dataset) {
-            if (!item.getItemPhotoURI().isEmpty()) {
+            if (item.getItemPhotoURI() != null && !item.getItemPhotoURI().isEmpty()) {
                 try {
                     if (Build.VERSION.SDK_INT < 28) { //pre-Android 9
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), Uri.parse(item.getItemPhotoURI()));
@@ -138,13 +138,9 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
     @Override
     public void onBindViewHolder(@NonNull Adapter_Item.AdapterViewHolder holder, int position) {
         Item item = dataset.get(position);
-        holder.elementNameTV.setText(item.getItemName());
 
+        holder.elementNameTV.setText(item.getItemName());
         holder.itemViewPhoto.setImageBitmap(photoDataset.get(position));
-//        if (!item.getItemPhotoURI().equals("")) {
-//        } else {
-//            holder.itemViewPhoto.setImageResource(R.drawable.ic_photo);
-//        }
     }
 
     @Override
@@ -152,7 +148,7 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
         return dataset == null ? 0 : dataset.size();
     }
 
-    public void removeItem(int position) {
+    public void remove(int position) {
         dataset.remove(position);
         notifyItemRemoved(position);
     }
@@ -169,10 +165,10 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
 
         public AdapterViewHolder(View view) {
             super(view);
-            elementNameTV = view.findViewById(R.id.itemCardView_name);
-            elementCategoryTV = view.findViewById(R.id.itemCardView_Category);
-            layout = view.findViewById(R.id.itemCardView_layout);
-            itemViewPhoto = view.findViewById(R.id.itemViewPhoto);
+            elementNameTV = view.findViewById(R.id.card_view_item_itemName);
+            elementCategoryTV = view.findViewById(R.id.card_view_item_ItemCategory);
+            layout = view.findViewById(R.id.card_view_item_layout);
+            itemViewPhoto = view.findViewById(R.id.card_view_item_itemPhoto);
         }
     }
 

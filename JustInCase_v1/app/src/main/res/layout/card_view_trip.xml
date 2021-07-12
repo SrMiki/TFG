@@ -39,13 +39,30 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/options_layout"
+                android:id="@+id/card_view_category_options_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center">
 
+
+                <Button
+                    android:id="@+id/card_view_category_editButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:backgroundTint="@color/white"
+                    android:drawableTop="@drawable/ic_edit" />
+
+                <Button
+                    android:id="@+id/card_view_category_deleteButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:backgroundTint="@color/white"
+                    android:drawableTop="@drawable/ic_delete"
+                    android:drawableTint="@color/black" />
 
                 <Button
                     android:id="@+id/showTrip_button_addHandlugage"
@@ -56,33 +73,25 @@
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
-                <Button
-                    android:id="@+id/showTrip_button_editTrip"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="5dp"
-                    android:backgroundTint="@color/white"
-                    android:drawableTop="@drawable/ic_edit" />
-
-                <Button
-                    android:id="@+id/showTrip_button_deleteTrip"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="5dp"
-                    android:backgroundTint="@color/white"
-                    android:drawableTop="@drawable/ic_delete"
-                    android:drawableTint="@color/black" />
-
             </LinearLayout>
 
         </LinearLayout>
 
         <TextView
+            android:layout_marginTop="10dp"
             android:id="@+id/recyclerview_Trip_tripDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="@string/trip_travelDate" />
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/recyclerview_Trip_tripMembers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/trip_members" />
 
         <LinearLayout
             android:id="@+id/cardviewtrip_suitcasesLinearLayout"

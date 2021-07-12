@@ -34,6 +34,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -41,28 +42,85 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/trip_destination"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
-        <EditText
-            android:id="@+id/fragment_createTrip_input_tripDestino"
+        <TextView
+            android:id="@+id/fragment_createTrip_destination"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-
+            android:layout_weight="4"
             android:ems="10"
-
             android:hint="@string/hint_inputDestination"
-            android:inputType="textPersonName" />
+            android:textSize="15sp" />
 
         <Button
-            android:id="@+id/fragment_createTrip_btn_country"
-            android:layout_width="50dp"
+            android:id="@+id/fragment_createTrip_countryBtn"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="40dp"
             android:layout_height="50dp"
-            android:layout_gravity="end"
-            android:drawableBottom="@drawable/ic_language">
+            app:icon="@drawable/ic_location" />
 
-        </Button>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/trip_travelDate"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/activity_createTrip_travelDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="false"
+                android:gravity="center"
+                android:inputType="date"
+                android:maxLines="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_createTrip_returnDateLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/trip_returnDate"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/fragment_createTrip_tripReturnDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="false"
+                android:gravity="center"
+                android:inputType="date"
+                android:maxLines="1" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -72,59 +130,69 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/trip_travelDate"
-            android:textSize="20sp" />
+            android:text="@string/trip_transport"
+            android:textSize="15sp" />
 
         <EditText
-            android:id="@+id/activity_createTrip_input_travelDate"
-            android:layout_width="0dp"
+            android:id="@+id/fragment_createTrip_transport"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:clickable="true"
             android:ems="10"
-            android:focusable="false"
-            android:hint="@string/hint_InputDate"
-            android:inputType="date"
+            android:inputType="text"
             android:maxLines="1" />
-
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/fragment_createTrip_LayoutInput_tripReturnDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
 
         <TextView
-            android:id="@+id/fragment_createTrip_text_tripReturnDate"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/trip_returnDate"
-            android:textSize="20sp" />
+            android:text="@string/trip_groupTrip"
+            android:textSize="15sp" />
 
-        <EditText
-            android:id="@+id/fragment_createTrip_input_tripReturnDate"
+        <TextView
+            android:id="@+id/fragment_createTrip_tripSize"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:ems="10"
-            android:focusable="false"
-            android:inputType="date"
-            android:maxLines="1" />
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:gravity="center_horizontal"
+            android:text="@string/number_1" />
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/fragment_createTrip_btn_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="20dp"
-        android:text="@string/btn_finish">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
-    </Button>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_createTrip_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fragment_createTrip_btn_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_check" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

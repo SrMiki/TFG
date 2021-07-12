@@ -5,66 +5,97 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
-    <LinearLayout
-        android:id="@+id/categoryCardView_layout"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
-
-        <TextView
-            android:id="@+id/categoryCardView_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="15dp"
-            android:layout_weight="1"
-            android:text="category"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+        android:layout_height="60dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="10dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
-            android:id="@+id/options_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:id="@+id/card_view_category_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
 
-            <Button
-                android:id="@+id/showTrip_button_addHandlugage"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:backgroundTint="@color/white"
-                android:drawableTop="@drawable/ic_card_travel"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/card_view_category_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="15dp"
+                android:layout_weight="1"
+                android:text="@string/text_category"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/showTrip_button_editTrip"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="5dp"
-                android:backgroundTint="@color/white"
-                android:drawableTop="@drawable/ic_edit" />
+            <LinearLayout
+                android:id="@+id/card_view_category_arrow_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="end">
 
-            <Button
-                android:id="@+id/showTrip_button_deleteTrip"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="5dp"
-                android:backgroundTint="@color/white"
-                android:drawableTop="@drawable/ic_delete"
-                android:drawableTint="@color/black" />
+                <ImageView
+                    android:id="@+id/card_view_item_arrow"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/ic_right_arrow" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/card_view_category_options_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="5dp"
+                android:visibility="gone">
+
+
+                <Button
+                    android:id="@+id/card_view_category_editButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:backgroundTint="@color/quantum_grey"
+                    android:padding="14dp"
+                    app:icon="@drawable/ic_edit" />
+
+                <Button
+                    android:id="@+id/card_view_category_deleteButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:backgroundTint="@color/quantum_grey"
+                    android:padding="14dp"
+                    app:icon="@drawable/ic_delete_black" />
+
+                <Button
+                    android:id="@+id/card_view_category_addItemButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:backgroundTint="@color/secundary_900"
+                    android:padding="14dp"
+                    app:icon="@drawable/ic_add" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
+    </androidx.cardview.widget.CardView>
 
     <LinearLayout
-        android:id="@+id/categoryCardView_itemLinearLayout"
+        android:id="@+id/card_view_category_nestedRecyclerView_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -73,7 +104,7 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/categoryCardView_nestedRecyclerView"
+            android:id="@+id/card_view_category_nestedRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

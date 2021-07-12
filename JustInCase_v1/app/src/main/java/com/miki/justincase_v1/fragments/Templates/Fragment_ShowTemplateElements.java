@@ -26,8 +26,8 @@ import com.miki.justincase_v1.fragments.BaseFragment;
 
 import java.util.ArrayList;
 
-public class Fragment_ShowTemplateElements extends BaseFragment implements Item_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
-
+public class Fragment_ShowTemplateElements extends BaseFragment
+        implements Item_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     Adapter_Item adapter;
     RecyclerView recyclerView;
@@ -50,12 +50,10 @@ public class Fragment_ShowTemplateElements extends BaseFragment implements Item_
             Template template = (Template) bundle.getSerializable("template");
             dataset = Presenter.selectItemFromThisTemplate(template, getContext());
 
-            if(!dataset.isEmpty()){
+            if (!dataset.isEmpty()) {
                 LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
                 linearLayout.setVisibility(View.VISIBLE);
             }
-
-
 
             TextView textView = view.findViewById(R.id.showEntity_title);
             String title = getString(R.string.toolbar_template) + ": " + template.getTemplateName();
@@ -76,7 +74,7 @@ public class Fragment_ShowTemplateElements extends BaseFragment implements Item_
             adapter.setListener(v -> {
                 int position = recyclerView.getChildAdapterPosition(v);
                 focusItem = dataset.get(position);
-                editItemDialog(v);
+                editItemDialog();
                 return true;
             });
 
@@ -92,7 +90,7 @@ public class Fragment_ShowTemplateElements extends BaseFragment implements Item_
             String name = dataset.get(deletedIndex).getItemName();
             Item deletedItem = dataset.get(deletedIndex);
 
-            adapter.removeItem(viewHolder.getAdapterPosition());
+            adapter.remove(viewHolder.getAdapterPosition());
 
 //            restoreDeletedElement(viewHolder, name, deletedItem, deletedIndex);
             //Note: if the item it's deleted and then restore, only restore in item. You must
@@ -103,32 +101,38 @@ public class Fragment_ShowTemplateElements extends BaseFragment implements Item_
         }
     }
 
-    private void editItemDialog(View v) {
+    private void editItemDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_editItem));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_edittext, null);
 
-        EditText editText = view.findViewById(R.id.alertdialog_viewEditText);
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_edittext);
+        dialogTitle.setText(getString(R.string.dialog_title_editItem));
+
+
+        EditText editText = view.findViewById(R.id.dialog_edittext_input);
         editText.setText(focusItem.getItemName());
 
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.text_edit), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_button_confirm), (dialog, which) -> {
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
             String itemName = editText.getText().toString();
             boolean update = Presenter.updateItem(focusItem, itemName, getContext());
             if (update) {
-                makeToast(v.getContext(), getString(R.string.toast_itemUpdated));
-                getNav().navigate(R.id.fragment_ShowTemplateElements, bundle );
+                makeToast(getContext(), getString(R.string.toast_updated_item));
+                getNav().navigate(R.id.fragment_ShowTemplateElements, bundle);
             } else {
-                makeToast(v.getContext(), getString(R.string.toast_warning_updateItem));
+                makeToast(getContext(), getString(R.string.toast_warning_item));
             }
-        }));
-        builder.show();
+        });
     }
 
 }

@@ -36,6 +36,7 @@ public class Fragment_Add_Item_To_Template extends BaseFragment {
 
     Template template;
     Bundle bundle;
+    TextView templateView;
 
     @Nullable
     @Override
@@ -47,6 +48,9 @@ public class Fragment_Add_Item_To_Template extends BaseFragment {
             arrayList = new ArrayList<>();
 
             template = (Template) bundle.getSerializable("template");
+
+            templateView = view.findViewById(R.id.fragment_Add_Item_to_category_textview);
+            templateView.setText(R.string.text_template);
 
             title = view.findViewById(R.id.Name);
             title.setText(template.getTemplateName());
@@ -87,11 +91,10 @@ public class Fragment_Add_Item_To_Template extends BaseFragment {
 
             });
 
-
             floatingActionButton.setOnClickListener(v -> {
                 Presenter.addItemToThisTemplate(arrayList, template, getContext());
                 Presenter.removeItemSelectedState(arrayList, getContext());
-                getNav().navigate(R.id.fragment_ShowTemplateElements, bundle);
+                getNav().navigate(R.id.action_fragment_Add_Item_To_Template_to_fragment_ShowTemplateElements, bundle);
             });
 
         }
@@ -106,17 +109,16 @@ public class Fragment_Add_Item_To_Template extends BaseFragment {
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
-        TextView textView = view.findViewById(R.id.alertdialog_textView);
+        TextView textView = view.findViewById(R.id.dialog_message_textview);
         textView.setText(getString(R.string.dialog_ask_createNewItem));
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_no), ((dialog, which) -> {
-            dialog.dismiss();
+        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> {
             getNav().navigate(R.id.fragment_ShowTemplates);
         }));
 
 
-        builder.setPositiveButton(getString(R.string.dialog_yes), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> {
             createNewItemDialog();
         }));
         builder.show();
@@ -132,13 +134,13 @@ public class Fragment_Add_Item_To_Template extends BaseFragment {
         View view = inflater.inflate(R.layout.alertdialog_edittext, null);
         builder.setView(view);
 
-        EditText editText = view.findViewById(R.id.alertdialog_viewEditText);
+        EditText editText = view.findViewById(R.id.dialog_edittext_input);
         editText.setHint(getString(R.string.hint_itemName));
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.text_create), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_button_create), ((dialog, which) -> {
             String itemName = editText.getText().toString();
             boolean create = Presenter.createItem(itemName, getContext());
             dataset = Presenter.selectItemNOTintThisTemplate(template, getContext());
@@ -146,7 +148,7 @@ public class Fragment_Add_Item_To_Template extends BaseFragment {
                 adapter.notifyItemInserted(dataset.size()-1);
                 anotherItemDialog();
             } else {
-                makeToast(getContext(), getString(R.string.toast_error_createItem));
+                makeToast(getContext(), getString(R.string.toast_warning_item));
                 dialog.dismiss();
                 createNewItemDialog();
             }
@@ -162,13 +164,13 @@ public class Fragment_Add_Item_To_Template extends BaseFragment {
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
-        TextView textView = view.findViewById(R.id.alertdialog_textView);
+        TextView textView = view.findViewById(R.id.dialog_message_textview);
         textView.setText(getString(R.string.dialog_ask_anotherItem));
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_no), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.dialog_yes), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> {
             createNewItemDialog();
         }));
         builder.show();

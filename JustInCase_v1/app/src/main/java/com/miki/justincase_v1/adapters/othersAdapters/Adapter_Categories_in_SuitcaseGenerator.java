@@ -39,7 +39,7 @@ public class Adapter_Categories_in_SuitcaseGenerator extends RecyclerView.Adapte
     @Override
     public Adapter_Categories_in_SuitcaseGenerator.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view_categoryinalgoritm, parent, false);
+                .inflate(R.layout.card_view_category_in_suitcase_generator, parent, false);
         view.setOnClickListener(this);
         return new AdapterViewHolder(view);
     }

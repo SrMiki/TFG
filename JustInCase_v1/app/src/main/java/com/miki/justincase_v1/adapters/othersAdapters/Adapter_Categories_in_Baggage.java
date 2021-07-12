@@ -2,7 +2,6 @@ package com.miki.justincase_v1.adapters.othersAdapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +31,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Adapter_Categories_in_Baggage extends RecyclerView.Adapter<Adapter_Categories_in_Baggage.AdapterViewHolder> implements View.OnClickListener, View.OnLongClickListener, Filterable {
+public class Adapter_Categories_in_Baggage extends RecyclerView.Adapter<Adapter_Categories_in_Baggage.AdapterViewHolder>
+        implements View.OnClickListener, View.OnLongClickListener, Filterable {
 
     HandLuggage handluggage;
-
 
     RecyclerView.RecycledViewPool recycledViewPool = new RecyclerView.RecycledViewPool();
 
@@ -133,50 +132,16 @@ public class Adapter_Categories_in_Baggage extends RecyclerView.Adapter<Adapter_
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         focusCategory = dataset.get(position);
-
         holder.elementNameTV.setText(focusCategory.getCategoryName());
-
-        Context context = holder.itemView.getContext();
-
-//        if (selectedState) {
-//            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.item_selected));
-//        } else {
-//            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
-//        }
-
-//        holder.nestedRecyclerview_LinearLayout.setVisibility(View.GONE);
-//        holder.options_layout.setVisibility(View.GONE);
-//        holder.arrow.setImageResource(R.drawable.ic_right_arrow);
-//        Context context = holder.itemView.getContext();
-//        if (cardSelected == position) {
-//            if (!holder.selected) {
-//                holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.item_selected));
-//                holder.selected = true;
-//                holder.nestedRecyclerview_LinearLayout.setVisibility(View.VISIBLE);
-//                holder.arrow.setImageResource(R.drawable.ic_down_arrow);
-//                holder.options_layout.setVisibility(View.VISIBLE);
-//            } else { // LAST ITEM!
-//                holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
-//                holder.selected = false;
-//                isSelected = false;
-//            }
-//        } else {
-//            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
-//            holder.selected = false;
-//        }
-
-        /**
-         *  items recyclerview
-         */
 
         setChildRecyclerview(holder, focusCategory);
     }
 
     private void setChildRecyclerview(@NonNull AdapterViewHolder holder, Category focusCategory) {
-        ArrayList<Baggage> childDataset;
+        ArrayList<Baggage> childDataset; //encapsulate!
 
+        holder.childRecyclerview = holder.itemView.findViewById(R.id.card_view_category_nestedRecyclerView);
 
-        holder.childRecyclerview = holder.itemView.findViewById(R.id.categoryCardView_nestedRecyclerView);
         ItemTouchHelper.SimpleCallback simpleCallback = new Baggage_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, holder);
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(holder.childRecyclerview);
 
@@ -198,26 +163,27 @@ public class Adapter_Categories_in_Baggage extends RecyclerView.Adapter<Adapter_
             Baggage focusBaggage = childDataset.get(adapterPosition);
             changeItemCount(v, focusBaggage, holder.adapter_baggage, adapterPosition);
         });
-
-
     }
 
 
     private void changeItemCount(View v, Baggage focusBaggage, Adapter_Baggage adapter_baggage, int adapterPosition) {
         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-
-        builder.setTitle(v.getResources().getString(R.string.text_itemCount));
-
         LayoutInflater inflater = activity.getLayoutInflater();
+
         View view = inflater.inflate(R.layout.alertdialog_count, null);
-        builder.setView(view);
+
+        TextView dialogTitle = view.findViewById(R.id.alertdialog_title_count);
+        dialogTitle.setText(R.string.dialog_text_itemCount);
+
 
         numberPicker = view.findViewById(R.id.numberPicker);
         numberPicker.setMinValue(1);
         numberPicker.setMaxValue(99);
         numberPicker.setValue(focusBaggage.getBaggageCount());
 
-        builder.setNegativeButton(v.getResources().getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setView(view);
+
+        builder.setNegativeButton(v.getResources().getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
 
         NavController navController = Navigation.findNavController(activity, R.id.fragment);
         Bundle bundle = new Bundle();
@@ -230,62 +196,6 @@ public class Adapter_Categories_in_Baggage extends RecyclerView.Adapter<Adapter_
         builder.show();
     }
 
-   /* private void setOptionsButton(AdapterViewHolder holder, Category category) {
-
-        navController = Navigation.findNavController(activity, R.id.fragment);
-
-        Bundle obundle = new Bundle();
-        obundle.putSerializable("category", category);
-        holder.editTrip.setOnClickListener(v -> editCategoryDialog(v));
-
-        holder.deleteTrip.setOnClickListener(v -> deletedCategoryDialog(v));
-
-        holder.addHandluggage.setOnClickListener(v -> {
-            navController.navigate(R.id.fragment_Add_Item_To_Category, obundle);
-        });
-
-    }
-
-    private void deletedCategoryDialog(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-
-        builder.setCancelable(true);
-        builder.setNegativeButton(v.getResources().getString(R.string.text_no), ((dialog, which) -> dialog.dismiss()));
-
-        builder.setTitle(v.getResources().getString(R.string.text_delete) + " " + v.getResources().getString(R.string.text_category));
-        TextView textView = new TextView(v.getContext());
-        textView.setText(v.getResources().getString(R.string.warning_deleteCategory));
-        builder.setView(textView);
-
-        builder.setPositiveButton(v.getResources().getString(R.string.text_yes), ((dialog, which) -> {
-            Presented.deleteCategory(focusCategory, v.getContext());
-            navController.navigate(R.id.fragment_ShowCategories);
-        }));
-        builder.show();
-    }
-
-    private void editCategoryDialog(View v) {
-        String title = v.getResources().getString(R.string.text_edit) + " " + v.getResources().getString(R.string.text_category);
-        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-
-        builder.setNegativeButton(v.getResources().getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
-        builder.setTitle(title);
-        builder.setCancelable(true);
-
-        EditText editText = new EditText(v.getContext());
-        editText.setText(focusCategory.getCategoryName());
-        builder.setView(editText);
-
-        builder.setPositiveButton(v.getResources().getString(R.string.text_edit), ((dialog, which) -> {
-            String itemName = editText.getText().toString();
-            Presented.updateCategory(focusCategory, itemName, v.getContext());
-//            makeToast(v.getContext(), getString(R.string.text_haveBeenUpdated);
-
-            navController.navigate(R.id.fragment_ShowCategories);
-        }));
-        builder.show();
-    }*/
-
     @Override
     public int getItemCount() {
         return dataset == null ? 0 : dataset.size();
@@ -295,30 +205,25 @@ public class Adapter_Categories_in_Baggage extends RecyclerView.Adapter<Adapter_
         this.selectedState = selectedState;
     }
 
-    public void removeCategory(int position) {
-        dataset.remove(position);
-        notifyItemRemoved(position);
-    }
-
-
-    public class AdapterViewHolder extends RecyclerView.ViewHolder implements Baggage_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+    public class AdapterViewHolder extends RecyclerView.ViewHolder
+            implements Baggage_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
         TextView elementNameTV;
-        public LinearLayout linearLayout;
         //        ImageView arrow;
         LinearLayout childRecyclerview_LinearLayout;
         RecyclerView childRecyclerview;
         private boolean cardSelected;
 
+        public LinearLayout linearLayout;
         Adapter_Baggage adapter_baggage;
 
         public AdapterViewHolder(View view) {
             super(view);
-            elementNameTV = view.findViewById(R.id.categoryCardView_name);
-            linearLayout = view.findViewById(R.id.categoryCardView_layout);
+            elementNameTV = view.findViewById(R.id.card_view_category_name);
+            linearLayout = view.findViewById(R.id.card_view_category_layout);
 //            arrow = view.findViewById(R.id.categoryCardView_Arrow);
-            childRecyclerview_LinearLayout = view.findViewById(R.id.categoryCardView_itemLinearLayout);
-            childRecyclerview = view.findViewById(R.id.categoryCardView_nestedRecyclerView);
+            childRecyclerview_LinearLayout = view.findViewById(R.id.card_view_category_nestedRecyclerView_layout);
+            childRecyclerview = view.findViewById(R.id.card_view_category_nestedRecyclerView);
         }
 
         @Override

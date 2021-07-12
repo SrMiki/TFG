@@ -30,26 +30,10 @@ public class BaseFragment extends Fragment {
         return Navigation.findNavController(v);
     }
 
-    public void closeKeyBoard() {
-        InputMethodManager inputManager =
-                (InputMethodManager) getContext().
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(
-                getActivity().getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
+    public void closeKeyBoard(View view) {
+        InputMethodManager inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
-//
-//    public void openKeyBoard() {
-//        InputMethodManager inputManager =
-//                (InputMethodManager) getContext().
-//                        getSystemService(Context.INPUT_METHOD_SERVICE);
-//        inputManager.hideSoftInputFromWindow(
-//                getActivity().getCurrentFocus().getWindowToken(),
-//                InputMethodManager.SHOW_IMPLICIT);
-//    }
-
-
-
 
     /**
      * @param dateTextView The EditText to put the Date
@@ -68,10 +52,6 @@ public class BaseFragment extends Fragment {
         newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
     }
 
-    /**
-     * @param selectedDateTextView
-     * @param dateTextView
-     */
     protected void showDatePickerDialog(EditText selectedDateTextView, EditText dateTextView) {
         String selectedDate = selectedDateTextView.getText().toString();
         DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
@@ -95,7 +75,7 @@ public class BaseFragment extends Fragment {
         Toast toast =
                 Toast.makeText(context,
                         text, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER | Gravity.BOTTOM, 0, 0);
+//        toast.setGravity( Gravity.BOTTOM, 0, 0);
         toast.show();
     }
 
@@ -111,7 +91,7 @@ public class BaseFragment extends Fragment {
     public AlertDialog.Builder makeNewAlertDialog(String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
         builder.setTitle(title);
         builder.setCancelable(true);
         return builder;

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,7 +22,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.Adapter_Category;
-import com.miki.justincase_v1.Swipers.Category_RecyclerItemTouchHelper;
 import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
@@ -38,6 +36,7 @@ public class Fragment_ShowCategories extends BaseFragment {
     FloatingActionButton floatingButton;
     Category focusCategory;
 
+    private boolean showOptionMenu = false;
 
     @Nullable
     @Override
@@ -46,123 +45,110 @@ public class Fragment_ShowCategories extends BaseFragment {
 
         dataset = Presenter.selectAllCategories(getContext());
 
-        if(!dataset.isEmpty()){
+        if (!dataset.isEmpty()) {
             LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
             linearLayout.setVisibility(View.VISIBLE);
+
+            setHasOptionsMenu(true);
+
+            recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            adapter = new Adapter_Category(dataset, getActivity());
+            recyclerView.setAdapter(adapter);
+
+            adapter.setOnClickListener(v -> {
+                int position = recyclerView.getChildAdapterPosition(v);
+                focusCategory = dataset.get(position);
+                updateFocusCategory(position);
+            });
+
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                if (bundle.getSerializable("categoryPosition") != null) {
+                    int categoryPosition = (int) bundle.getSerializable("categoryPosition");
+                    adapter.setCardSelected(categoryPosition);
+                }
+            }
         }
-
-        setHasOptionsMenu(true);
-
-        recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new Adapter_Category(dataset, getActivity());
-        recyclerView.setAdapter(adapter);
 
         floatingButton = view.findViewById(R.id.fragment_show_entity_btn_add);
 
         floatingButton.setOnClickListener(v -> newCategoryDialog());
-
-        adapter.setOnClickListener(v -> {
-            int position = recyclerView.getChildAdapterPosition(v);
-            focusCategory = dataset.get(position);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("category", focusCategory);
-            getNav().navigate(R.id.action_fragment_ShowCategories_to_fragment_ShowCategoryContent, bundle);
-        });
-
-        adapter.setOnLongClickListener(v -> {
-            int position = recyclerView.getChildAdapterPosition(v);
-            focusCategory = dataset.get(position);
-            editCategoryDialog(v);
-            return true;
-        });
         return view;
     }
 
-    private void editCategoryDialog(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_editCategory));
+    private void updateFocusCategory(int position) {
+        if (!adapter.isSelected()) {
+            changeFocusState(position);
+        } else if (adapter.getCardSelected() == position) {
+            changeFocusState(-1);// all closed
+        } else {
+            adapter.setCardSelected(position);
+        }
+    }
 
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-        View view = inflater.inflate(R.layout.alertdialog_edittext, null);
-
-        EditText editText = view.findViewById(R.id.alertdialog_viewEditText);
-        editText.setText(focusCategory.getCategoryName());
-
-        builder.setView(view);
-
-        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
-
-        builder.setPositiveButton(getString(R.string.text_edit), ((dialog, which) -> {
-            String name = editText.getText().toString();
-            if (name.isEmpty()) {
-                makeToast(v.getContext(), getString(R.string.toast_emptyName));
-            } else {
-                boolean update = Presenter.updateCategory(focusCategory, name, getContext());
-                if (update) {
-                    makeToast(v.getContext(), getString(R.string.toast_categoryUpdated));
-                    getNav().navigate(R.id.fragment_ShowCategories);
-                } else {
-                    makeToast(v.getContext(), getString(R.string.toast_updateCategory));
-                }
-            }
-        }));
-        builder.show();
+    private void changeFocusState(int position) {
+        adapter.setCardSelected(position);
+        showOptionMenu = !showOptionMenu;
+        adapter.setSelectedState(showOptionMenu);
     }
 
     private void newCategoryDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.dialog_title_newCategory));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_edittext, null);
         builder.setView(view);
 
-        EditText editText = view.findViewById(R.id.alertdialog_viewEditText);
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_edittext);
+        dialogTitle.setText(getString(R.string.dialog_title_newCategory));
+
+        EditText editText = view.findViewById(R.id.dialog_edittext_input);
         editText.setHint(getString(R.string.hint_createCategory));
+
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.text_create), ((dialog, which) -> {
+        //still need for older versions of Android
+        builder.setPositiveButton(getString(R.string.dialog_button_add), (dialog, which) -> {
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
             if (editText.getText().toString().isEmpty()) {
-                makeToast(getContext(), getString(R.string.toast_emptyName));
-                newCategoryDialog();
+                makeToast(getContext(), getString(R.string.toast_warning_emptyName));
             } else {
                 String name = editText.getText().toString();
-                boolean category = Presenter.createCategory(name, getContext());
-                if (category) {
-                    makeToast(getContext(), getString(R.string.toast_categoryCreated));
-
-                    addItemsDialog();
-
-                    getNav().navigate(R.id.fragment_ShowCategories);
+                if (!Presenter.createCategory(name, getContext())) {
+                    makeToast(getContext(), getString(R.string.toast_warning_category));
                 } else {
-                    makeToast(getContext(), getString(R.string.toast_errorExistCategory));
+//                    makeToast(getContext(), getString(R.string.toast_created_category));
+                    dialog.dismiss();
+                    addItemsDialog();
                 }
             }
-        }));
-        builder.show();
+        });
     }
 
     private void addItemsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.dialog_title_newCategory));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
-        TextView textView = view.findViewById(R.id.alertdialog_textView);
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_textview);
+        dialogTitle.setText(getString(R.string.dialog_title_addCategoryContent));
+
+        TextView textView = view.findViewById(R.id.dialog_message_textview);
         textView.setText(getString(R.string.dialog_ask_addItemsToCategory));
+
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_no), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.dialog_yes), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> {
             ArrayList<Category> allCategories = Presenter.getAllCategories(getContext());
             Category category = allCategories.get(allCategories.size() - 1);
             Bundle bundle = new Bundle();
@@ -171,7 +157,6 @@ public class Fragment_ShowCategories extends BaseFragment {
         }));
         builder.show();
     }
-
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -193,32 +178,5 @@ public class Fragment_ShowCategories extends BaseFragment {
             }
         });
         super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    private void deleteItemDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-        View view = inflater.inflate(R.layout.alertdialog_textview, null);
-
-        TextView textView = view.findViewById(R.id.alertdialog_textView);
-        textView.setText(getString(R.string.dialog_ask_deleteItemsToo));
-        builder.setView(view);
-
-        builder.setNegativeButton(getString(R.string.dialog_no), ((dialog, which) -> {
-            dialog.dismiss();
-            Presenter.deleteCategory(focusCategory, getContext());
-            getNav().navigate(R.id.fragment_ShowCategories);
-        }));
-
-        builder.setPositiveButton(getString(R.string.dialog_yes), ((dialog, which) -> {
-            Presenter.deleteItemFromTrips(focusCategory, getContext());
-            Presenter.deleteItemOfThisCategory(focusCategory, getContext());
-            Presenter.deleteCategory(focusCategory, getContext());
-            getNav().navigate(R.id.fragment_ShowCategories);
-        }));
-        builder.show();
-
     }
 }

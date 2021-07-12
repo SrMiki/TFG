@@ -38,26 +38,24 @@
         </menu>
 
     </item>
-    <item  android:title="@string/menu_links">
-        <menu>
-            <item
-                android:id="@+id/ic_ofertas"
-                android:icon="@drawable/ic_monetization"
-                android:title="@string/menu_ofertas">
-            </item>
-            <item
-                android:id="@+id/ic_coche"
-                android:icon="@drawable/ic_car"
-                android:title="@string/menu_coche">
-            </item>
-            <item
-                android:id="@+id/ic_COVID"
-                android:icon="@drawable/ic_masks"
-                android:title="@string/menu_covid">
-            </item>
-        </menu>
-
-
-    </item>
+<!--    <item  android:title="@string/menu_links">-->
+<!--        <menu>-->
+<!--            <item-->
+<!--                android:id="@+id/ic_ofertas"-->
+<!--                android:icon="@drawable/ic_monetization"-->
+<!--                android:title="@string/menu_ofertas">-->
+<!--            </item>-->
+<!--            <item-->
+<!--                android:id="@+id/ic_coche"-->
+<!--                android:icon="@drawable/ic_car"-->
+<!--                android:title="@string/menu_coche">-->
+<!--            </item>-->
+<!--            <item-->
+<!--                android:id="@+id/ic_COVID"-->
+<!--                android:icon="@drawable/ic_masks"-->
+<!--                android:title="@string/menu_covid">-->
+<!--            </item>-->
+<!--        </menu>-->
+<!--    </item>-->
 
 </menu>

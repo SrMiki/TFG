@@ -41,7 +41,8 @@ import com.miki.justincase_v1.fragments.BaseFragment;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class Fragment_ShowItems extends BaseFragment
+        implements Item_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     Adapter_Item adapter;
     ArrayList<Item> dataset;
@@ -50,110 +51,127 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
     ImageView item_photo;
 
     FloatingActionButton floatingButton;
-    private String itemPhotoUri;
+    private String itemPhotoUri = "";
 
     private ImageCapture itemPhoto;
+
+    String itemName = "";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recyclerview_addbutton, container, false);
 
-        floatingButton = view.findViewById(R.id.fragment_show_entity_btn_add);
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
         dataset = Presenter.selectAllItems(getContext());
         if (!dataset.isEmpty()) {
             LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
             linearLayout.setVisibility(View.VISIBLE);
+
+            setHasOptionsMenu(true);
+
+            recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
+            ItemTouchHelper.SimpleCallback simpleCallback = new Item_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+            new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            adapter = new Adapter_Item(dataset, getActivity());
+            recyclerView.setAdapter(adapter);
+
+            adapter.setListener(v -> {
+                Item item = dataset.get(recyclerView.getChildAdapterPosition(v));
+                editItemDialog(item);
+                return true;
+            });
         }
 
-        setHasOptionsMenu(true);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            showNotification(bundle);
+        }
 
+        floatingButton = view.findViewById(R.id.fragment_show_entity_btn_add);
         floatingButton.setOnClickListener(v -> createNewItemDialog());
-
-        recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
-        ItemTouchHelper.SimpleCallback simpleCallback = new Item_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new Adapter_Item(dataset, getActivity());
-        recyclerView.setAdapter(adapter);
-
-        adapter.setListener((View v) -> {
-            Item item = dataset.get(recyclerView.getChildAdapterPosition(v));
-            editItemDialog(item);
-            return true;
-        });
-
-
         return view;
     }
 
+    private void showNotification(Bundle bundle) {
+        String notification = (String) bundle.getSerializable("notification");
+        if (notification != null) {
+            switch (notification) {
+                case "itemCreate":
+                    makeToast(getContext(), getString(R.string.toast_created_item));
+                    break;
+                case "itemUpdated":
+                    makeToast(getContext(), getString(R.string.toast_updated_item));
+                    break;
+            }
+        }
+    }
+
     private void createNewItemDialog() {
-        itemPhotoUri = "";
-
-        // --  Dialog -- //
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        builder.setTitle(getString(R.string.dialog_title_newItem));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_item, null);
         builder.setView(view);
 
         item_photo = view.findViewById(R.id.itemPhoto);
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_itemTextview);
+        dialogTitle.setText(getString(R.string.dialog_title_newItem));
+
         EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
         editText.setHint(getString(R.string.hint_itemName));
 
         TextView addPhoto = view.findViewById(R.id.itemAlertdialog_addPhoto);
 
-        // --  Dialog -- //
-
-
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.dialog_add), (dialog, which) -> {
+        //still need for older versions of Android
+        builder.setPositiveButton(getString(R.string.dialog_button_add), (dialog, which) -> {
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
             String itemName = editText.getText().toString();
             if (itemName.isEmpty()) {
-                makeToast(getContext(), getString(R.string.toast_emptyName));
+                makeToast(getContext(), getString(R.string.toast_warning_emptyName));
             } else {
-                if (Presenter.createItem(itemName, itemPhotoUri, getContext())) {
-                    makeToast(getContext(), getString(R.string.toast_itemCreated));
-                    dialog.dismiss();
-                    getNav().navigate(R.id.fragment_ShowItems);
+                if (!Presenter.createItem(itemName, itemPhotoUri, getContext())) {
+                    makeToast(getContext(), getString(R.string.toast_warning_item));
                 } else {
-                    makeToast(getContext(), getString(R.string.toast_error_createItem));
+                    dialog.dismiss();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("notification", "itemCreated");
+                    getNav().navigate(R.id.fragment_ShowItems, bundle);
                 }
             }
         });
 
-        AlertDialog show = builder.show();
-
         //ItemPhoto!
         addPhoto.setOnClickListener(v -> {
-            show.dismiss();
-            AddPhotoDialog();
+            dialog.dismiss();
+            itemName = editText.getText().toString();
+            AddPhotoDialog(editText.getText().toString(), true);
         });
-
     }
 
     private void editItemDialog(Item item) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_editItem));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_item, null);
+
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_itemTextview);
+        dialogTitle.setText(getString(R.string.dialog_title_editItem));
 
         EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
         editText.setText(item.getItemName());
 
         ImageView itemPhoto = view.findViewById(R.id.itemPhoto);
-        if (!item.getItemPhotoURI().isEmpty()) {
+        if (item.getItemPhotoURI() != null && !item.getItemPhotoURI().isEmpty()) {
             Bitmap bitmap;
             try {
                 if (Build.VERSION.SDK_INT < 28) { //Android 9
@@ -177,51 +195,58 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
         TextView addPhoto = view.findViewById(R.id.itemAlertdialog_addPhoto);
         addPhoto.setText(R.string.text_changephoto);
 
-        addPhoto.setOnClickListener(v -> AddPhotoDialog());
-
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_cancel), ((DialogInterface dialog, int which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((DialogInterface dialog, int which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.text_edit), ((dialog, which) -> {
+        //still need for older versions of Android
+        builder.setPositiveButton(getString(R.string.dialog_button_add), (dialog, which) -> {
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
             String itemName = editText.getText().toString();
             if (itemName.isEmpty()) {
-                makeToast(getContext(), getString(R.string.toast_emptyName));
-                dialog.dismiss();
+                makeToast(getContext(), getString(R.string.toast_warning_emptyName));
             } else {
-                boolean updateItem = Presenter.updateItem(item, itemName.trim().toLowerCase(), getContext());
-                if (updateItem) {
-                    makeToast(getContext(), getString(R.string.toast_itemUpdated));
-                    getNav().navigate(R.id.fragment_ShowItems);
+                if (!Presenter.updateItem(item, itemName.trim().toLowerCase(), getContext())) {
+                    makeToast(getContext(), getString(R.string.toast_warning_item));
                 } else {
-                    makeToast(getContext(), getString(R.string.toast_warning_updateItem));
+                    dialog.dismiss();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("notification", "itemUpdated");
+                    getNav().navigate(R.id.fragment_ShowItems, bundle);
                 }
             }
-        }));
-        builder.show();
+        });
+
+        addPhoto.setOnClickListener(v -> {
+            dialog.dismiss();
+            itemName = editText.getText().toString();
+            AddPhotoDialog(itemName, false);
+        });
     }
 
-
-    private void AddPhotoDialog() {
-        // --  Dialog -- //
+    /**
+     * @param itemName
+     * @param operation >> false == edit, true == create
+     *                  that's cause camaraX need to know
+     */
+    private void AddPhotoDialog(String itemName, boolean operation) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_item));
-
-        builder.setTitle(R.string.addPhotoDialogTitle);
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_photo, null);
-        builder.setView(view);
+
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_photo);
+        dialogTitle.setText(getString(R.string.dialog_title_photo));
 
         ImageView photo = view.findViewById(R.id.take_photo);
         ImageView galery = view.findViewById(R.id.galery);
 
-        builder.setNegativeButton(getString(R.string.dialog_cancel), ((dialog, which) -> dialog.dismiss()));
-
-        builder.setPositiveButton(getString(R.string.dialog_add), ((dialog, which) -> dialog.dismiss()));
+        builder.setView(view);
         AlertDialog show = builder.show();
-        // --  Dialog -- //
 
         galery.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -233,13 +258,120 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
             }
         });
 
-
         photo.setOnClickListener(v -> {
             show.dismiss();
-            getNav().navigate(R.id.cameraX);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("itemName", itemName);
+            bundle.putSerializable("itemOperation", operation);
+            getNav().navigate(R.id.cameraX, bundle);
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (data != null) {
+            if (requestCode == 10) {
+                Uri itemUri = data.getData();
+
+//                if (operation.equals("itemCreated")) {
+//                    createItemDialog(itemUri);
+//                } else if (operation.equals("itemUpdated")) {
+//                    editItemDialog(itemUri);
+//                } else {
+//
+//                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void createItemDialog(Uri itemUri) {
+        String itemPhotoUri = itemUri.toString();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.alertdialog_item, null);
+
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_itemTextview);
+        dialogTitle.setText(getString(R.string.dialog_title_newItem));
+
+        item_photo = view.findViewById(R.id.itemPhoto);
+        item_photo.setVisibility(View.VISIBLE);
+        item_photo.setImageURI(itemUri);
+
+        EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
+        editText.setText(itemName);
+
+        builder.setView(view);
+
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
+
+        builder.setPositiveButton(getString(R.string.dialog_button_add), (dialog, which) -> {
+        });
+
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
+            String itemName = editText.getText().toString();
+            if (itemName.isEmpty()) {
+                makeToast(getContext(), getString(R.string.toast_warning_emptyName));
+            } else {
+                if (!Presenter.createItem(itemName, itemPhotoUri, getContext())) {
+                    makeToast(getContext(), getString(R.string.toast_warning_item));
+                } else {
+                    dialog.dismiss();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("notification", "itemCreated");
+                    getNav().navigate(R.id.fragment_ShowItems, bundle);
+                }
+            }
+        });
+    }
+
+    private void editItemDialog(Uri itemUri) {
+        String itemPhotoUri = itemUri.toString();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.alertdialog_item, null);
+
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_itemTextview);
+        dialogTitle.setText(getString(R.string.dialog_title_editItem));
+
+        item_photo = view.findViewById(R.id.itemPhoto);
+        item_photo.setVisibility(View.VISIBLE);
+        item_photo.setImageURI(itemUri);
+
+        EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
+        editText.setText(itemName);
+
+        builder.setView(view);
+
+        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
+
+        builder.setPositiveButton(getString(R.string.dialog_button_add), (dialog, which) -> {
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
+            String itemName = editText.getText().toString();
+            if (itemName.isEmpty()) {
+                makeToast(getContext(), getString(R.string.toast_warning_emptyName));
+            } else {
+                if (!Presenter.createItem(itemName, itemPhotoUri, getContext())) {
+                    makeToast(getContext(), getString(R.string.toast_warning_item));
+                } else {
+                    dialog.dismiss();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("notification", "itemCreated");
+                    getNav().navigate(R.id.fragment_ShowItems, bundle);
+                }
+            }
+        });
+    }
 
     @Override
     public void onSwipe(RecyclerView.ViewHolder viewHolder, int direction, int position) {
@@ -249,7 +381,7 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
             String name = dataset.get(deletedIndex).getItemName();
             Item deletedItem = dataset.get(deletedIndex);
 
-            adapter.removeItem(viewHolder.getAdapterPosition());
+            adapter.remove(viewHolder.getAdapterPosition());
 
             restoreDeletedElement(viewHolder, name, deletedItem, deletedIndex);
             //Note: if the item it's deleted and then restore, only restore in item. You must
@@ -261,7 +393,7 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
     }
 
     public void restoreDeletedElement(RecyclerView.ViewHolder viewHolder, String name, Item deletedItem, int deletedIndex) {
-        String deleted = getString(R.string.toast_hasBeenDeleted);
+        String deleted = getString(R.string.toast_deleted);
         String restore = getString(R.string.snackbar_restore);
         Snackbar snackbar = Snackbar.make(((Adapter_Item.AdapterViewHolder) viewHolder).layout,
                 name + " " + deleted,
@@ -275,6 +407,7 @@ public class Fragment_ShowItems extends BaseFragment implements Item_RecyclerIte
         snackbar.setActionTextColor(Color.GREEN);
         snackbar.show();
     }
+
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {

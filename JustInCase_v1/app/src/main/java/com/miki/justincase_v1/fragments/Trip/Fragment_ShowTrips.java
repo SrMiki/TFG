@@ -68,9 +68,7 @@ public class Fragment_ShowTrips extends BaseFragment {
             isSeletec(position);
         });
         return view;
-
     }
-
 
     private void isSeletec(int position) {
         Bundle bundle = new Bundle();
@@ -87,17 +85,15 @@ public class Fragment_ShowTrips extends BaseFragment {
                     TextView textView = new TextView(getContext());
                     textView.setText(getString(R.string.dialog_warning_startTrip));
                     builder.setView(textView);
-                    builder.setPositiveButton(getString(R.string.dialog_confirm), ((dialog, which) -> {
+                    builder.setPositiveButton(getString(R.string.dialog_button_confirm), ((dialog, which) -> {
                         getNav().navigate(R.id.fragment_CheckIn, bundle);
                     }));
                     builder.show();
                 }
-
             });
-            a(position);
+            updateSelectedState(position);
         } else if (adapter.getCardSelected() == position) {
-            a(-1);
-
+            updateSelectedState(-1);
         } else {
             adapter.setCardSelected(position);
         }
@@ -107,7 +103,9 @@ public class Fragment_ShowTrips extends BaseFragment {
         button = view.findViewById(R.id.fragment_show_trip_button);
         button.setText(getString(R.string.btn_newTrip));
         button.setBackgroundColor(getContext().getResources().getColor(R.color.primary_700));
-        button.setOnClickListener(vs -> getNav().navigate(R.id.fragment_CreateTrip));
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("operation", "create");
+        button.setOnClickListener(vs -> getNav().navigate(R.id.fragment_CreateTrip, bundle));
     }
 
     private void setRecyclerview(View view) {
@@ -118,13 +116,10 @@ public class Fragment_ShowTrips extends BaseFragment {
         adapter.activity = getActivity();
     }
 
-
-    private void a(int position) {
+    private void updateSelectedState(int position) {
         adapter.setCardSelected(position);
-        getActivity().invalidateOptionsMenu();
         showOptionMenu = !showOptionMenu;
         adapter.setSelectedState(showOptionMenu);
-
     }
 
     @Override
@@ -145,50 +140,6 @@ public class Fragment_ShowTrips extends BaseFragment {
                 return false;
             }
         });
-//        super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
-
-//    @Override
-//    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-//        MenuItem menuItem;
-//        menuItem = menu.findItem(R.id.action_addItem);
-//        menuItem.setVisible(showOptionMenu);
-//
-//        menuItem = menu.findItem(R.id.action_edit);
-//        menuItem.setVisible(showOptionMenu);
-//
-//        menuItem = menu.findItem(R.id.action_delete);
-//        menuItem.setVisible(showOptionMenu);
-//
-////        super.onPrepareOptionsMenu(menu);
-//
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        Bundle obundle = new Bundle();
-//        obundle.putSerializable("Trip", focusTrip);
-//        switch (item.getItemId()) {
-//            case R.id.action_delete:
-//                deleteThisTrip();
-//                return true;
-//            case R.id.action_edit:
-//                adapter.setSelectedState(false);
-//                getActivity().invalidateOptionsMenu();
-//                showOptionMenu = !showOptionMenu;
-//
-//                return true;
-//            case R.id.action_addItem:
-//                adapter.setSelectedState(false);
-//                getActivity().invalidateOptionsMenu();
-//                showOptionMenu = !showOptionMenu;
-//
-//                return true;
-//            default:
-//                return true;
-////                return super.onOptionsItemSelected(item);
-//        }
-//
-//    }
-
 }

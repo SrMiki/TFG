@@ -1,7 +1,5 @@
 package com.miki.justincase_v1.fragments.Travel;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +45,26 @@ public class Fragment_CheckIn extends BaseFragment {
 
             dataset = Presenter.getHandLuggage(trip, getContext());
 
+            recyclerView = view.findViewById(R.id.startTrip_recyclerview);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+            adapter = new Adapter_CheckList_Suitcase(dataset);
+            recyclerView.setAdapter(adapter);
+
+            adapter.setListener(v -> {
+                HandLuggage handLuggage = dataset.get(recyclerView.getChildAdapterPosition(v));
+                Bundle obundle = new Bundle();
+                obundle.putSerializable("handluggage", handLuggage);
+                getNav().navigate(R.id.fragment_DoCheckList, obundle);
+            });
+
+
+            if (trip.isTravelling() == 0) {
+                checkIn();
+            } else if (trip.isTravelling() == 1) {
+                checkOut();
+            }
+
 //            setTrip(view);
 
 //            if (trip.getReturnDate().isEmpty()) {
@@ -55,63 +73,8 @@ public class Fragment_CheckIn extends BaseFragment {
 //                returnDateTV.setText(trip.getReturnDate());
 //            }
 
-            recyclerView = view.findViewById(R.id.startTrip_recyclerview);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new Adapter_CheckList_Suitcase(dataset);
-            recyclerView.setAdapter(adapter);
-
-            adapter.setListener(v -> {
-                HandLuggage handLuggage = dataset.get(recyclerView.getChildAdapterPosition(v));
-                Bundle obundle = new Bundle();
-                obundle.putSerializable("handluggage", handLuggage);
-                SharedPreferences sp;
-                sp = v.getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
-                boolean showCategoires = sp.getBoolean("showCategories", false);
-                if (showCategoires) {
-                    getNav().navigate(R.id.fragment_DoCheckListByCategory, obundle);
-                } else {
-                    getNav().navigate(R.id.fragment_DoCheckListByItem, obundle);
-                }
-            });
-
-
-            ArrayList<HandLuggage> handLuggageArrayList = Presenter.getHandLuggage(trip, getContext());
-
-
-            if (allSelected(handLuggageArrayList)) {
-                button.setVisibility(View.VISIBLE);
-            } else {
-                button.setVisibility(View.GONE);
-            }
-
-            setCheckTripStatus();
-            button.setOnClickListener(v -> {
-                Presenter.clearCheckHandLuggage(trip, getContext());
-                Presenter.updateTrip(trip, getContext());
-                getNav().navigate(R.id.mainFragment);
-            });
-
-
         }
         return view;
-    }
-
-    /**
-     * update chek-in / check-out status
-     * 0 == planning
-     * 1 == start
-     * 2 == check-out (1st) (for travel trip if there is a return Trip)
-     * 3 == check-in (2nd) (for return Trip)
-     * 4 == finished
-     * <p>
-     * 2 & 3 for go and return travel
-     */
-    private void setCheckTripStatus() {
-        if (trip.isTravelling() == 0) {
-            trip.setTravelling(1); //start
-        } else if(trip.isTravelling()==2) {
-            trip.setTravelling(3);
-        }
     }
 
     private void setTrip(View view) {
@@ -123,6 +86,43 @@ public class Fragment_CheckIn extends BaseFragment {
         tripDestinationTV.setText(trip.getDestination());
         tripTravelDateTV.setText(trip.getTravelDate());
     }
+
+    private void checkOut() {
+        if (allSelected(dataset)) {
+            button.setText(getString(R.string.btn_endCheckOut));
+        } else {
+            button.setText(getString(R.string.btn_doCheckOut));
+        }
+
+        button.setOnClickListener(v -> {
+            if (trip.getTravels() > 0) {
+                trip.setTravels(trip.getTravels() - 1);
+                trip.setTravelling(0);
+            } else {
+                trip.setTravelling(2);
+            }
+            Presenter.clearCheckHandLuggage(trip, getContext());
+            Presenter.updateTrip(trip, getContext());
+            getNav().navigate(R.id.fragment_ShowTrips);
+        });
+    }
+
+    private void checkIn() {
+        if (allSelected(dataset)) {
+            button.setVisibility(View.VISIBLE);
+        } else {
+            button.setVisibility(View.GONE);
+        }
+
+        button.setOnClickListener(v -> {
+            trip.setTravelling(1);
+            Presenter.clearCheckHandLuggage(trip, getContext());
+            Presenter.updateTrip(trip, getContext());
+            getNav().navigate(R.id.mainFragment);
+        });
+
+    }
+
 
     private boolean allSelected(ArrayList<HandLuggage> handLuggageArrayList) {
         for (HandLuggage handLuggage : handLuggageArrayList) {

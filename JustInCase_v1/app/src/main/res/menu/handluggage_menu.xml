@@ -14,12 +14,12 @@
         android:icon="@drawable/ic_delete"
         android:title="@string/text_delete"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_import"
-        android:icon="@drawable/ic_share"
-        android:title="@string/toolbar_import"
-        android:visible="true"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/action_import"-->
+<!--        android:icon="@drawable/ic_share"-->
+<!--        android:title="@string/toolbar_import"-->
+<!--        android:visible="true"-->
+<!--        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/action_template"
@@ -32,6 +32,13 @@
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share"
         android:title="@string/toolbar_share"
+        android:visible="true"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_owner"
+        android:icon="@drawable/ic_account"
+        android:title="@string/toolbar_owner"
         android:visible="true"
         app:showAsAction="never" />
 

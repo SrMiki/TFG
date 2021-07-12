@@ -1,7 +1,6 @@
 package com.miki.justincase_v1.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.db.entity.Category;
-import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.db.entity.Template;
 
 import java.util.ArrayList;
@@ -117,19 +112,7 @@ public class Adapter_Template extends RecyclerView.Adapter<Adapter_Template.Adap
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         Template template = dataset.get(position);
         holder.elementNameTV.setText(template.getTemplateName());
-
-//        Context context = holder.itemView.getContext();
-
-//        if (selectedState) {
-//            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.item_selected));
-//        } else {
-//            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.design_default_color_on_primary));
-//        }
     }
-
-
-
-
 
     @Override
     public int getItemCount() {
@@ -148,8 +131,8 @@ public class Adapter_Template extends RecyclerView.Adapter<Adapter_Template.Adap
 
         public AdapterViewHolder(View view) {
             super(view);
-            elementNameTV = view.findViewById(R.id.entityCardView_name);
-            layout = view.findViewById(R.id.entityCardView_layout);
+            elementNameTV = view.findViewById(R.id.card_view_entity_name);
+            layout = view.findViewById(R.id.card_view_entity_layout);
 
         }
     }

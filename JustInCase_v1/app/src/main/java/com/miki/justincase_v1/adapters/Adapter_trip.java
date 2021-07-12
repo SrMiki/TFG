@@ -126,16 +126,21 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
         setOptionsButtons(holder, trip);
 
         String destination = trip.getDestination();
-        String travelDate = trip.getTravelDate() + " - " + trip.getReturnDate();
+        String travelDate = trip.getTravelDate();
+        if(!trip.getReturnDate().isEmpty()){
+            travelDate += " - " + trip.getReturnDate();
+        }
+        String members = trip.getMembers();
 
         holder.tripName_TextView.setText(destination);
         holder.tripDate_TextView.setText(travelDate);
+        holder.tripMembers_TextView.setText(members);
 
         Context context = holder.itemView.getContext();
         holder.nestedRecyclerview_LinearLayout.setVisibility(View.GONE);
         holder.optionLinearLayout.setVisibility(View.GONE);
 
-        isSelected(holder, position, context);
+        updateSelectedState(holder, position, context);
 
         setChildRecyclerView(holder, trip);
     }
@@ -146,22 +151,24 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
         Bundle obundle = new Bundle();
         obundle.putSerializable("trip", trip);
         holder.editTrip.setOnClickListener(v -> {
-            navController.navigate(R.id.fragment_Edit_Trip, obundle);
+            navController.navigate(R.id.fragment_CreateTrip, obundle);
         });
 
         holder.deleteTrip.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-            builder.setTitle(v.getResources().getString(R.string.dialog_title_warning));
-
             LayoutInflater inflater = activity.getLayoutInflater();
+
             View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
-            TextView textView = view.findViewById(R.id.alertdialog_textView);
+            TextView dialogTitle = view.findViewById(R.id.dialog_title_textview);
+            dialogTitle.setText(v.getResources().getString(R.string.dialog_title_warning));
+
+            TextView textView = view.findViewById(R.id.dialog_message_textview);
             textView.setText(v.getResources().getString(R.string.dialog_warning_deleteTrip));
             builder.setView(view);
 
-            builder.setNegativeButton(v.getResources().getString(R.string.dialog_no), ((dialog, which) -> dialog.dismiss()));
-            builder.setPositiveButton(v.getResources().getString(R.string.dialog_yes), ((dialog, which) -> {
+            builder.setNegativeButton(v.getResources().getString(R.string.dialog_button_no), ((dialog, which) -> dialog.dismiss()));
+            builder.setPositiveButton(v.getResources().getString(R.string.dialog_button_yes), ((dialog, which) -> {
                 Presenter.deleteTrip(trip, holder.itemView.getContext());
                 navController.navigate(R.id.fragment_ShowTrips);
             }));
@@ -174,7 +181,6 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
     }
 
     private void setChildRecyclerView(AdapterViewHolder holder, Trip trip) {
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                 holder.itemView.getContext(),
                 LinearLayoutManager.VERTICAL,
@@ -208,11 +214,10 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
             boolean showCategoires = sp.getBoolean("showCategories", false);
             navController.navigate(R.id.fragment_ShowBaggage, obundle);
         });
-
     }
 
 
-    private void isSelected(AdapterViewHolder holder, int position, Context context) {
+    private void updateSelectedState(AdapterViewHolder holder, int position, Context context) {
         if (cardSelected == position) {
             if (!holder.selected) {
 //                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.item_selected));
@@ -253,29 +258,30 @@ public class Adapter_Trip extends RecyclerView.Adapter<Adapter_Trip.AdapterViewH
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+
         RecyclerView childRecyclerview;
-        public TextView tripName_TextView, tripDate_TextView;
+        public TextView tripName_TextView, tripDate_TextView, tripMembers_TextView;
         public LinearLayout layout;
 
-        LinearLayout nestedRecyclerview_LinearLayout;
-
-        LinearLayout optionLinearLayout;
-        Button button, editTrip, deleteTrip, addHandluggage;
+        LinearLayout nestedRecyclerview_LinearLayout, optionLinearLayout;
+        Button editTrip, deleteTrip, addHandluggage;
 
         private boolean selected;
 
         public AdapterViewHolder(@NonNull View view) {
             super(view);
+            layout = view.findViewById(R.id.tripCardView_layoutToDeleted);
+
             tripName_TextView = view.findViewById(R.id.recyclerview_Trip_tripDestino);
             tripDate_TextView = view.findViewById(R.id.recyclerview_Trip_tripDate);
-            layout = view.findViewById(R.id.tripCardView_layoutToDeleted);
+            tripMembers_TextView = view.findViewById(R.id.recyclerview_Trip_tripMembers);
 
             childRecyclerview = view.findViewById(R.id.cardviewtrip_nestedRecyclerView);
             nestedRecyclerview_LinearLayout = view.findViewById(R.id.cardviewtrip_suitcasesLinearLayout);
 
-            optionLinearLayout = view.findViewById(R.id.options_layout);
-            editTrip = view.findViewById(R.id.showTrip_button_editTrip);
-            deleteTrip = view.findViewById(R.id.showTrip_button_deleteTrip);
+            optionLinearLayout = view.findViewById(R.id.card_view_category_options_layout);
+            editTrip = view.findViewById(R.id.card_view_category_editButton);
+            deleteTrip = view.findViewById(R.id.card_view_category_deleteButton);
             addHandluggage = view.findViewById(R.id.showTrip_button_addHandlugage);
 
         }
