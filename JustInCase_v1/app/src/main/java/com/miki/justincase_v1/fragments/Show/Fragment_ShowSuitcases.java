@@ -142,8 +142,8 @@ public class Fragment_ShowSuitcases extends BaseFragment
                 if (!Presenter.createSuitcase(suitcase, getContext())) {
                     makeToast(getContext(), getString(R.string.toast_warning_suitcase));
                 } else {
-                    dialog.dismiss();
                     closeKeyBoard(view);
+                    dialog.dismiss();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("notification", "suitcaseCreated");
                     getNav().navigate(R.id.fragment_ShowSuitcases, bundle);
@@ -203,8 +203,8 @@ public class Fragment_ShowSuitcases extends BaseFragment
                 if (!Presenter.updateSuitcase(suitcase, getContext())) {
                     makeToast(v.getContext(), getString(R.string.toast_warning_suitcase));
                 } else {
-                    dialog.dismiss();
                     closeKeyBoard(view);
+                    dialog.dismiss();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("notification", "suitcaseUpdated");
                     getNav().navigate(R.id.fragment_ShowSuitcases, bundle);

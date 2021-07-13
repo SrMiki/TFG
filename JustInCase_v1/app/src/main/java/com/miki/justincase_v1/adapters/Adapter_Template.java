@@ -123,6 +123,11 @@ public class Adapter_Template extends RecyclerView.Adapter<Adapter_Template.Adap
         this.selectedState = selectedState;
     }
 
+    public void remove(int adapterPosition) {
+        dataset.remove(adapterPosition);
+        notifyItemRemoved(adapterPosition);
+    }
+
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
 

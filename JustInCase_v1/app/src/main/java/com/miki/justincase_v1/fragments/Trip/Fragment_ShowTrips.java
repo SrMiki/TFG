@@ -81,14 +81,7 @@ public class Fragment_ShowTrips extends BaseFragment {
                 if (Presenter.getHandLuggage(focusTrip, getContext()).size() != 0) {
                     getNav().navigate(R.id.fragment_CheckIn, bundle);
                 } else {
-                    AlertDialog.Builder builder = makeNewAlertDialog(getString(R.string.dialog_warning));
-                    TextView textView = new TextView(getContext());
-                    textView.setText(getString(R.string.dialog_warning_startTrip));
-                    builder.setView(textView);
-                    builder.setPositiveButton(getString(R.string.dialog_button_confirm), ((dialog, which) -> {
-                        getNav().navigate(R.id.fragment_CheckIn, bundle);
-                    }));
-                    builder.show();
+                    warningNoBaggageDialog(bundle);
                 }
             });
             updateSelectedState(position);
@@ -97,6 +90,29 @@ public class Fragment_ShowTrips extends BaseFragment {
         } else {
             adapter.setCardSelected(position);
         }
+    }
+
+    private void warningNoBaggageDialog(Bundle bundle) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.alertdialog_textview, null);
+
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_textview);
+        dialogTitle.setText(R.string.dialog_title_warning);
+
+        TextView textView = view.findViewById(R.id.dialog_message_textview);
+        textView.setText(R.string.dialog_warning_startTrip);
+
+        builder.setView(view);
+
+        builder.setNegativeButton(R.string.dialog_button_cancel, ((dialog, which) -> {
+        }));
+
+        builder.setPositiveButton(getString(R.string.dialog_button_confirm), ((dialog, which) -> {
+            getNav().navigate(R.id.fragment_CheckIn, bundle);
+        }));
+        builder.show();
     }
 
     private void setButton(View view) {

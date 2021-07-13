@@ -36,6 +36,9 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
     EditText travelDate, returnDate, transport;
     TextView destination, size;
 
+    LinearLayout membersLayout;
+    TextView swipeTextView;
+
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch dateSwitch;
     NumberPicker numberPicker;
@@ -43,7 +46,6 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
     FloatingActionButton btn_finish;
     Button btn_country;
 
-    Trip newTrip;
     private Trip trip;
 
     RecyclerView recyclerView;
@@ -55,6 +57,9 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_trip, container, false);
         LinearLayout linearLayout = view.findViewById(R.id.fragment_createTrip_returnDateLayout);
+
+        //members Layout
+        membersLayout = view.findViewById(R.id.membersLayout);
 
         destination = view.findViewById(R.id.fragment_createTrip_destination);
         destination.setOnClickListener(v -> tripDestinationDialog());
@@ -68,13 +73,15 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
         size = view.findViewById(R.id.fragment_createTrip_tripSize);
         size.setOnClickListener(this::changeMemberNumber);
 
+
+
         //SWITCH BUTTON
         dateSwitch = view.findViewById(R.id.fragment_createTrip_switch);
         dateSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                linearLayout.setVisibility(view.GONE);
+                linearLayout.setVisibility(View.GONE);
             } else {
-                linearLayout.setVisibility(view.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
                 travelDate.setText("");
             }
             returnDate.setText("");
@@ -100,7 +107,7 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
         trip = new Trip();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            if ((Trip) bundle.getSerializable("trip") != null) { //edit trip!
+            if (bundle.getSerializable("trip") != null) { //edit trip!
                 trip = (Trip) bundle.getSerializable("trip");
 
                 destination.setText(trip.destination);
@@ -122,22 +129,22 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
             saveTrip();
             Bundle temp = new Bundle();
             temp.putSerializable("trip", trip);
-            if(bundle.getSerializable("operation") != null){
+            if (bundle.getSerializable("operation") != null) {
                 temp.putSerializable("operation", "create");
             }
             getNav().navigate(R.id.fragment_CountryList, temp);
         });
 
+
         btn_finish.setOnClickListener(v -> {
             if (bundle.getSerializable("operation") != null) { //edit trip!
                 saveTrip();
                 if (!Presenter.createTrip(trip, getContext())) {
-                    printWarningToast(getContext(), getString(R.string.dialog_warning_createTrip));
+                    makeToast(getContext(), getString(R.string.dialog_warning_createTrip));
                 } else {
                     ask_newHandLuggageDialog();
                 }
             } else { //new trip
-
                 saveTrip();
                 Presenter.updateTrip(trip, getContext());
                 getNav().navigate(R.id.action_fragment_CreateTrip_to_fragment_ShowTrips);
@@ -154,9 +161,13 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
         String travelTransport = transport.getText().toString();
         String returnTransport = "";
 
-        String members = datasetToString();
+        String members;
         int memberSize = Integer.parseInt(size.getText().toString());
-
+        if (memberSize == 1) {
+            members = "";
+        } else {
+            members = datasetToString();
+        }
         trip.setTrip(tripDestination, tripTravelDate, tripReturnDate, travelTransport, returnTransport, members, memberSize);
     }
 
@@ -171,7 +182,6 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
             return s.substring(0, s.length() - 2);
         }
     }
-
 
     private void tripDestinationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -195,7 +205,7 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
 
         AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String string = editText.getText().toString();
             if (string.isEmpty()) {
                 makeToast(getContext(), getString(R.string.toast_warning_emptyName));
@@ -268,14 +278,25 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
         if (length > 1) {
             recyclerView.setVisibility(View.VISIBLE);
 
+            //1st member
+            //When you change the size member, the 1st is blank
+            if (dataset.get(0) != null && dataset.get(0).isEmpty()) {
+                dataset.set(0, getString(R.string.text_member) + " " + (1));
+            }
 
             for (int i = dataset.size(); i < length; i++) {
                 dataset.add(getString(R.string.text_member) + " " + (i + 1));
             }
+
             adapter = new Adapter_StringList(dataset);
             adapter.setArrow(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(adapter);
+
+            if(dataset != null){
+                membersLayout.setVisibility(View.VISIBLE);
+            }
+
 
             ItemTouchHelper.SimpleCallback simpleCallback = new String_RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
             new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
@@ -312,7 +333,7 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
 
         AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String newMemberName = editText.getText().toString();
             if (newMemberName.isEmpty()) {
                 makeToast(getContext(), getString(R.string.toast_warning_emptyName));

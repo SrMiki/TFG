@@ -132,6 +132,14 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
                 showByItem();
             }
 
+            if(dataset != null || datasetCategory != null){
+                LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
+                linearLayout.setVisibility(View.VISIBLE);
+
+                TextView textView = view.findViewById(R.id.showEntity_swipeText);
+                textView.setText(R.string.pulsaParaEditar);
+            }
+
             actionButton = view.findViewById(R.id.fragment_show_entity_btn_add);
             actionButton.setOnClickListener(v -> getNav().navigate(R.id.fragment_Add_Baggage, bundle));
 
@@ -318,17 +326,6 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
         builder.show();
     }
 
-    private void importHandLuggageDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        builder.setTitle(getString(R.string.dialog_title_importHandLuggage));
-
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.alertdialog_photo, null);
-        builder.setView(view);
-
-    }
-
     private void shareHandLuggageDialog() {
         ArrayList<Baggage> baggageOfThisHandLuggage = Presenter.getBaggageOfThisHandLuggage(handLuggage, getContext());
         String baggage = makeString(baggageOfThisHandLuggage);
@@ -337,21 +334,8 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
         sendIntent.putExtra(Intent.EXTRA_TEXT, baggage);
         sendIntent.setType("text/plain");
 
-        Intent shareIntent = Intent.createChooser(sendIntent, "hola");
+        Intent shareIntent = Intent.createChooser(sendIntent, "");
         startActivity(shareIntent);
-
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//
-//        builder.setTitle(getString(R.string.DialogTitle_shareHandLuggage));
-//        builder.setMessage(getString(R.string.DialogMessage_shareHandLuggage));
-//
-//        builder.setNegativeButton(getString(R.string.text_cancel), ((dialog, which) -> dialog.dismiss()));
-//        builder.setPositiveButton(getString(R.string.DialogText_shareHandLuggage), (dialog, which) -> {
-//
-//
-//
-//        });
-
     }
 
     private String makeString(ArrayList<Baggage> baggageOfThisHandLuggage) {

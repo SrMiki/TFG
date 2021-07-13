@@ -1,5 +1,6 @@
 package com.miki.justincase_v1.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -31,8 +32,12 @@ public class BaseFragment extends Fragment {
     }
 
     public void closeKeyBoard(View view) {
-        InputMethodManager inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View focus = getActivity().getCurrentFocus();
+        if (focus == null) {
+            focus = new View(getActivity());
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     /**
@@ -75,25 +80,7 @@ public class BaseFragment extends Fragment {
         Toast toast =
                 Toast.makeText(context,
                         text, Toast.LENGTH_SHORT);
-//        toast.setGravity( Gravity.BOTTOM, 0, 0);
+        toast.setGravity( Gravity.BOTTOM, 0, 0);
         toast.show();
-    }
-
-    public void printWarningToast(Context context, String text) {
-        Toast toast =
-                Toast.makeText(context,
-                        text, Toast.LENGTH_SHORT);
-        toast.show();
-
-    }
-
-    @NotNull
-    public AlertDialog.Builder makeNewAlertDialog(String title) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
-        builder.setTitle(title);
-        builder.setCancelable(true);
-        return builder;
     }
 }

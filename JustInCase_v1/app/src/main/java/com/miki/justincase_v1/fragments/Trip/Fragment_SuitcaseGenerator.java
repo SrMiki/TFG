@@ -58,7 +58,6 @@ public class Fragment_SuitcaseGenerator extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_suitcase_generator, container, false);
 
-
         Bundle bundle = getArguments();
         if (bundle != null) {
             selectedCategory = new ArrayList<>();

@@ -2,17 +2,13 @@ package com.miki.justincase_v1.fragments.Show;
 
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,9 +23,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
-import com.miki.justincase_v1.db.entity.Item;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
 import java.io.File;
@@ -44,15 +38,14 @@ public class CameraX extends BaseFragment {
     private static final int REQUEST_CODE_PERMISSIONS = 10;
     private ImageCapture imageCapture = null;
 
-    private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA};
+    private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     File outputDirectory;
     private Uri saveUri;
     ExecutorService cameraExecutor;
     private PreviewView previewViewCamera;
-    ImageView item_photo;
 
     String itemName = "";
-    private boolean operation; // false == edit, true == create
+    private String operation;
 
     Bundle bundle;
 
@@ -65,7 +58,7 @@ public class CameraX extends BaseFragment {
         bundle = getArguments();
         if (bundle != null) {
             itemName = (String) bundle.getSerializable("itemName");
-            operation = (Boolean) bundle.getSerializable("itemOperation");
+            operation = (String) bundle.getSerializable("itemOperation");
         }
 
         if (allPermissionsGranted()) {
@@ -99,14 +92,12 @@ public class CameraX extends BaseFragment {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                         saveUri = Uri.fromFile(photoFile);
-                        String msg = getString(R.string.photoCapure) + saveUri;
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+                        String msg = getString(R.string.photoCapure);
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        bundle.putSerializable("itemPhotoUri", saveUri.toString());
+                        bundle.putSerializable("itemOperation", operation);
+                        bundle.putSerializable("itemName", itemName);
                         getNav().navigate(R.id.fragment_ShowItems, bundle);
-                        if (operation) {
-                            createItemDialog(saveUri.toString());
-                        } else {
-                            editItemDialog(saveUri.toString());
-                        }
                     }
 
                     @Override
@@ -115,95 +106,6 @@ public class CameraX extends BaseFragment {
                     }
                 });
     }
-
-    private void createItemDialog(String itemPhotoUri) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-        View view = inflater.inflate(R.layout.alertdialog_item, null);
-
-        TextView dialogTitle = view.findViewById(R.id.dialog_title_itemTextview);
-        dialogTitle.setText(getString(R.string.dialog_title_newItem));
-
-        item_photo = view.findViewById(R.id.itemPhoto);
-        item_photo.setVisibility(View.VISIBLE);
-        item_photo.setImageURI(saveUri);
-
-        EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
-        editText.setText(itemName);
-
-        builder.setView(view);
-
-        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
-
-        builder.setPositiveButton(getString(R.string.dialog_button_add), (dialog, which) -> {
-        });
-
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
-            String itemName = editText.getText().toString();
-            if (itemName.isEmpty()) {
-                makeToast(getContext(), getString(R.string.toast_warning_emptyName));
-            } else {
-                if (!Presenter.createItem(itemName, itemPhotoUri, getContext())) {
-                    makeToast(getContext(), getString(R.string.toast_warning_item));
-                } else {
-                    dialog.dismiss();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("notification", "itemCreated");
-                    getNav().navigate(R.id.fragment_ShowItems, bundle);
-                }
-            }
-        });
-    }
-
-    private void editItemDialog(String itemPhotoUri) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-        View view = inflater.inflate(R.layout.alertdialog_item, null);
-
-        TextView dialogTitle = view.findViewById(R.id.dialog_title_itemTextview);
-        dialogTitle.setText(getString(R.string.dialog_title_editItem));
-
-        item_photo = view.findViewById(R.id.itemPhoto);
-        item_photo.setVisibility(View.VISIBLE);
-        item_photo.setImageURI(saveUri);
-
-        EditText editText = view.findViewById(R.id.itemAlertdialog_editText);
-        editText.setText(itemName);
-
-        builder.setView(view);
-
-        Item item = Presenter.getItemByItemName(getContext(), itemName);
-
-        builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
-
-        builder.setPositiveButton(getString(R.string.dialog_button_confirm), (dialog, which) -> {
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
-            String itemName = editText.getText().toString();
-            if (itemName.isEmpty()) {
-                makeToast(getContext(), getString(R.string.toast_warning_emptyName));
-            } else {
-                if (!Presenter.updateItem(item, itemName.trim().toLowerCase(), getContext())) {
-                    makeToast(getContext(), getString(R.string.toast_warning_item));
-                } else {
-                    dialog.dismiss();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("notification", "itemUpdated");
-                    getNav().navigate(R.id.fragment_ShowItems, bundle);
-                }
-            }
-        });
-    }
-
-
     private void startCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(getContext());
 

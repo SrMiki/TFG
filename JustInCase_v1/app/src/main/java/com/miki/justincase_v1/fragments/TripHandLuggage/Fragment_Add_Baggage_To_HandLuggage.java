@@ -180,7 +180,7 @@ public class Fragment_Add_Baggage_To_HandLuggage extends BaseFragment {
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
-        TextView dialogTitle = view.findViewById(R.id.dialog_title_itemTextview);
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_textview);
         dialogTitle.setText(getString(R.string.dialog_title_warning));
 
         TextView textView = view.findViewById(R.id.dialog_message_textview);
@@ -188,7 +188,7 @@ public class Fragment_Add_Baggage_To_HandLuggage extends BaseFragment {
 
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.dialog_button_notNow), ((dialog, which) -> {
             dialog.dismiss();
             getNav().navigate(R.id.fragment_ShowBaggage, bundle);
         }));
@@ -202,15 +202,12 @@ public class Fragment_Add_Baggage_To_HandLuggage extends BaseFragment {
 
     private void createNewItemDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-//        openKeyBoard();
-
-        builder.setTitle(getString(R.string.dialog_title_newItem));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_edittext, null);
-        builder.setView(view);
+
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_edittext);
+        dialogTitle.setText(getString(R.string.dialog_title_newItem));
 
         EditText editText = view.findViewById(R.id.dialog_edittext_input);
         editText.setHint(getString(R.string.hint_itemName));
@@ -221,28 +218,30 @@ public class Fragment_Add_Baggage_To_HandLuggage extends BaseFragment {
             getNav().navigate(R.id.fragment_ShowBaggage, bundle);
         }));
 
-        builder.setPositiveButton(getString(R.string.dialog_button_create), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_button_add), (dialog, which) -> {
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String itemName = editText.getText().toString();
-            boolean create = Presenter.createItem(itemName, getContext());
-            if (create) {
-                getNav().navigate(R.id.fragment_Add_Baggage, bundle);
-                anotherItemDialog();
-            } else {
+            if (!Presenter.createItem(itemName, getContext())) {
                 makeToast(getContext(), getString(R.string.toast_warning_item));
-                dialog.dismiss();
-                createNewItemDialog();
+            } else {
+                adapter.notifyItemInserted(adapter.getItemCount());
+                anotherItemDialog();
             }
-        }));
-        builder.show();
+        });
     }
 
     private void anotherItemDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_item));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
+
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_textview);
+        dialogTitle.setText(getString(R.string.dialog_title_newItem));
 
         TextView textView = view.findViewById(R.id.dialog_message_textview);
         textView.setText(getString(R.string.dialog_ask_anotherItem));
@@ -251,9 +250,9 @@ public class Fragment_Add_Baggage_To_HandLuggage extends BaseFragment {
         builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> dialog.dismiss()));
 
         builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> {
+            dialog.dismiss();
             createNewItemDialog();
         }));
         builder.show();
     }
 }
-

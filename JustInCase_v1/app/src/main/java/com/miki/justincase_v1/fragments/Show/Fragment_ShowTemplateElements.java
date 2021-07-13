@@ -1,4 +1,4 @@
-package com.miki.justincase_v1.fragments.Templates;
+package com.miki.justincase_v1.fragments.Show;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -125,7 +125,7 @@ public class Fragment_ShowTemplateElements extends BaseFragment
         dialog.show();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
             String itemName = editText.getText().toString();
-            boolean update = Presenter.updateItem(focusItem, itemName, getContext());
+            boolean update = Presenter.updateItem(focusItem, itemName, focusItem.getItemPhotoURI(), getContext());
             if (update) {
                 makeToast(getContext(), getString(R.string.toast_updated_item));
                 getNav().navigate(R.id.fragment_ShowTemplateElements, bundle);

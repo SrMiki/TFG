@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
@@ -193,7 +194,7 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.Adap
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("category", category);
-        holder.editCategory.setOnClickListener(v -> editCategoryDialog(v.getContext(), category, holder.getAdapterPosition()));
+        holder.editCategory.setOnClickListener(v -> editCategoryDialog(v.getContext(), category, navController));
 
         holder.deleteCategory.setOnClickListener(v -> deleteCategoryDialog(category, navController, v));
 
@@ -217,15 +218,18 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.Adap
 
         builder.setView(view);
 
-        builder.setNegativeButton(v.getResources().getString(R.string.dialog_button_no), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(v.getResources().getString(R.string.dialog_button_no), ((dialog, which) ->
+                navController.navigate(R.id.fragment_ShowCategories)));
         builder.setPositiveButton(v.getResources().getString(R.string.dialog_button_yes), ((dialog, which) -> {
             Presenter.deleteCategory(category, v.getContext());
-            navController.navigate(R.id.fragment_ShowCategories);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("notification", "categoryDeleted");
+            navController.navigate(R.id.fragment_ShowCategories, bundle);
         }));
         builder.show();
     }
 
-    private void editCategoryDialog(Context context, Category category, int adapterPosition) {
+    private void editCategoryDialog(Context context, Category category, NavController navController) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = activity.getLayoutInflater();
 
@@ -247,7 +251,7 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.Adap
 
         AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String categoryName = editText.getText().toString();
             if (categoryName.isEmpty()) {
                 makeToast(context, context.getString(R.string.toast_warning_emptyName));
@@ -255,9 +259,11 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.Adap
                 if (!Presenter.updateCategory(category, categoryName.trim().toLowerCase(), context)) {
                     makeToast(context, context.getString(R.string.toast_warning_category));
                 } else {
-                    notifyItemChanged(adapterPosition);
-                    makeToast(context, context.getString(R.string.toast_updated_category));
+                    closeKeyBoard(view);
                     dialog.dismiss();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("notification", "categoryUpdated");
+                    navController.navigate(R.id.fragment_ShowCategories, bundle);
                 }
             }
         });
@@ -269,6 +275,16 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.Adap
                         text, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM, 0, 0);
         toast.show();
+    }
+
+
+    public void closeKeyBoard(View view) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View focus = activity.getCurrentFocus();
+        if (focus == null) {
+            focus = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override

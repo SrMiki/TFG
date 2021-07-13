@@ -104,7 +104,7 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
-        TextView dialogTitle = view.findViewById(R.id.dialog_title_itemTextview);
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_textview);
         dialogTitle.setText(getString(R.string.dialog_warning));
 
         TextView textView = view.findViewById(R.id.dialog_message_textview);
@@ -138,20 +138,24 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
         builder.setView(view);
         builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.dialog_button_create), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_button_add), (dialog, which) -> {
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String itemName = editText.getText().toString();
-            boolean create = Presenter.createItem(itemName, getContext());
             dataset = Presenter.selectItemWhitNoCategory(getContext());
-            if (create) {
+            if (!Presenter.createItem(itemName, getContext())) {
+                makeToast(getContext(), getString(R.string.toast_warning_item));
+                createNewItemDialog();
+                dialog.dismiss();
+            } else {
                 adapter.notifyItemInserted(dataset.size()-1);
                 anotherItemDialog();
-            } else {
-                makeToast(getContext(), getString(R.string.toast_warning_item));
                 dialog.dismiss();
-                createNewItemDialog();
             }
-        }));
-        builder.show();
+        });
     }
 
     private void anotherItemDialog() {
@@ -159,7 +163,6 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
-
 
         TextView dialogTitle = view.findViewById(R.id.dialog_title_edittext);
         dialogTitle.setText(R.string.text_item);

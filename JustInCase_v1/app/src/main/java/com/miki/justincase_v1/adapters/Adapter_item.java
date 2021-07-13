@@ -1,7 +1,8 @@
 package com.miki.justincase_v1.adapters;
 
 import android.app.Activity;
-import android.content.pm.PackageManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
@@ -18,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.miki.justincase_v1.R;
@@ -32,6 +32,7 @@ import java.util.List;
 public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewHolder>
         implements View.OnLongClickListener, Filterable {
 
+    private final boolean permissions;
     private View.OnLongClickListener listener;
 
     List<Item> dataset;
@@ -47,7 +48,13 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
         referencesDataset = new ArrayList<>(dataset);
         photoDataset = new ArrayList<>();
 
-        initPhotoDataset(dataset);
+
+        SharedPreferences sp = activity.getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
+        permissions = sp.getBoolean("permissions", false);
+
+        if (permissions) {
+            initPhotoDataset(dataset);
+        }
     }
 
     /**
@@ -140,7 +147,11 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
         Item item = dataset.get(position);
 
         holder.elementNameTV.setText(item.getItemName());
-        holder.itemViewPhoto.setImageBitmap(photoDataset.get(position));
+        if (permissions) {
+            holder.itemViewPhoto.setImageBitmap(photoDataset.get(position));
+        } else {
+            holder.itemViewPhoto.setVisibility(View.GONE);
+        }
     }
 
     @Override

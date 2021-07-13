@@ -1,4 +1,4 @@
-package com.miki.justincase_v1.fragments.Travel;
+package com.miki.justincase_v1.fragments.Trip;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

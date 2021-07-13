@@ -68,6 +68,9 @@ public class Fragment_ShowCategories extends BaseFragment {
                     int categoryPosition = (int) bundle.getSerializable("categoryPosition");
                     adapter.setCardSelected(categoryPosition);
                 }
+                if (bundle.getSerializable("notification") != null) {
+                    showNotification(bundle);
+                }
             }
         }
 
@@ -75,6 +78,21 @@ public class Fragment_ShowCategories extends BaseFragment {
 
         floatingButton.setOnClickListener(v -> newCategoryDialog());
         return view;
+    }
+
+    private void showNotification(Bundle bundle) {
+        String notification = (String) bundle.getSerializable("notification");
+        switch (notification) {
+            case "categoryCreated":
+                makeToast(getContext(), getString(R.string.toast_created_category));
+                break;
+            case "categoryUpdated":
+                makeToast(getContext(), getString(R.string.toast_updated_category));
+                break;
+            case "categoryDeleted":
+                makeToast(getContext(), getString(R.string.toast_deleted_category));
+                break;
+        }
     }
 
     private void updateFocusCategory(int position) {
@@ -124,8 +142,11 @@ public class Fragment_ShowCategories extends BaseFragment {
                 if (!Presenter.createCategory(name, getContext())) {
                     makeToast(getContext(), getString(R.string.toast_warning_category));
                 } else {
-//                    makeToast(getContext(), getString(R.string.toast_created_category));
+                    closeKeyBoard(view);
                     dialog.dismiss();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("notification", "categoryCreated");
+                    getNav().navigate(R.id.fragment_ShowCategories, bundle);
                     addItemsDialog();
                 }
             }
@@ -146,7 +167,7 @@ public class Fragment_ShowCategories extends BaseFragment {
 
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_notNow), ((dialog, which) -> dialog.dismiss()));
 
         builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> {
             ArrayList<Category> allCategories = Presenter.getAllCategories(getContext());

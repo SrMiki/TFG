@@ -24,7 +24,6 @@ import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.Swipers.Template_RecyclerItemTouchHelper;
 import com.miki.justincase_v1.adapters.Adapter_Template;
-import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.db.entity.Template;
 import com.miki.justincase_v1.fragments.BaseFragment;
 
@@ -79,7 +78,29 @@ public class Fragment_ShowTemplates extends BaseFragment implements Template_Rec
             editTemplateDialog();
             return true;
         });
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            showNotification(bundle);
+        }
         return view;
+    }
+
+    private void showNotification(Bundle bundle) {
+        String notification = (String) bundle.getSerializable("notification");
+        if (notification != null) {
+            switch (notification) {
+                case "templateCreated":
+                    makeToast(getContext(), getString(R.string.toast_created_template));
+                    break;
+                case "templateUpdated":
+                    makeToast(getContext(), getString(R.string.toast_updated_template));
+                    break;
+                case "templateDeleted":
+                    makeToast(getContext(), getString(R.string.toast_deleted_template));
+                    break;
+            }
+        }
     }
 
     private void editTemplateDialog() {
@@ -103,7 +124,7 @@ public class Fragment_ShowTemplates extends BaseFragment implements Template_Rec
 
         AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String name = editText.getText().toString();
             if (name.isEmpty()) {
                 makeToast(v.getContext(), getString(R.string.toast_warning_emptyName));
@@ -111,8 +132,11 @@ public class Fragment_ShowTemplates extends BaseFragment implements Template_Rec
                 if (!Presenter.updateTemplate(focusTemplate, name, getContext())) {
                     makeToast(getContext(), getString(R.string.toast_warning_template));
                 } else {
-//                    makeToast(getContext(), getString(R.string.toast_updated_template));
-                    getNav().navigate(R.id.fragment_ShowTemplates);
+                    closeKeyBoard(view);
+                    dialog.dismiss();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("notification", "templateUpdated");
+                    getNav().navigate(R.id.fragment_ShowTemplates, bundle);
                 }
             }
         });
@@ -139,17 +163,19 @@ public class Fragment_ShowTemplates extends BaseFragment implements Template_Rec
 
         AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             if (editText.getText().toString().isEmpty()) {
                 makeToast(getContext(), getString(R.string.toast_warning_emptyName));
             } else {
                 String name = editText.getText().toString();
                 if (!Presenter.createTemplate(name, getContext())) {
                     makeToast(getContext(), getString(R.string.toast_warning_template));
-                } else{
+                } else {
+                    closeKeyBoard(view);
                     dialog.dismiss();
-//                    makeToast(getContext(), getString(R.string.toast_created_template));
-                    getNav().navigate(R.id.fragment_ShowTemplates);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("notification", "templateCreated");
+                    getNav().navigate(R.id.fragment_ShowTemplates, bundle);
                     addItemsDialog();
                 }
             }
@@ -171,7 +197,7 @@ public class Fragment_ShowTemplates extends BaseFragment implements Template_Rec
 
         builder.setView(view);
 
-        builder.setNegativeButton(R.string.dialog_button_late, ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(R.string.dialog_button_notNow, ((dialog, which) -> dialog.dismiss()));
 
         builder.setPositiveButton(R.string.dialog_button_yes, ((dialog, which) -> {
             ArrayList<Template> allTemplate = Presenter.getAllTemplate(getContext());
@@ -208,50 +234,39 @@ public class Fragment_ShowTemplates extends BaseFragment implements Template_Rec
 
     @Override
     public void onSwipe(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-//        if (viewHolder instanceof Adapter_Category.AdapterViewHolder) {
-//
-//            int deletedIndex = viewHolder.getAdapterPosition();
-////            String name = dataset.get(deletedIndex).getItemName();
-//            focusTemplate = dataset.get(deletedIndex);
-//
-//            adapter.removeCategory(viewHolder.getAdapterPosition());
-//
-////            restoreDeletedElement(viewHolder, name, deletedItem, deletedIndex);
-//            //Note: if the item it's deleted and then restore, only restore in item. You must
-//            //yo add again in Baggages and Categorys.
-//            if (Presenter.selectItemFromThisCategory(focusTemplate, getContext()).isEmpty()) {
-//                Presenter.deleteCategory(focusTemplate, getContext());
-//                getNav().navigate(R.id.fragment_ShowCategories);
-//            } else {
-//                deleteItemDialog();
-//            }
-//        }
+        if (viewHolder instanceof Adapter_Template.AdapterViewHolder) {
+            warningTemplateDialog(viewHolder);
+        }
     }
 
-    private void deleteItemDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
+    private void warningTemplateDialog(RecyclerView.ViewHolder viewHolder) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_textview);
+        dialogTitle.setText(R.string.dialog_title_warning);
+
         TextView textView = view.findViewById(R.id.dialog_message_textview);
-        textView.setText(getString(R.string.dialog_ask_deleteItemsToo));
+        textView.setText(R.string.dialog_warning_deleteTemplate);
+
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> {
-            dialog.dismiss();
-            Presenter.deleteTemplate(focusTemplate, getContext());
-            getNav().navigate(R.id.fragment_ShowCategories);
-        }));
+        builder.setNegativeButton(R.string.dialog_button_cancel, ((dialog, which) -> getNav().navigate(R.id.fragment_ShowTemplates)));
 
-//        builder.setPositiveButton(getString(R.string.text_yes), ((dialog, which) -> {
-//            Presenter.deleteItemFromTrips(focusTemplate, getContext());
-//            Presenter.deleteItemOfThisCategory(focusTemplate, getContext());
-//            Presenter.deleteCategory(focusTemplate, getContext());
-//            getNav().navigate(R.id.fragment_ShowCategories);
-//        }));
+        builder.setPositiveButton(R.string.dialog_button_yes, ((dialog, which) -> deleteTemplate(viewHolder)));
         builder.show();
+    }
 
+    private void deleteTemplate(RecyclerView.ViewHolder viewHolder) {
+        int deletedIndex = viewHolder.getAdapterPosition();
+        focusTemplate = dataset.get(deletedIndex);
+        adapter.remove(viewHolder.getAdapterPosition());
+        Presenter.deleteTemplate(focusTemplate, getContext());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("notification", "templateDeleted");
+        getNav().navigate(R.id.fragment_ShowTemplates,bundle);
     }
 }

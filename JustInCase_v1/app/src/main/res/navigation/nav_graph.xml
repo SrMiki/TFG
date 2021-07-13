@@ -97,7 +97,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_CheckIn"
-        android:name="com.miki.justincase_v1.fragments.Travel.Fragment_CheckIn"
+        android:name="com.miki.justincase_v1.fragments.Trip.Fragment_CheckIn"
         android:label="@string/title_startTrip">
         <action
             android:id="@+id/action_fragment_CheckIn_to_fragment_DoCheckListByItem"
@@ -142,7 +142,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_DoCheckList"
-        android:name="com.miki.justincase_v1.fragments.Travel.Fragment_DoCheckList"
+        android:name="com.miki.justincase_v1.fragments.Trip.Fragment_DoCheckList"
         android:label="@string/title_checkList">
         <action
             android:id="@+id/action_fragment_DoCheckListByItem_self"
@@ -170,7 +170,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_ShowTemplateElements"
-        android:name="com.miki.justincase_v1.fragments.Templates.Fragment_ShowTemplateElements"
+        android:name="com.miki.justincase_v1.fragments.Show.Fragment_ShowTemplateElements"
         android:label="@string/title_templateElement">
         <action
             android:id="@+id/action_fragment_ShowTemplateElements_to_fragment_Add_Item_To_Template"
@@ -178,7 +178,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_Add_Item_To_Template"
-        android:name="com.miki.justincase_v1.fragments.Templates.Fragment_Add_Item_To_Template"
+        android:name="com.miki.justincase_v1.fragments.Show.Fragment_Add_Item_To_Template"
         android:label="@string/title_add_element_to_Template">
         <action
             android:id="@+id/action_fragment_Add_Item_To_Template_to_fragment_ShowTemplateElements"

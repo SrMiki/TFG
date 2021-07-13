@@ -1,4 +1,4 @@
-package com.miki.justincase_v1.fragments.Templates;
+package com.miki.justincase_v1.fragments.Show;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -103,76 +103,74 @@ public class Fragment_Add_Item_To_Template extends BaseFragment {
 
     private void noItemsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.dialog_warning));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
+        TextView title = view.findViewById(R.id.dialog_title_textview);
+        title.setText(getString(R.string.dialog_title_warning));
+
         TextView textView = view.findViewById(R.id.dialog_message_textview);
         textView.setText(getString(R.string.dialog_ask_createNewItem));
+
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> {
-            getNav().navigate(R.id.fragment_ShowTemplates);
-        }));
+        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> getNav().navigate(R.id.fragment_ShowTemplates)));
+        builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> createNewItemDialog()));
 
-
-        builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> {
-            createNewItemDialog();
-        }));
         builder.show();
     }
 
     private void createNewItemDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        builder.setTitle(getString(R.string.dialog_title_newItem));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_edittext, null);
-        builder.setView(view);
+
+        TextView title = view.findViewById(R.id.dialog_title_edittext);
+        title.setText(R.string.dialog_title_newItem);
 
         EditText editText = view.findViewById(R.id.dialog_edittext_input);
         editText.setHint(getString(R.string.hint_itemName));
+
         builder.setView(view);
 
         builder.setNegativeButton(getString(R.string.dialog_button_cancel), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.dialog_button_create), ((dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.dialog_button_add), (dialog, which) -> {
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String itemName = editText.getText().toString();
-            boolean create = Presenter.createItem(itemName, getContext());
             dataset = Presenter.selectItemNOTintThisTemplate(template, getContext());
-            if (create) {
-                adapter.notifyItemInserted(dataset.size()-1);
-                anotherItemDialog();
-            } else {
+            if (!Presenter.createItem(itemName, getContext())) {
                 makeToast(getContext(), getString(R.string.toast_warning_item));
-                dialog.dismiss();
-                createNewItemDialog();
+            } else {
+                adapter.notifyItemInserted(dataset.size() - 1);
+                anotherItemDialog();
             }
-        }));
-        builder.show();
+        });
     }
 
     private void anotherItemDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.text_item));
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
+        TextView title = view.findViewById(R.id.dialog_title_textview);
+        title.setText(getString(R.string.dialog_title_newItem));
+
         TextView textView = view.findViewById(R.id.dialog_message_textview);
         textView.setText(getString(R.string.dialog_ask_anotherItem));
+
         builder.setView(view);
 
         builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> dialog.dismiss()));
 
-        builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> {
-            createNewItemDialog();
-        }));
+        builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> createNewItemDialog()));
         builder.show();
     }
 }

@@ -72,25 +72,25 @@
     <string name="trip_switchDates">Viaje solo de ida</string>
 
     <!-- TODO   TOAST .............................................................. -->
-    <string name="toast_created_suitcase">La maleta ha sido creada</string>
-    <string name="toast_created_category">La categoria ha sido creada</string>
-    <string name="toast_created_template">plantilla creada</string>
+    <string name="toast_created_suitcase">Maleta creada</string>
+    <string name="toast_created_category">Categoria creada</string>
+    <string name="toast_created_template">Plantilla creada</string>
     <string name="toast_created_handLuggage">Maleta agregada</string>
-    <string name="toast_created_someHandLuggage">Se han agregado las maletas</string>
+    <string name="toast_created_someHandLuggage">Maletas agregadas</string>
     <string name="toast_created_item">Item creado</string>
 
-    <string name="toast_updated_category">La categoria ha sido actualizada</string>
-    <string name="toast_updated_item">El item ha sido actualizado</string>
-    <string name="toast_updated_suitcase">La maleta ha sido actualizada</string>
+    <string name="toast_updated_category">Categoria actualizada</string>
+    <string name="toast_updated_item">Item actualizado</string>
+    <string name="toast_updated_suitcase">Maleta actualizada</string>
 
     <string name="toast_deleted">Ha sido eleminado</string>
 
-    <string name="toast_warning_emptyName">Ha dejado el nombre en blanco</string>
+    <string name="toast_warning_emptyName">Nombre en blanco</string>
 
-    <string name="toast_warning_category">Ya existe esa categoria</string>
-    <string name="toast_warning_item">El item ya existe</string>
-    <string name="toast_warning_template">Ya existe una plantilla con ese nombre</string>
-    <string name="toast_warning_suitcase">Ya existe una maleta con ese nombre</string>
+    <string name="toast_warning_category">Ya existe</string>
+    <string name="toast_warning_item">Ya existe</string>
+    <string name="toast_warning_template">Ya existe</string>
+    <string name="toast_warning_suitcase">Ya existe</string>
     <string name="toast_warning_cameraPermissions">"Permisos de cámaras denegados "</string>
 
 
@@ -198,8 +198,8 @@
 
     <string name="text_doCheckOut">Deshacer maleta</string>
 
-    <string name="text_swipe">Arrastra para eliminar</string>
-    <string name="text_swipe2">Mantén pulsado para editar</string>
+    <string name="text_swipe">Mantén para editar</string>
+    <string name="text_swipe2">Arrastra para eliminar</string>
 
     <string name="checkbox_checkAll">seleccionar/deseleccionar todo</string>
     <string name="text_photo">Agregar foto</string>
@@ -254,6 +254,13 @@
     <string name="dialog_button_late">mejor luego</string>
     <string name="text_template">Plantilla</string>
     <string name="toast_updated_template">La plantilla ha sido actualizada</string>
+    <string name="pulsaParaEditar">Pulsa para editar</string>
+    <string name="dialog_button_notNow">Ahora no</string>
+    <string name="dialog_warning_deleteTemplate">"¿Quiere eliminar esta plantilla? "</string>
+    <string name="toast_deleted_template">Plantilla eliminada</string>
+    <string name="toast_deleted_category">Categoria eliminada</string>
+    <string name="requestPermission">Si no permite acceder a la memoria no podrá utilizar las funciones de cámara e imagen</string>
+    <string name="dialog_button_ok">entendido</string>
 
 
 </resources>

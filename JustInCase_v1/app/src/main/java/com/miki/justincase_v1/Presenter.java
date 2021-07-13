@@ -289,15 +289,20 @@ public class Presenter {
         return true;
     }
 
-    public static boolean updateItem(Item updateItem, String nombreItem, Context context) {
+    public static boolean updateItem(Item updateItem, String nombreItem, String itemPhotoUri, Context context) {
         db = AppDatabase.getInstance(context);
         List<Item> itemList = db.itemDAO().getAll();
         for (Item item : itemList) {
             if (item.getItemName().equals(nombreItem)) {
-                return false;
+                if (item.getItemPhotoURI().equals(itemPhotoUri)) {
+                    return false;
+                }
             }
         }
         updateItem.setItem(nombreItem);
+        if (!itemPhotoUri.isEmpty()) {
+            updateItem.setItemPhotoURI(itemPhotoUri);
+        }
         db.itemDAO().update(updateItem);
         return true;
     }
