@@ -96,7 +96,7 @@ public class Fragment_ShowTemplateElements extends BaseFragment
             //Note: if the item it's deleted and then restore, only restore in item. You must
             //yo add again in Baggages and Categorys.
             Presenter.removeItemFromThisTemplate(deletedItem, getContext());
-            getNav().navigate(R.id.fragment_ShowTemplateElements, bundle);
+            getNav().navigate(R.id.action_fragment_ShowTemplateElements_self, bundle);
 
         }
     }
@@ -125,12 +125,13 @@ public class Fragment_ShowTemplateElements extends BaseFragment
         dialog.show();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((View.OnClickListener) v -> {
             String itemName = editText.getText().toString();
-            boolean update = Presenter.updateItem(focusItem, itemName, focusItem.getItemPhotoURI(), getContext());
-            if (update) {
-                makeToast(getContext(), getString(R.string.toast_updated_item));
-                getNav().navigate(R.id.fragment_ShowTemplateElements, bundle);
-            } else {
+            if (!Presenter.updateItem(focusItem, itemName, focusItem.getItemPhotoURI(), getContext())) {
                 makeToast(getContext(), getString(R.string.toast_warning_item));
+            } else {
+                closeKeyBoard(view);
+                dialog.dismiss();
+                getNav().navigate(R.id.action_fragment_ShowTemplateElements_self, bundle);
+                makeToast(getContext(), getString(R.string.toast_updated_item));
             }
         });
     }

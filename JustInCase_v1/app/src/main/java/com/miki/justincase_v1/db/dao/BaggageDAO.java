@@ -57,7 +57,8 @@ public interface BaggageDAO {
 
     @Query("SELECT * FROM categories " +
             "WHERE categoryID IN (SELECT FKcategoryID FROM categoryContent " +
-            "WHERE FKitemID IN (SELECT FKitemID FROM baggage WHERE FKHandLuggageID IS :handLuggageID)) ORDER BY categoryName")
+            "WHERE FKitemID IN (SELECT FKitemID FROM baggage WHERE FKHandLuggageID IS :handLuggageID)) " +
+            "ORDER BY categoryName")
     List<Category> selectCategoriesOfThisHandLuggage(int handLuggageID);
 //
 //    @Query("SELECT * FROM categories " +

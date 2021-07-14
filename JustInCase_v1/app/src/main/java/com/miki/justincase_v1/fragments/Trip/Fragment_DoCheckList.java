@@ -1,6 +1,7 @@
 package com.miki.justincase_v1.fragments.Trip;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -143,10 +144,38 @@ public class Fragment_DoCheckList extends BaseFragment {
         inflater.inflate(R.menu.share_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.action_share);
 
-        menuItem.setOnMenuItemClickListener(item -> {
+        menuItem.setOnMenuItemClickListener(v -> {
+            shareHandLuggageDialog();
             return true;
         });
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void shareHandLuggageDialog() {
+        ArrayList<Baggage> baggageOfThisHandLuggage = Presenter.getBaggageOfThisHandLuggage(handLuggage, getContext());
+        String baggage = makeString(baggageOfThisHandLuggage);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, baggage);
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, "");
+        startActivity(shareIntent);
+    }
+
+    private String makeString(ArrayList<Baggage> baggageOfThisHandLuggage) {
+        String msg = getString(R.string.text_suitcase) + " \t" + handLuggage.handLuggageName + "\n";
+        if (handLuggage.getOwners() != null && !handLuggage.getOwners().isEmpty()) {
+            msg += getString(R.string.text_owner) + " \t" + handLuggage.getOwners() + "\n\n";
+        }
+        for (Baggage baggage : baggageOfThisHandLuggage) {
+            msg += baggage.baggageName + " \t" + baggage.baggageCount;
+            if (baggage.isCheck()) {
+                msg += " \t" + "x";
+            }
+            msg += "\n";
+        }
+        return msg;
     }
 }

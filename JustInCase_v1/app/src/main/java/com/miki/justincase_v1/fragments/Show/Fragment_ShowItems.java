@@ -137,7 +137,7 @@ public class Fragment_ShowItems extends BaseFragment
                 createNewItemDialog();
                 break;
             case "edit":
-                Item item = Presenter.getItemByItemName(getContext(), itemName);
+                Item item = Presenter.getItemByItemName(itemName, getContext());
                 editItemDialog(item);
                 break;
         }

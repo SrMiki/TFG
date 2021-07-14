@@ -54,9 +54,8 @@ public class Trip implements Serializable {
         travels = 0;
     }
 
-    public Trip() {
-
-    }
+    //aux Constructor
+    public Trip() {}
 
     public void setTrip(String destination, String travelDate, String returnDate, String travelTransport, String returnTransport, String members, int memberSize) {
         this.destination = destination;
@@ -123,4 +122,7 @@ public class Trip implements Serializable {
         this.memberSize = memberSize;
     }
 
+    public int getTripID() {
+        return this.tripID;
+    }
 }

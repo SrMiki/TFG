@@ -65,7 +65,9 @@ public class Adapter_CheckList_Suitcase extends RecyclerView.Adapter<Adapter_Che
             handLuggage.setHandLuggageCompleted(checked == handLuggage.getHandLuggageSize());
             Presenter.updateHandLuggage(handLuggage, holder.itemView.getContext());
         } else {
+
             holder.elementNameTV.setText(handLuggage.handLuggageName);
+            holder.count.setText(R.string.text_emptysuitcase);
             handLuggage.setHandLuggageCompleted(true);
         }
     }

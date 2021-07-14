@@ -180,8 +180,8 @@
                     android:onClick="changeToogleButtonBackground"
                     android:textAllCaps="false"
 
-                    android:textOff="@string/toggle_washingMachine"
-                    android:textOn="@string/toggle_washingMachine" />
+                    android:textOff="@string/form_washingMachine"
+                    android:textOn="@string/form_washingMachine" />
 
 
                 <ToggleButton
@@ -192,8 +192,8 @@
                     android:drawableTop="@drawable/ic_services_clean_hands"
                     android:onClick="changeToogleButtonBackground"
                     android:textAllCaps="false"
-                    android:textOff="@string/toggle_personalCare"
-                    android:textOn="@string/toggle_personalCare" />
+                    android:textOff="@string/form_personalCare"
+                    android:textOn="@string/form_personalCare" />
             </LinearLayout>
 
 
@@ -217,8 +217,8 @@
                     android:drawableTop="@drawable/ic_others_pets"
                     android:onClick="changeToogleButtonBackground"
                     android:textAllCaps="false"
-                    android:textOff="@string/toggle_pets"
-                    android:textOn="@string/toggle_pets" />
+                    android:textOff="@string/form_pets"
+                    android:textOn="@string/form_pets" />
 
 
                 <ToggleButton
@@ -229,8 +229,8 @@
                     android:drawableTop="@drawable/ic_others_child"
                     android:onClick="changeToogleButtonBackground"
                     android:textAllCaps="false"
-                    android:textOff="@string/toggle_baby"
-                    android:textOn="@string/toggle_baby" />
+                    android:textOff="@string/form_baby"
+                    android:textOn="@string/form_baby" />
 
             </LinearLayout>
 

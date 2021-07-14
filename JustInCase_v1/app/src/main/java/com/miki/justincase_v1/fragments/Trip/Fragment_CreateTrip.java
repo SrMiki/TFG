@@ -186,12 +186,12 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        View view = inflater.inflate(R.layout.alertdialog_edittext, null);
+        View view = inflater.inflate(R.layout.alertdialog_destination, null);
 
-        TextView dialogTitle = view.findViewById(R.id.dialog_title_edittext);
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_destination);
         dialogTitle.setText(getString(R.string.dialog_title_editTripDestination));
 
-        EditText editText = view.findViewById(R.id.dialog_edittext_input);
+        EditText editText = view.findViewById(R.id.dialog_edittext_destination);
         editText.setText(destination.getText());
 
         builder.setView(view);

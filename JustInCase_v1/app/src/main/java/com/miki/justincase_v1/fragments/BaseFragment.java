@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class BaseFragment extends Fragment {
 
-
     protected NavController getNav() {
         return Navigation.findNavController(getActivity(), R.id.fragment);
     }
@@ -40,18 +39,11 @@ public class BaseFragment extends Fragment {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    /**
-     * @param dateTextView The EditText to put the Date
-     */
     protected void showDatePickerDialog(EditText dateTextView) {
-
-        DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                // +1 because January is zero
-                final String selectedDate = twoDigits(day) + " / " + twoDigits(month + 1) + " / " + year;
-                dateTextView.setText(selectedDate);
-            }
+        DatePickerFragment newFragment = DatePickerFragment.newInstance((datePicker, year, month, day) -> {
+            // +1 because January is zero
+            final String selectedDate = twoDigits(day) + " / " + twoDigits(month + 1) + " / " + year;
+            dateTextView.setText(selectedDate);
         });
 
         newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
@@ -75,12 +67,12 @@ public class BaseFragment extends Fragment {
         return (n <= 9) ? ("0" + n) : String.valueOf(n);
     }
 
-
+    //notifications
     public void makeToast(Context context, String text) {
         Toast toast =
                 Toast.makeText(context,
                         text, Toast.LENGTH_SHORT);
-        toast.setGravity( Gravity.BOTTOM, 0, 0);
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
         toast.show();
     }
 }

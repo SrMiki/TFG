@@ -6,6 +6,9 @@
         <item>crema solar</item>
         <item>traje de baño</item>
         <item>sandalias</item>
+        <item>sombrilla</item>
+        <item>gafas de sol</item>
+        <item>toalla de playa</item>
     </string-array>
 
     <string-array name="suggested_Items">
@@ -25,9 +28,10 @@
     </string-array>
 
     <string-array name="sports_Items">
-        <item>toalla</item>
+        <item>toalla deportiva</item>
         <item>chandal</item>
         <item>calzado deportivo</item>
+        <item>cantimplora</item>
     </string-array>
 
     <string-array name="hiking_Items">
@@ -37,18 +41,27 @@
     </string-array>
 
     <string-array name="camping_Items">
-        <item>tienda</item>
+        <item>tienda de campaña</item>
         <item>saco de dormir</item>
+        <item>nevera portatil</item>
+        <item>linterna</item>
+        <item>bolsas de basura</item>
+        <item>bateria externa</item>
+        <item>mechero</item>
     </string-array>
 
     <string-array name="sailing_Items">
         <item>crema solar</item>
+        <item>gorra</item>
+        <item>Calzado náutico</item>
     </string-array>
 
     <string-array name="pool_Items">
         <item>toalla</item>
         <item>gafas de piscina</item>
+        <item>crema solar</item>
         <item>bañador</item>
+        <item>sandalias</item>
     </string-array>
 
     <string-array name="photografy_Items">
@@ -63,5 +76,19 @@
         <item>colonia</item>
         <item>pasta de dientes</item>
         <item>cepillo de dientes</item>
+    </string-array>
+
+    <string-array name="pet_Items">
+        <item>pienso</item>
+        <item>collar</item>
+        <item>transportín</item>
+        <item>juguete</item>
+    </string-array>
+
+    <string-array name="baby_Items">
+        <item>pañales</item>
+        <item>biberón</item>
+        <item>chupete</item>
+        <item>carro de bebés</item>
     </string-array>
 </resources>

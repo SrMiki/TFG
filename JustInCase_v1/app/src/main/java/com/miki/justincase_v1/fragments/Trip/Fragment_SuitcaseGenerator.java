@@ -49,7 +49,7 @@ public class Fragment_SuitcaseGenerator extends BaseFragment {
 
     ToggleButton toggleButton_snow, toggleButton_beach, toggleButton_hiking, toggleButton_sport,
             toggleButton_sailing, toggleButton_pool, toggleButton_photografy, toggleButton_camping,
-            toggleButton_personalCare;
+            toggleButton_personalCare, toggleButton_pet, toggleButton_baby;
 
     private RecyclerView recyclerView;
     private Adapter_Categories_in_SuitcaseGenerator adapter;
@@ -75,6 +75,9 @@ public class Fragment_SuitcaseGenerator extends BaseFragment {
 
             toggleButton_personalCare = view.findViewById(R.id.toggle_personalCare);
 
+            toggleButton_pet = view.findViewById(R.id.toggle_pets);
+            toggleButton_baby = view.findViewById(R.id.toggle_baby);
+
 
             handLuggage = (HandLuggage) bundle.getSerializable("handLuggage");
 
@@ -86,8 +89,6 @@ public class Fragment_SuitcaseGenerator extends BaseFragment {
             TextView datysTV = view.findViewById(R.id.algoritm_days);
             int days = getTotalDays(trip);
             datysTV.setText(days + "");
-
-
 
 
             recyclerTitle = view.findViewById(R.id.recyclerview_categorySuitcaseGenerator_title);
@@ -189,18 +190,26 @@ public class Fragment_SuitcaseGenerator extends BaseFragment {
             extractXMLlist(stringArray);
         }
 
-        if (!toggleButton_personalCare.isChecked()) {
+        if (toggleButton_personalCare.isChecked()) {
             stringArray = v.getResources().getStringArray(R.array.personal_care);
             extractXMLlist(stringArray);
         }
 
+        if (toggleButton_pet.isChecked()) {
+            stringArray = v.getResources().getStringArray(R.array.pet_Items);
+            extractXMLlist(stringArray);
+        }
+
+        if (toggleButton_baby.isChecked()) {
+            stringArray = v.getResources().getStringArray(R.array.baby_Items);
+            extractXMLlist(stringArray);
+        }
 
         // 3) agregamos a la BD la lista
         //en caso de que existan, se sobreescribe para obtener su ID
         Presenter.addSuggestedItemList(suggestedItem, getContext());
 
         if (!selectedCategory.isEmpty()) {
-            makeToast(getContext(), "HOOLIWI");
             for (Category category :
                     selectedCategory) {
                 ArrayList<Item> itemArrayList = Presenter.selectItemFromThisCategory(category, getContext());

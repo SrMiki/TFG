@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.miki.justincase_v1.Presenter;
 import com.miki.justincase_v1.R;
 import com.miki.justincase_v1.adapters.othersAdapters.Adapter_CheckList_Suitcase;
+import com.miki.justincase_v1.db.entity.Baggage;
 import com.miki.justincase_v1.db.entity.HandLuggage;
 import com.miki.justincase_v1.db.entity.Trip;
 import com.miki.justincase_v1.fragments.BaseFragment;
@@ -97,11 +98,11 @@ public class Fragment_CheckIn extends BaseFragment {
     }
 
     private void checkIn() {
-        if (allSelected(dataset)) {
+//        if (allSelected(dataset)) {
             button.setVisibility(View.VISIBLE);
-        } else {
-            button.setVisibility(View.GONE);
-        }
+//        } else {
+//            button.setVisibility(View.GONE);
+//        }
 
         button.setOnClickListener(v -> {
             trip.setTravelling(1);
@@ -115,7 +116,8 @@ public class Fragment_CheckIn extends BaseFragment {
 
     private boolean allSelected(ArrayList<HandLuggage> handLuggageArrayList) {
         for (HandLuggage handLuggage : handLuggageArrayList) {
-            if (!handLuggage.isHandLuggageCompleted()) {
+            ArrayList<Baggage> baggageOfThisHandLuggage = Presenter.getBaggageOfThisHandLuggage(handLuggage, getContext());
+            if(Presenter.checkBaggageState(baggageOfThisHandLuggage, getContext())){
                 return false;
             }
         }

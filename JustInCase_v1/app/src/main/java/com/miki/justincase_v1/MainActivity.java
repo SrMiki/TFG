@@ -73,9 +73,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         NavController navController = Navigation.findNavController(this, R.id.fragment);
-//        if(item.getItemId() == R.id.ic_ofertas){
-//            initDB.initDB(getApplicationContext());
-//        }
         return NavigationUI.onNavDestinationSelected(item, navController)
                 || super.onOptionsItemSelected(item);
     }

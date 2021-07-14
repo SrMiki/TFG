@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.miki.justincase_v1.db.entity.Category;
 import com.miki.justincase_v1.db.entity.Template;
 
 import java.util.List;
@@ -18,6 +19,9 @@ public interface TemplateDAO {
 
     @Query("SELECT * FROM template ORDER BY templateName")
     List<Template> selectAll();
+
+    @Query("SELECT * FROM template WHERE templateName IS :templateName")
+    Template getTemplateByName(String templateName);
 
     @Update
     void update(Template template);

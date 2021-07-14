@@ -191,6 +191,10 @@
         <action
             android:id="@+id/action_fragment_ShowTemplateElements_to_fragment_Add_Item_To_Template"
             app:destination="@id/fragment_Add_Item_To_Template" />
+        <action
+            android:id="@+id/action_fragment_ShowTemplateElements_self"
+            app:destination="@id/fragment_ShowTemplateElements"
+            app:popUpTo="@id/fragment_ShowTemplates" />
     </fragment>
     <fragment
         android:id="@+id/fragment_Add_Item_To_Template"
