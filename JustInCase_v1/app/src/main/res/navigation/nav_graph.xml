@@ -75,6 +75,10 @@
             android:id="@+id/action_fragment_Add_HandLuggage_to_fragment_ShowTrips"
             app:destination="@id/fragment_ShowTrips"
             app:popUpTo="@id/fragment_ShowTrips" />
+        <action
+            android:id="@+id/action_fragment_Add_HandLuggage_self"
+            app:destination="@id/fragment_Add_HandLuggage"
+            app:popUpTo="@id/fragment_ShowTrips" />
     </fragment>
     <fragment
         android:id="@+id/fragment_Add_Baggage"
@@ -84,6 +88,10 @@
             android:id="@+id/action_fragment_Add_item_to_Baggage_to_fragment_ShowBaggageByItem"
             app:destination="@id/fragment_ShowBaggage"
             app:popUpTo="@id/fragment_ShowTrips" />
+        <action
+            android:id="@+id/action_fragment_Add_Baggage_self"
+            app:destination="@id/fragment_Add_Baggage"
+            app:popUpTo="@id/fragment_ShowBaggage" />
     </fragment>
     <fragment
         android:id="@+id/fragment_Add_Item_To_Category"
@@ -94,6 +102,10 @@
             app:destination="@id/fragment_ShowCategories"
             app:popUpTo="@id/fragment_ShowCategories"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_fragment_Add_Item_To_Category_self"
+            app:destination="@id/fragment_Add_Item_To_Category"
+            app:popUpTo="@id/fragment_ShowCategories" />
     </fragment>
     <fragment
         android:id="@+id/fragment_CheckIn"
@@ -139,6 +151,10 @@
             android:id="@+id/action_fragment_ShowBaggage_self"
             app:destination="@id/fragment_ShowBaggage"
             app:popUpTo="@id/fragment_ShowTrips" />
+        <action
+            android:id="@+id/action_fragment_ShowBaggage_to_fragment_Add_Baggage"
+            app:destination="@id/fragment_Add_Baggage"
+            app:popUpTo="@id/fragment_ShowBaggage" />
     </fragment>
     <fragment
         android:id="@+id/fragment_DoCheckList"

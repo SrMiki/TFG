@@ -12,11 +12,20 @@
     <color name="secundary_400">#fc7542</color>
 
     <color name="black">#000000</color>
+    <color name="grey">#9AECECEC</color>
+
+    <color name="red">#C3FD0000</color>
+    <color name="green">#8043A047</color>
+
 
     <color name="item_selected">#b3e8fd</color>
 
+    <color name="category_selected">#B1E9FF</color>
+
     <color name="white">#ffffff</color>
     <color name="hover">#b3e8fd</color>
+
+    <color name="ligthWhite">#EDEDED</color>
 
 </resources>
 

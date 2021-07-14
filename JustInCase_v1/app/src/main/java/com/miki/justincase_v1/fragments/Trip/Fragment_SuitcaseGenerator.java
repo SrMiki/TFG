@@ -36,12 +36,14 @@ public class Fragment_SuitcaseGenerator extends BaseFragment {
     public TextView tripName_TextView, tripTravelDate_TextView, tripReturnDate_TextView;
     public LinearLayout layout;
 
+    TextView recyclerTitle;
+
     Trip trip;
     HandLuggage handLuggage;
     Suitcase suitcase;
 
     ArrayList<Item> suggestedItem;
-    ArrayList<Category> selectedCategory;
+    private ArrayList<Category> dataset, selectedCategory;
 
     int travelDay, travelMonth, travelYear, returnDay, returnMonth, returnYear;
 
@@ -51,7 +53,7 @@ public class Fragment_SuitcaseGenerator extends BaseFragment {
 
     private RecyclerView recyclerView;
     private Adapter_Categories_in_SuitcaseGenerator adapter;
-    private ArrayList<Category> dataset;
+
 
     @Nullable
     @Override
@@ -60,7 +62,6 @@ public class Fragment_SuitcaseGenerator extends BaseFragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            selectedCategory = new ArrayList<>();
 
             toggleButton_snow = view.findViewById(R.id.toggle_snow);
             toggleButton_beach = view.findViewById(R.id.toggle_beach);
@@ -86,34 +87,53 @@ public class Fragment_SuitcaseGenerator extends BaseFragment {
             int days = getTotalDays(trip);
             datysTV.setText(days + "");
 
-            FloatingActionButton btn = view.findViewById(R.id.fragment_algoritm_btn);
-            btn.setOnClickListener(v -> {
-                addSuggestedBaggage(v);
-                getNav().navigate(R.id.action_algoritm_to_fragment_ShowBaggageByItem, bundle);
-            });
 
+
+
+            recyclerTitle = view.findViewById(R.id.recyclerview_categorySuitcaseGenerator_title);
+            recyclerView = view.findViewById(R.id.myCategory_recyclerview);
 
             dataset = Presenter.getAllCategories(getContext());
-            recyclerView = view.findViewById(R.id.myCategory_recyclerview);
-            //la clave >> gridLayout para hacerlo por columnas!
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
+            if (!dataset.isEmpty()) {
+                Presenter.removeCategorySelectedState(dataset, getContext());
+                recyclerTitle.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+            selectedCategory = new ArrayList<>();
 
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
             adapter = new Adapter_Categories_in_SuitcaseGenerator(dataset);
             recyclerView.setAdapter(adapter);
-            adapter.setOnClickListener(v -> {
+
+            adapter.setListener(v -> {
                 int position = recyclerView.getChildAdapterPosition(v);
                 Category category = dataset.get(position);
-                if (!selectedCategory.contains(category)) {
+                if (!contains(selectedCategory, category)) {
                     selectedCategory.add(category);
+                    category.setSelectedState(true);
                 } else {
+                    category.setSelectedState(false);
                     selectedCategory.remove(category);
                 }
                 adapter.notifyItemChanged(position);
             });
 
-
+            FloatingActionButton btn = view.findViewById(R.id.fragment_algoritm_btn);
+            btn.setOnClickListener(v -> {
+                addSuggestedBaggage(v);
+                getNav().navigate(R.id.action_algoritm_to_fragment_ShowBaggageByItem, bundle);
+            });
         }
         return view;
+    }
+
+    private boolean contains(ArrayList<Category> selectedCategory, Category compareCategory) {
+        for (Category category : selectedCategory) {
+            if (category.getCategoryName().equals(compareCategory.getCategoryName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -180,12 +200,13 @@ public class Fragment_SuitcaseGenerator extends BaseFragment {
         Presenter.addSuggestedItemList(suggestedItem, getContext());
 
         if (!selectedCategory.isEmpty()) {
+            makeToast(getContext(), "HOOLIWI");
             for (Category category :
                     selectedCategory) {
-                suggestedItem.addAll(Presenter.selectItemFromThisCategory(category, getContext()));
+                ArrayList<Item> itemArrayList = Presenter.selectItemFromThisCategory(category, getContext());
+                suggestedItem.addAll(itemArrayList);
             }
         }
-
 
         //quitar duplicados en caso de que algun item de la lista xml ya exista y esté en una de las categorias
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

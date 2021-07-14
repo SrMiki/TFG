@@ -15,8 +15,11 @@ public class Category implements Serializable {
     @ColumnInfo(name = "categoryName")
     public String categoryName;
 
+    private boolean selectedState;
+
     public Category(String categoryName) {
         this.categoryName = categoryName;
+        selectedState=false;
     }
 
     public String getCategoryName() {
@@ -27,11 +30,18 @@ public class Category implements Serializable {
         this.categoryName = categoryName;
     }
 
+    public boolean isSelectedState() {
+        return selectedState;
+    }
+
+    public void setSelectedState(boolean selectedState) {
+        this.selectedState = selectedState;
+    }
+
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         Category other = (Category) o;
         return this.getCategoryName().equals(other.getCategoryName());
-
     }
 
 }

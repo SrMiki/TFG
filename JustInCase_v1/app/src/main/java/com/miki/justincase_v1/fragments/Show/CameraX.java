@@ -163,9 +163,7 @@ public class CameraX extends BaseFragment {
         } else {
             return getActivity().getFilesDir();
         }
-
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,

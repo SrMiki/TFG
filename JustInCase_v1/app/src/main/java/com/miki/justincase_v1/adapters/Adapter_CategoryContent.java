@@ -1,8 +1,13 @@
 package com.miki.justincase_v1.adapters;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,10 +29,17 @@ public class Adapter_CategoryContent extends RecyclerView.Adapter<Adapter_Catego
 
     private final ArrayList<Item> dataset;
     private View.OnClickListener listener;
+    Activity activity;
 
-    public Adapter_CategoryContent(ArrayList<Item> database, Category category) {
+    private final boolean permissions;
+
+    public Adapter_CategoryContent(ArrayList<Item> database, Category category, Activity activity) {
         this.dataset = database;
         this.category = category;
+
+        SharedPreferences sp = activity.getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
+        permissions = sp.getBoolean("permissions", false);
+
     }
 
     public void setListener(View.OnClickListener listener) {
@@ -54,6 +66,12 @@ public class Adapter_CategoryContent extends RecyclerView.Adapter<Adapter_Catego
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         Item item = dataset.get(position);
         holder.itemName.setText(item.getItemName());
+        if (permissions) {
+//            holder.itemViewPhoto.setImageBitmap(photoDataset.get(position));
+            holder.itemViewPhoto.setImageURI(Uri.parse(item.getItemPhotoURI()));
+        } else {
+            holder.itemViewPhoto.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -82,11 +100,13 @@ public class Adapter_CategoryContent extends RecyclerView.Adapter<Adapter_Catego
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
         public TextView itemName;
         public LinearLayout layout;
+        ImageView itemViewPhoto;
 
         public AdapterViewHolder(@NonNull View v) {
             super(v);
-            itemName = itemView.findViewById(R.id.card_view_item_itemName);
-            layout = itemView.findViewById(R.id.card_view_item_layout);
+            itemName = v.findViewById(R.id.card_view_item_itemName);
+            layout = v.findViewById(R.id.card_view_item_layout);
+            itemViewPhoto = v.findViewById(R.id.card_view_item_itemPhoto);
         }
     }
 }

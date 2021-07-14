@@ -49,7 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:ems="10"
+            android:ems="25"
             android:hint="@string/hint_inputDestination"
             android:textSize="15sp" />
 
@@ -127,7 +127,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -175,7 +176,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:gravity="end"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"

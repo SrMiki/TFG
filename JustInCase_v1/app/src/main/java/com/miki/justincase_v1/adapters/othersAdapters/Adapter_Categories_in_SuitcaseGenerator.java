@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ToggleButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class Adapter_Categories_in_SuitcaseGenerator extends RecyclerView.Adapter<Adapter_Categories_in_SuitcaseGenerator.AdapterViewHolder> implements View.OnClickListener {
 
-    private View.OnClickListener clickListener;
+    private View.OnClickListener listener;
 
     ArrayList<Category> dataset;
 
@@ -26,20 +26,20 @@ public class Adapter_Categories_in_SuitcaseGenerator extends RecyclerView.Adapte
 
     @Override
     public void onClick(View v) {
-        if (clickListener != null) {
-            clickListener.onClick(v);
+        if (listener != null) {
+            listener.onClick(v);
         }
     }
 
-    public void setOnClickListener(View.OnClickListener onClickListener) {
-        this.clickListener = onClickListener;
+    public void setListener( View.OnClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public Adapter_Categories_in_SuitcaseGenerator.AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view_category_in_suitcase_generator, parent, false);
+                .inflate(R.layout.card_view_category_suitcasegenerator, parent, false);
         view.setOnClickListener(this);
         return new AdapterViewHolder(view);
     }
@@ -47,18 +47,15 @@ public class Adapter_Categories_in_SuitcaseGenerator extends RecyclerView.Adapte
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         Category category = dataset.get(position);
-        Context context = holder.toggleButton_Category.getContext();
+        Context context = holder.itemView.getContext();
 
-        holder.toggleButton_Category.setBackgroundColor(context.getResources().getColor(R.color.quantum_grey50));
-        holder.toggleButton_Category.setText(category.getCategoryName()); // init name
+        holder.category.setBackgroundColor(context.getResources().getColor(R.color.grey));
+        holder.category.setText(category.getCategoryName()); // init name
 
-        holder.toggleButton_Category.setTextOn(category.getCategoryName());
-        holder.toggleButton_Category.setTextOff(category.getCategoryName());
-        
-        if (holder.toggleButton_Category.isChecked()) {
-            holder.toggleButton_Category.setBackgroundColor(context.getResources().getColor(R.color.item_selected));
+        if (category.isSelectedState()) {
+            holder.category.setBackgroundColor(context.getResources().getColor(R.color.category_selected));
         } else {
-            holder.toggleButton_Category.setBackgroundColor(context.getResources().getColor(R.color.quantum_grey50));
+            holder.category.setBackgroundColor(context.getResources().getColor(R.color.grey));
         }
     }
 
@@ -69,14 +66,11 @@ public class Adapter_Categories_in_SuitcaseGenerator extends RecyclerView.Adapte
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
 
-
-        ToggleButton toggleButton_Category;
+        TextView category;
 
         public AdapterViewHolder(View view) {
             super(view);
-
-            toggleButton_Category = view.findViewById(R.id.toggleButton_Category);
+            category = view.findViewById(R.id.card_view_category_suitcasegenerator_name);
         }
-
     }
 }

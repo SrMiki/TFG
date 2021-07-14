@@ -48,49 +48,59 @@
 
 
                 <Button
+                    android:id="@+id/showTrip_button_addHandlugage"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="10dp"
+                    android:backgroundTint="@color/ligthWhite"
+                    android:paddingEnd="5dp"
+                    app:icon="@drawable/ic_card_travel"
+                    app:iconGravity="textStart"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <Button
                     android:id="@+id/card_view_category_editButton"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="5dp"
-                    android:backgroundTint="@color/white"
-                    android:drawableTop="@drawable/ic_edit" />
+                    android:layout_marginEnd="10dp"
+                    android:backgroundTint="@color/ligthWhite"
+                    android:paddingEnd="5dp"
+                    app:icon="@drawable/ic_edit"
+                    app:iconGravity="textStart"
+                    android:foreground="?android:attr/selectableItemBackground" />
+
 
                 <Button
                     android:id="@+id/card_view_category_deleteButton"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="5dp"
-                    android:backgroundTint="@color/white"
-                    android:drawableTop="@drawable/ic_delete"
-                    android:drawableTint="@color/black" />
-
-                <Button
-                    android:id="@+id/showTrip_button_addHandlugage"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:backgroundTint="@color/white"
-                    android:drawableTop="@drawable/ic_card_travel"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:backgroundTint="@android:color/holo_red_light"
+                    android:paddingEnd="5dp"
+                    app:icon="@drawable/ic_delete"
+                    app:iconGravity="textStart"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
         <TextView
-            android:layout_marginTop="10dp"
             android:id="@+id/recyclerview_Trip_tripDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:text="@string/trip_travelDate" />
 
         <TextView
-            android:layout_marginTop="10dp"
             android:id="@+id/recyclerview_Trip_tripMembers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:text="@string/trip_members" />
 
         <LinearLayout

@@ -74,7 +74,7 @@ public class Adapter_list_of_Items_to_select extends RecyclerView.Adapter<Adapte
     }
 
 
-    public class AdapterViewHolder extends RecyclerView.ViewHolder {
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
 
         TextView elementNameTV;
         public LinearLayout layout;

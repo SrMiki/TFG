@@ -96,6 +96,7 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
 
             recyclerView = view.findViewById(R.id.fragment_show_entity_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
 
 
             btn_generateBaggage = view.findViewById(R.id.btn_generateBaggage);
@@ -116,6 +117,9 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
             switchShowCategories.setChecked(showCategories);
             editor.putBoolean("showCategories", switchShowCategories.isChecked());
 
+            dataset = new ArrayList<>();
+            datasetCategory = new ArrayList<>();
+
             if (showCategories) {
                 switchShowCategories.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     editor.putBoolean("showCategories", false);
@@ -132,8 +136,9 @@ public class Fragment_ShowHandLuggage extends BaseFragment implements Baggage_Re
                 showByItem();
             }
 
-            if(dataset != null || datasetCategory != null){
-                LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
+            if (!dataset.isEmpty() || !datasetCategory.isEmpty()) {
+                recyclerView.setVisibility(View.VISIBLE);
+
                 linearLayout.setVisibility(View.VISIBLE);
 
                 TextView textView = view.findViewById(R.id.showEntity_swipeText);

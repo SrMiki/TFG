@@ -17,7 +17,8 @@ import com.miki.justincase_v1.db.entity.HandLuggage;
 
 import java.util.ArrayList;
 
-public class Adapter_Baggage extends RecyclerView.Adapter<Adapter_Baggage.AdapterViewHolder> implements View.OnClickListener, Baggage_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class Adapter_Baggage extends RecyclerView.Adapter<Adapter_Baggage.AdapterViewHolder>
+        implements View.OnClickListener, Baggage_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private final HandLuggage handLuggage;
 

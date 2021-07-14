@@ -162,7 +162,7 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.Adap
 
         linearLayoutManager.setInitialPrefetchItemCount(childDataset.size());
 
-        holder.adapter_categoryContent = new Adapter_CategoryContent(childDataset, category);
+        holder.adapter_categoryContent = new Adapter_CategoryContent(childDataset, category, activity);
 
         holder.childRecyclerview.setLayoutManager(linearLayoutManager);
         holder.childRecyclerview.setAdapter(holder.adapter_categoryContent);

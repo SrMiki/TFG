@@ -84,9 +84,11 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
                 } else {
                     floatingActionButton.setVisibility(View.VISIBLE);
                 }
-
             });
 
+            if(bundle.getSerializable("another") != null && (Boolean) bundle.getSerializable("another")){
+                createNewItemDialog();
+            }
 
             floatingActionButton.setOnClickListener(v -> {
                 Presenter.addItemToThisCategory(arrayList, category, getContext());
@@ -112,14 +114,10 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
 
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> {
-            getNav().navigate(R.id.fragment_ShowCategories);
-        }));
+        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> getNav().navigate(R.id.fragment_ShowCategories)));
 
 
-        builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> {
-            createNewItemDialog();
-        }));
+        builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> createNewItemDialog()));
         builder.show();
     }
 
@@ -145,13 +143,9 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
         dialog.show();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String itemName = editText.getText().toString();
-            dataset = Presenter.selectItemWhitNoCategory(getContext());
             if (!Presenter.createItem(itemName, getContext())) {
                 makeToast(getContext(), getString(R.string.toast_warning_item));
-                createNewItemDialog();
-                dialog.dismiss();
             } else {
-                adapter.notifyItemInserted(dataset.size()-1);
                 anotherItemDialog();
                 dialog.dismiss();
             }
@@ -164,7 +158,7 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
 
         View view = inflater.inflate(R.layout.alertdialog_textview, null);
 
-        TextView dialogTitle = view.findViewById(R.id.dialog_title_edittext);
+        TextView dialogTitle = view.findViewById(R.id.dialog_title_textview);
         dialogTitle.setText(R.string.text_item);
 
 
@@ -172,10 +166,15 @@ public class Fragment_Add_Item_To_Category extends BaseFragment {
         textView.setText(getString(R.string.dialog_ask_anotherItem));
         builder.setView(view);
 
-        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> dialog.dismiss()));
+        builder.setNegativeButton(getString(R.string.dialog_button_no), ((dialog, which) -> {
+            dialog.dismiss();
+            bundle.putSerializable("another", false);
+            getNav().navigate(R.id.action_fragment_Add_Item_To_Category_self, bundle);
+        }));
 
         builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> {
-            createNewItemDialog();
+            bundle.putSerializable("another", true);
+            getNav().navigate(R.id.action_fragment_Add_Item_To_Category_self, bundle);
         }));
         builder.show();
     }

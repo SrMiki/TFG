@@ -52,9 +52,9 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
         SharedPreferences sp = activity.getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         permissions = sp.getBoolean("permissions", false);
 
-        if (permissions) {
-            initPhotoDataset(dataset);
-        }
+//        if (permissions) {
+//            initPhotoDataset(dataset);
+//        }
     }
 
     /**
@@ -148,7 +148,8 @@ public class Adapter_Item extends RecyclerView.Adapter<Adapter_Item.AdapterViewH
 
         holder.elementNameTV.setText(item.getItemName());
         if (permissions) {
-            holder.itemViewPhoto.setImageBitmap(photoDataset.get(position));
+//            holder.itemViewPhoto.setImageBitmap(photoDataset.get(position));
+            holder.itemViewPhoto.setImageURI(Uri.parse(item.getItemPhotoURI()));
         } else {
             holder.itemViewPhoto.setVisibility(View.GONE);
         }

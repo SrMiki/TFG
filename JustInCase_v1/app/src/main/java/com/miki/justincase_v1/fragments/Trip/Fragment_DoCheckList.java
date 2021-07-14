@@ -68,19 +68,15 @@ public class Fragment_DoCheckList extends BaseFragment {
             recyclerView = view.findViewById(R.id.fragment_checklist_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-            CheckBox checkBoxAll = view.findViewById(R.id.checkbox_checkAll);
-            checkBoxAll.setChecked(handLuggage.isHandLuggageCompleted());
-            checkBoxAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                Presenter.checkAllBaggage(dataset, isChecked, getContext());
-                adapter.notifyDataSetChanged();
-            });
-
             switchShowCategories = view.findViewById(R.id.switch_ShowCategory);
             sp = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
             boolean showCategories = sp.getBoolean("showCategories", false);
             switchShowCategories.setChecked(showCategories);
             editor.putBoolean("showCategories", switchShowCategories.isChecked());
+
+            //always iniciate
+            dataset = Presenter.getBaggageOfThisHandLuggage(handLuggage, getContext());
 
             if (showCategories) {
                 switchShowCategories.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -98,6 +94,17 @@ public class Fragment_DoCheckList extends BaseFragment {
                 showByItem();
             }
 
+            CheckBox checkBoxAll = view.findViewById(R.id.checkbox_checkAll);
+            checkBoxAll.setChecked(handLuggage.isHandLuggageCompleted());
+            checkBoxAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                Presenter.checkAllBaggage(dataset, isChecked, getContext());
+                Bundle obundle = new Bundle();
+                Trip trip = Presenter.getTrip(handLuggage, getContext());
+                obundle.putSerializable("trip", trip);
+                getNav().navigate(R.id.action_fragment_DoCheckList_to_fragment_CheckIn, obundle);
+//                adapter.notifyDataSetChanged();
+            });
+
             actionButton = view.findViewById(R.id.fragment_checklist_btn_finish);
             actionButton.setOnClickListener(v -> {
                 Presenter.checkBaggage(handLuggage, dataset, getContext());
@@ -111,8 +118,6 @@ public class Fragment_DoCheckList extends BaseFragment {
     }
 
     private void showByItem() {
-        dataset = Presenter.getBaggageOfThisHandLuggage(handLuggage, getContext());
-
         adapter = new Adapter_Check_Items(dataset);
         recyclerView.setAdapter(adapter);
 
@@ -139,7 +144,6 @@ public class Fragment_DoCheckList extends BaseFragment {
         MenuItem menuItem = menu.findItem(R.id.action_share);
 
         menuItem.setOnMenuItemClickListener(item -> {
-            makeToast(getContext(), "Holiwi");
             return true;
         });
 

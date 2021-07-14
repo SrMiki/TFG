@@ -28,7 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:text="@string/text_category"
                 android:textSize="20sp"
@@ -40,7 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:gravity="end">
+                android:gravity="end"
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/card_view_item_arrow"
@@ -54,7 +55,6 @@
                 android:id="@+id/card_view_category_options_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:padding="5dp"
@@ -63,30 +63,37 @@
 
                 <Button
                     android:id="@+id/card_view_category_editButton"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="10dp"
-                    android:backgroundTint="@color/quantum_grey"
+                    android:backgroundTint="@color/grey"
                     android:padding="14dp"
-                    app:icon="@drawable/ic_edit" />
+                    android:paddingEnd="5dp"
+                    app:icon="@drawable/ic_edit"
+                    app:iconGravity="textStart" />
 
                 <Button
                     android:id="@+id/card_view_category_deleteButton"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="10dp"
-                    android:backgroundTint="@color/quantum_grey"
+                    android:backgroundTint="@color/grey"
                     android:padding="14dp"
-                    app:icon="@drawable/ic_delete_black" />
+                    android:paddingEnd="5dp"
+                    app:icon="@drawable/ic_delete_black"
+                    app:iconGravity="textStart" />
 
                 <Button
                     android:id="@+id/card_view_category_addItemButton"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="10dp"
-                    android:backgroundTint="@color/secundary_900"
-                    android:padding="14dp"
-                    app:icon="@drawable/ic_add" />
+                    android:layout_marginEnd="10dp"
+                    android:backgroundTint="@color/green"
+                    android:paddingEnd="5dp"
+                    app:icon="@drawable/ic_add"
+                    app:iconGravity="textStart" />
+
 
             </LinearLayout>
 

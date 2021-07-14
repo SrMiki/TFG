@@ -101,10 +101,11 @@ public class HandLuggage implements Serializable {
         this.handLuggageName = suitcaseName;
     }
 
-    public String getOwners(){
+    public String getOwners() {
         return this.owners;
     }
-    public void setOwners(String owners){
+
+    public void setOwners(String owners) {
         this.owners = owners;
     }
 

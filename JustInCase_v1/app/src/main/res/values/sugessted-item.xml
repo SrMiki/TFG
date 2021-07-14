@@ -8,7 +8,6 @@
         <item>sandalias</item>
     </string-array>
 
-
     <string-array name="suggested_Items">
         <item>camiseta</item>
         <item>pantalón</item>
@@ -49,10 +48,12 @@
     <string-array name="pool_Items">
         <item>toalla</item>
         <item>gafas de piscina</item>
+        <item>bañador</item>
     </string-array>
 
     <string-array name="photografy_Items">
         <item>cámara de fotos</item>
+        <item>lente de largo alcance</item>
         <item>trípode</item>
     </string-array>
 
@@ -60,6 +61,7 @@
         <item>gel de baño</item>
         <item>champú</item>
         <item>colonia</item>
+        <item>pasta de dientes</item>
+        <item>cepillo de dientes</item>
     </string-array>
-
 </resources>

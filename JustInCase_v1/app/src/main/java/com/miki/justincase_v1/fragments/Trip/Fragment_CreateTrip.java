@@ -70,10 +70,6 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
 
         btn_finish = view.findViewById(R.id.fragment_createTrip_btn_finish);
 
-        size = view.findViewById(R.id.fragment_createTrip_tripSize);
-        size.setOnClickListener(this::changeMemberNumber);
-
-
 
         //SWITCH BUTTON
         dateSwitch = view.findViewById(R.id.fragment_createTrip_switch);
@@ -103,6 +99,9 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
 
         dataset = new ArrayList<>();
         recyclerView = view.findViewById(R.id.fragment_createTrip_recyclerview);
+
+        size = view.findViewById(R.id.fragment_createTrip_tripSize);
+        size.setOnClickListener(this::changeMemberNumber);
 
         trip = new Trip();
         Bundle bundle = getArguments();
@@ -278,14 +277,14 @@ public class Fragment_CreateTrip extends BaseFragment implements String_Recycler
         if (length > 1) {
             recyclerView.setVisibility(View.VISIBLE);
 
+            for (int i = dataset.size(); i < length; i++) {
+                dataset.add(getString(R.string.text_member) + " " + (i + 1));
+            }
+
             //1st member
             //When you change the size member, the 1st is blank
             if (dataset.get(0) != null && dataset.get(0).isEmpty()) {
                 dataset.set(0, getString(R.string.text_member) + " " + (1));
-            }
-
-            for (int i = dataset.size(); i < length; i++) {
-                dataset.add(getString(R.string.text_member) + " " + (i + 1));
             }
 
             adapter = new Adapter_StringList(dataset);

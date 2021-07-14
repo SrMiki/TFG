@@ -164,10 +164,10 @@ public class Fragment_AddHandLuggage extends BaseFragment {
                 if (!Presenter.createSuitcase(suitcase, getContext())) {
                     makeToast(getContext(), getString(R.string.toast_warning_suitcase));
                 } else {
-                    makeToast(getContext(), getString(R.string.toast_created_suitcase));
+                    closeKeyBoard(view);
                     dialog.dismiss();
-                    dataset = Presenter.selectSuitcaseNOTFromThisTrip(trip, getContext());
-                    setRecyclerView();
+                    getNav().navigate(R.id.action_fragment_Add_HandLuggage_self, bundle);
+                    makeToast(getContext(), getString(R.string.toast_created_suitcase));
                 }
             }
 

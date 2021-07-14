@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,21 +48,25 @@ public class Fragment_Use_Templates_For_HandLuggage extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_add_item_to_category, container, false);
 
         recyclerView = view.findViewById(R.id.fragment_Add_Item_To_Category_recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         floatingButton = view.findViewById(R.id.fragment_Add_Item_To_Category_finish);
         floatingButton.setVisibility(View.GONE);
+
+        setHasOptionsMenu(true);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
 
             dataset = Presenter.selectAllTemplates(getContext());
 
-            if (!dataset.isEmpty()) {
-//                LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
-//                linearLayout.setVisibility(View.VISIBLE);
-//                setHasOptionsMenu(true);
+            if (dataset.isEmpty()) {
+                recyclerView.setVisibility(View.GONE);
+                LinearLayout linearLayout = view.findViewById(R.id.showEntity_swipeLayout);
+                linearLayout.setVisibility(View.GONE);
+
             } else {
 
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 adapter = new Adapter_Template(dataset, getActivity());
                 recyclerView.setAdapter(adapter);
 

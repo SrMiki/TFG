@@ -47,7 +47,8 @@ import java.util.ArrayList;
 public class Fragment_ShowItems extends BaseFragment
         implements Item_RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
-    private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_MEDIA_LOCATION};
     private static final int REQUEST_CODE_PERMISSIONS = 1;
     boolean permissions;
 
@@ -73,14 +74,19 @@ public class Fragment_ShowItems extends BaseFragment
 
         sp = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         permissions = sp.getBoolean("permissions", false);
-//        if (sp.getInt("noAskMore", 2) > 0) {
-        if (allPermissionsGranted()) {
-            setPermissions();
-        } else {
-            ActivityCompat.requestPermissions(
-                    getActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+        if (sp.getInt("noAskMore", 2) > 0) {
+            if (allPermissionsGranted()) {
+                setPermissions();
+            } else {
+                ActivityCompat.requestPermissions(
+                        getActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+                SharedPreferences.Editor editor = sp.edit();
+
+                int noAskMore = sp.getInt("noAskMore", 2);
+                editor.putInt("noAskMore", noAskMore-1);
+                editor.apply();
+            }
         }
-//        }
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -366,7 +372,9 @@ public class Fragment_ShowItems extends BaseFragment
         sp = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("permissions", true);
+        editor.putInt("noAskMore", 0);
         editor.apply();
+        getNav().navigate(R.id.fragment_ShowItems);
     }
 
     private void showExplanation() {

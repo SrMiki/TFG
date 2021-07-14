@@ -48,6 +48,11 @@ public interface CategoryDAO {
     @Update
     void update(Category category);
 
+    @Update
+    void updateListOfCategory(ArrayList<Category> arrayList);
+
     @Query("SELECT * FROM categories WHERE categoryName IS :newCategory")
     Category getCategoryByName(String newCategory);
+
+
 }

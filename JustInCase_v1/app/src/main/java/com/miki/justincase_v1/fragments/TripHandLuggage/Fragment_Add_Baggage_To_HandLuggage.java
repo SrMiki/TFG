@@ -61,6 +61,9 @@ public class Fragment_Add_Baggage_To_HandLuggage extends BaseFragment {
         floatingActionButton = view.findViewById(R.id.fragment_Add_Item_To_Baggage_finish);
         floatingActionButton.setVisibility(View.GONE);
 
+        recyclerView = view.findViewById(R.id.fragment_Add_Item_To_Baggage_recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         bundle = getArguments();
         if (bundle != null) {
             arrayList = new ArrayList<>();
@@ -82,6 +85,29 @@ public class Fragment_Add_Baggage_To_HandLuggage extends BaseFragment {
 
     private void showByItem(View view) {
         dataset = Presenter.selectItemNOTFromThisBaggage(handLuggage, getContext());
+        adapter = new Adapter_list_of_Items_to_select(dataset);
+        recyclerView.setAdapter(adapter);
+
+        adapter.setListener(v -> {
+            int position = recyclerView.getChildAdapterPosition(v);
+            Item item = dataset.get(position);
+
+            if (!arrayList.contains(item)) {
+                arrayList.add(item);
+                item.setSelectedState(true);
+            } else {
+                arrayList.remove(item);
+                item.setSelectedState(false);
+            }
+            Presenter.updateItemState(item, getContext());
+            adapter.notifyItemChanged(position);
+            if (arrayList.isEmpty()) {
+                floatingActionButton.setVisibility(View.GONE);
+            } else {
+                floatingActionButton.setVisibility(View.VISIBLE);
+            }
+        });
+
         if (dataset.isEmpty()) {
             noItemsDialog();
         } else {
@@ -92,30 +118,6 @@ public class Fragment_Add_Baggage_To_HandLuggage extends BaseFragment {
                 createNewItemDialog();
             });
 
-            recyclerView = view.findViewById(R.id.fragment_Add_Item_To_Baggage_recyclerview);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new Adapter_list_of_Items_to_select(dataset);
-            recyclerView.setAdapter(adapter);
-
-            adapter.setListener(v -> {
-                int position = recyclerView.getChildAdapterPosition(v);
-                Item item = dataset.get(position);
-
-                if (!arrayList.contains(item)) {
-                    arrayList.add(item);
-                    item.setSelectedState(true);
-                } else {
-                    arrayList.remove(item);
-                    item.setSelectedState(false);
-                }
-                Presenter.updateItemState(item, getContext());
-                adapter.notifyItemChanged(position);
-                if (arrayList.isEmpty()) {
-                    floatingActionButton.setVisibility(View.GONE);
-                } else {
-                    floatingActionButton.setVisibility(View.VISIBLE);
-                }
-            });
 
             floatingActionButton.setOnClickListener(v -> {
                 Presenter.createBaggageByItems(arrayList, handLuggage, getContext());
@@ -133,8 +135,7 @@ public class Fragment_Add_Baggage_To_HandLuggage extends BaseFragment {
 
         arrayList_Category = new ArrayList<>();
 
-        recyclerView = view.findViewById(R.id.fragment_Add_Item_To_Baggage_recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         adapterCategory = new Adapter_list_of_Categories_to_select(datasetCategory, getActivity(), handLuggage);
         recyclerView.setAdapter(adapterCategory);
 
@@ -189,10 +190,8 @@ public class Fragment_Add_Baggage_To_HandLuggage extends BaseFragment {
         builder.setView(view);
 
         builder.setNegativeButton(getString(R.string.dialog_button_notNow), ((dialog, which) -> {
-            dialog.dismiss();
-            getNav().navigate(R.id.fragment_ShowBaggage, bundle);
+            getNav().navigate(R.id.action_fragment_Add_item_to_Baggage_to_fragment_ShowBaggageByItem, bundle);
         }));
-
 
         builder.setPositiveButton(getString(R.string.dialog_button_yes), ((dialog, which) -> {
             createNewItemDialog();
@@ -228,7 +227,8 @@ public class Fragment_Add_Baggage_To_HandLuggage extends BaseFragment {
             if (!Presenter.createItem(itemName, getContext())) {
                 makeToast(getContext(), getString(R.string.toast_warning_item));
             } else {
-                adapter.notifyItemInserted(adapter.getItemCount());
+                dialog.dismiss();
+                adapter.notifyItemInserted(dataset.size()-1);
                 anotherItemDialog();
             }
         });

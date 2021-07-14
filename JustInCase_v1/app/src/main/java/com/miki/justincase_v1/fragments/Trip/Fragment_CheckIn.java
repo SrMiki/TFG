@@ -58,21 +58,11 @@ public class Fragment_CheckIn extends BaseFragment {
                 getNav().navigate(R.id.fragment_DoCheckList, obundle);
             });
 
-
             if (trip.isTravelling() == 0) {
                 checkIn();
             } else if (trip.isTravelling() == 1) {
                 checkOut();
             }
-
-//            setTrip(view);
-
-//            if (trip.getReturnDate().isEmpty()) {
-//                linearLayout.setVisibility(View.GONE);
-//            } else {
-//                returnDateTV.setText(trip.getReturnDate());
-//            }
-
         }
         return view;
     }
@@ -81,7 +71,6 @@ public class Fragment_CheckIn extends BaseFragment {
         tripDestinationTV = view.findViewById(R.id.fragment_focusTrip_tripDestino);
         tripTravelDateTV = view.findViewById(R.id.fragment_focusTrip_tripDate);
         returnDateTV = view.findViewById(R.id.fragment_focusTrip_returnDate);
-
 
         tripDestinationTV.setText(trip.getDestination());
         tripTravelDateTV.setText(trip.getTravelDate());

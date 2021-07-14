@@ -48,7 +48,7 @@ public class Adapter_CheckList_Suitcase extends RecyclerView.Adapter<Adapter_Che
     @Override
     public void onBindViewHolder(@NonNull Adapter_CheckList_Suitcase.AdapterViewHolder holder, int position) {
         HandLuggage handLuggage = dataset.get(position);
-        if (handLuggage.getHandLuggageSize() != 0) {
+        if (handLuggage.getHandLuggageSize() > 0 ) {
             
             holder.elementNameTV.setText(handLuggage.handLuggageName);
 
@@ -64,6 +64,9 @@ public class Adapter_CheckList_Suitcase extends RecyclerView.Adapter<Adapter_Che
 
             handLuggage.setHandLuggageCompleted(checked == handLuggage.getHandLuggageSize());
             Presenter.updateHandLuggage(handLuggage, holder.itemView.getContext());
+        } else {
+            holder.elementNameTV.setText(handLuggage.handLuggageName);
+            handLuggage.setHandLuggageCompleted(true);
         }
     }
 
@@ -72,7 +75,7 @@ public class Adapter_CheckList_Suitcase extends RecyclerView.Adapter<Adapter_Che
         return dataset == null ? 0 : dataset.size();
     }
 
-    public class AdapterViewHolder extends RecyclerView.ViewHolder {
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
 
         TextView elementNameTV, count;
         public LinearLayout layout;

@@ -218,6 +218,8 @@ public class Presenter {
     }
 
     public static boolean createBaggageByItems(ArrayList<Item> itemArrayList, HandLuggage handLuggage, Context context) {
+        handLuggage.setHandLuggageSize(0);
+        handLuggage.setHandLuggageCompleted(false);
         db = AppDatabase.getInstance(context);
         ArrayList<Baggage> baggageArrayList = new ArrayList<>();
         ArrayList<Baggage> baggages = (ArrayList<Baggage>) db.baggageDAO().selectBaggageOfThisHandLuggage(handLuggage.handLuggageID);
@@ -592,8 +594,16 @@ public class Presenter {
         }
 
         db.itemDAO().updateListOfItem(arrayList);
+    }
 
+    public static void removeCategorySelectedState(ArrayList<Category> arrayList, Context context) {
+        db = AppDatabase.getInstance(context);
 
+        for (Category category : arrayList) {
+            category.setSelectedState(false);
+        }
+
+        db.categoryDAO().updateListOfCategory(arrayList);
     }
 
     public static void updateSuitcaseState(Suitcase suitcase, Context context) {
